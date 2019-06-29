@@ -118,16 +118,17 @@ void Interpreter::print(std::vector<std::string> words) {
 
 void Interpreter::println(std::vector<std::string> words) {
   if (words.size() < 2) {
-    std::cout << std::endl;
+    // do nothing
   } else {
     for (uint32_t i = 1; i < words.size(); ++i) {
       if (isString(words[i])) {
-        std::cout << removequotes(words[i]) << std::endl;
+        std::cout << removequotes(words[i]) << std::flush;
       } else {
-        std::cout << memory.get(words[i]) << std::endl;
+        std::cout << memory.get(words[i]) << std::flush;
       }
     }
   }
+  std::cout << std::endl;
 }
 
 void Interpreter::quit(std::vector<std::string> words) {

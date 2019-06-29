@@ -9,7 +9,11 @@ int main(int argc, char *argv[]) {
     std::cerr << "Need a file to interpret" << std::endl;
     exit(1);
   }
-  Interpreter i(argv[1]);
+  try {
+    Interpreter i(argv[1]);
+  } catch (std::logic_error e) {
+    std::cerr << e.what() << std::endl;
+  }
 
   return 0;
 }

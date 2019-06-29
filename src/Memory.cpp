@@ -38,21 +38,21 @@ std::string Memory::get(std::string var) {
 
 std::string Memory::getstring(std::string var) {
   if (strings.count(var) == 0) {
-    throw std::domain_error("Variable " + var + " does not exist");
+    throw std::logic_error("Variable " + var + " does not exist");
   }
   return strings[var];
 }
 
 bool Memory::getboolean(std::string var) {
   if (booleans.count(var) == 0) {
-    throw std::domain_error("Variable " + var + " does not exist");
+    throw std::logic_error("Variable " + var + " does not exist");
   }
   return booleans[var];
 }
 
 double Memory::getnum(std::string var) {
   if (nums.count(var) == 0) {
-    throw std::domain_error("Variable " + var + " does not exist");
+    throw std::logic_error("Variable " + var + " does not exist");
   }
   return nums[var];
 }
@@ -66,9 +66,9 @@ void Memory::createboolean(std::string name, bool value) {
     booleans[name] = value;
     variabletypes[name] = "boolean";
   } else if (variabletypes[name] == "boolean") {
-    booleans[name] = value;
+    throw std::logic_error("Reinitialization of variable " + name);
   } else {
-    throw std::logic_error("Variable already initialized as a " +
+    throw std::logic_error("Variable " + name + " already initialized as a " +
                            variabletypes[name]);
   }
 }
@@ -78,9 +78,9 @@ void Memory::createnum(std::string name, double num) {
     nums[name] = num;
     variabletypes[name] = "num";
   } else if (variabletypes[name] == "num") {
-    nums[name] = num;
+    throw std::logic_error("Reinitialization of variable " + name);
   } else {
-    throw std::logic_error("Variable already initialized as a " +
+    throw std::logic_error("Variable " + name + " already initialized as a " +
                            variabletypes[name]);
   }
 }
@@ -90,9 +90,9 @@ void Memory::createstring(std::string name, std::string str) {
     strings[name] = str;
     variabletypes[name] = "string";
   } else if (variabletypes[name] == "string") {
-    strings[name] = str;
+    throw std::logic_error("Reinitialization of variable " + name);
   } else {
-    throw std::logic_error("Variable already initialized as a " +
+    throw std::logic_error("Variable " + name + " already initialized as a " +
                            variabletypes[name]);
   }
 }
