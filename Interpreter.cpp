@@ -24,9 +24,40 @@ void Interpreter::interpret() {
 }
 
 void Interpreter::eval(std::string value) {
+    std::vector<std::string> words = split(value);
+    if (words.size() == 0){
+        return;
+    }
+    if (words[0] == "quit"){
 
+    }
 }
 
 void Interpreter::printcode() {
     std::copy(code.begin(), code.end(), std::ostream_iterator<std::string>(std::cout, "\n"));
+}
+
+std::vector<std::string> Interpreter::split(std::string str, char delim) {
+    std::vector<std::string> returnval;
+    std::string temp = "";
+    bool instr = false;
+    for (uint32_t i = 0; i < str.length(); ++i) {
+        if(str[i] == '"'){
+            instr = !instr;
+        }
+        if(str[i] == delim && temp != "" && !instr){
+            returnval.push_back(temp);
+            temp = "";
+        }
+        else if (instr){
+            temp+=str[i];
+        }
+        else{
+            temp+=tolower(str[i]);
+        }
+    }
+    if (temp!= ""){
+        returnval.push_back(temp);
+    }
+    return returnval;
 }

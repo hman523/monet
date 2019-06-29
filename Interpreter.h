@@ -21,6 +21,7 @@ private:
     void printcode();
     void interpret();
     void eval(std::string value);
+    std::vector<std::string> split(std::string str, char delim = ' ');
 
     //memory
     std::vector<std::string> code;
