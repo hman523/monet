@@ -1,0 +1,32 @@
+//
+// Created by hunter on 6/29/19.
+//
+
+#include "Interpreter.h"
+#include <fstream>
+#include <algorithm>
+#include <iterator>
+
+Interpreter::Interpreter(std::string filename) {
+    std::ifstream infile;
+    infile.open(filename);
+    std::string line;
+    while(std::getline(infile, line)){
+        code.push_back(line);
+    }
+    interpret();
+}
+
+
+
+void Interpreter::interpret() {
+    std::for_each(code.begin(), code.end(), [&](std::string line)->void { eval(line);});
+}
+
+void Interpreter::eval(std::string value) {
+
+}
+
+void Interpreter::printcode() {
+    std::copy(code.begin(), code.end(), std::ostream_iterator<std::string>(std::cout, "\n"));
+}
