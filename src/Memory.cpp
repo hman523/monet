@@ -2,31 +2,97 @@
 // Created by hunter on 6/29/19.
 //
 
-#include <sstream>
 #include "Memory.h"
+#include <iostream>
+#include <sstream>
 
-std::string Memory::get(std::string var) {
-    if(variabletypes[var] == "boolean"){
-        if(booleans[var]){
-            return "true";
-        } else{
-            return "false";
-        }
-    }
-    if (variabletypes[var] == "num"){
-        return std::to_string(nums[var]);
-    }
-    if (variabletypes[var] == "string"){
-        return strings[var];
-    }
-    else{
-        throw std::logic_error("Variable " + var + " not found");
-    }
+Memory::Memory() {
+  functionnamespace.insert("print");
+  functionnamespace.insert("quit");
 }
 
-double Memory::strtonum(std::string num) {
-    std::stringstream ss(num);
-    double val;
-    ss >> val;
-    return val;
+std::string Memory::get(std::string var) {
+  if (variabletypes.count(var) != 0) {
+    if (variabletypes[var] == "boolean") {
+      if (booleans[var]) {
+        return "true";
+      } else {
+        return "false";
+      }
+    }
+    if (variabletypes[var] == "num") {
+      return std::to_string(nums[var]);
+    }
+    if (variabletypes[var] == "string") {
+      return strings[var];
+    } else {
+      std::cerr
+          << "If you are seeing this message something is very, very wrong"
+          << std::endl;
+      return "";
+    }
+  } else {
+    throw std::logic_error("Variable " + var + " not found");
+  }
+}
+
+std::string Memory::getstring(std::string var) {
+  if (strings.count(var) == 0) {
+    throw std::domain_error("Variable " + var + " does not exist");
+  }
+  return strings[var];
+}
+
+bool Memory::getboolean(std::string var) {
+  if (booleans.count(var) == 0) {
+    throw std::domain_error("Variable " + var + " does not exist");
+  }
+  return booleans[var];
+}
+
+double Memory::getnum(std::string var) {
+  if (nums.count(var) == 0) {
+    throw std::domain_error("Variable " + var + " does not exist");
+  }
+  return nums[var];
+}
+
+bool Memory::functioninuse(std::string val) {
+  return functionnamespace.count(val) != 0;
+}
+
+void Memory::createboolean(std::string name, bool value) {
+  if (variabletypes.count(name) == 0) {
+    booleans[name] = value;
+    variabletypes[name] = "boolean";
+  } else if (variabletypes[name] == "boolean") {
+    booleans[name] = value;
+  } else {
+    throw std::logic_error("Variable already initialized as a " +
+                           variabletypes[name]);
+  }
+}
+
+void Memory::createnum(std::string name, double num) {
+  if (variabletypes.count(name) == 0) {
+    nums[name] = num;
+    variabletypes[name] = "num";
+  } else if (variabletypes[name] == "num") {
+    nums[name] = num;
+  } else {
+    throw std::logic_error("Variable already initialized as a " +
+                           variabletypes[name]);
+  }
+}
+
+void Memory::createstring(std::string name, std::string str) {
+  if (variabletypes.count(name) == 0) {
+    strings[name] = str;
+    variabletypes[name] = "string";
+  } else if (variabletypes[name] == "string") {
+    strings[name] = str;
+  } else {
+    throw std::logic_error("Variable already initialized as a " +
+                           variabletypes[name]);
+  }
 }
