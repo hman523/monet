@@ -3,4 +3,4 @@ project(BIPL)
 
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_FLAGS "-Wall -Wextra")
-add_executable(BIPL main.cpp Interpreter.cpp Interpreter.h)
+add_executable(BIPL main.cpp Interpreter.cpp Interpreter.h Memory.cpp Memory.h)
