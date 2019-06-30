@@ -137,6 +137,8 @@ void Interpreter::print(std::vector<std::string> words) {
         std::cout << removequotes(words[i]) << std::flush;
       } else if (isParens(words[i])) {
         std::cout << eval(removeparens(words[i])) << std::flush;
+      } else if (words[i] == "~") {
+        std::cout << std::endl;
       } else {
         std::cout << memory.get(words[i]) << std::flush;
       }
@@ -153,6 +155,8 @@ void Interpreter::println(std::vector<std::string> words) {
         std::cout << removequotes(words[i]) << std::flush;
       } else if (isParens(words[i])) {
         std::cout << eval(removeparens(words[i])) << std::flush;
+      } else if (words[i] == "~") {
+        std::cout << std::endl;
       } else {
         std::cout << memory.get(words[i]) << std::flush;
       }
