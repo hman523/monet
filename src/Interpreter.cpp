@@ -53,6 +53,9 @@ void Interpreter::eval(std::string value) {
   if (words[0] == "read") {
     read(words);
   }
+  if (words[0] == "printall"){
+    printcode();
+  }
 }
 
 void Interpreter::printcode() {
