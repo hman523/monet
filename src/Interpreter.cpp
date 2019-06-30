@@ -28,6 +28,10 @@ void Interpreter::eval(std::string value) {
   if (words.size() == 0) {
     return;
   }
+  if(words[0].length() > 1 && words[0].substr(0, 2) == "//"){
+    //do nothing, this is a comment
+    return;
+  }
   if (words[0] == "quit") {
     quit(words);
   }
