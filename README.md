@@ -7,4 +7,7 @@ The syntax is similar to BASIC. Syntax is always
 `command parameter`. A function can have an arbitrary number of parameters. Commands and functions are case insensitive
 
 Built in commands so far:
-`print`, `println`, `string`, `boolean`, `num`
+`print`, `println`, `string`, `boolean`, `num`, `read`
+
+Additionally, nesting is supported using parenthesis. For example:
+`print (add 1 2)`
