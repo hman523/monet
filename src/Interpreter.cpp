@@ -46,6 +46,9 @@ void Interpreter::eval(std::string value) {
   if (words[0] == "boolean") {
     declareboolean(words);
   }
+  if (words[0] == "read") {
+    read(words);
+  }
 }
 
 void Interpreter::printcode() {
@@ -162,4 +165,13 @@ void Interpreter::declarenum(std::vector<std::string> vals) {
     throw std::logic_error("Wrong number of parameters for num initialization");
   }
   memory.createnum(vals[1], strtonum(vals[2]));
+}
+
+void Interpreter::read(std::vector<std::string> vals) {
+  if (vals.size() != 2) {
+    throw std::logic_error("Wrong number of parameters for reading");
+  }
+  std::string input;
+  std::cin >> input;
+  memory.createstring(vals[1], input);
 }

@@ -34,6 +34,7 @@ private:
   void declarestring(std::vector<std::string> vals);
   void declareboolean(std::vector<std::string> vals);
   void declarenum(std::vector<std::string> vals);
+  void read(std::vector<std::string> vals);
 
   // memory
   std::vector<std::string> code;
