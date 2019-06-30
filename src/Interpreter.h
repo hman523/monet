@@ -19,12 +19,14 @@ public:
 private:
   // helper functions
   void interpret();
-  void eval(std::string value);
+  std::string eval(std::string value);
   std::vector<std::string> split(std::string str, char delim = ' ');
   bool isString(std::string val);
   int strtoint(std::string num);
   double strtonum(std::string num);
   std::string removequotes(std::string original);
+  bool isParens(std::string statement);
+  std::string removeparens(std::string original);
 
   // command functions for the interpretting
   void printcode();

@@ -23,39 +23,43 @@ void Interpreter::interpret() {
                 [&](std::string line) -> void { eval(line); });
 }
 
-void Interpreter::eval(std::string value) {
+std::string Interpreter::eval(std::string value) {
   std::vector<std::string> words = split(value);
   if (words.size() == 0) {
-    return;
+    return "";
   }
-  if(words[0].length() > 1 && words[0].substr(0, 2) == "//"){
+  else if(words[0].length() > 1 && words[0].substr(0, 2) == "//"){
     //do nothing, this is a comment
-    return;
+    return "";
   }
-  if (words[0] == "quit") {
+  else if (words[0] == "quit") {
     quit(words);
   }
-  if (words[0] == "print") {
+  else if (words[0] == "print") {
     print(words);
   }
-  if (words[0] == "println") {
+  else if (words[0] == "println") {
     println(words);
   }
-  if (words[0] == "string") {
+  else if (words[0] == "string") {
     declarestring(words);
   }
-  if (words[0] == "num") {
+  else if (words[0] == "num") {
     declarenum(words);
   }
-  if (words[0] == "boolean") {
+  else if (words[0] == "boolean") {
     declareboolean(words);
   }
-  if (words[0] == "read") {
+  else if (words[0] == "read") {
     read(words);
   }
-  if (words[0] == "printall"){
+  else if (words[0] == "printall"){
     printcode();
   }
+  else{
+    throw std::logic_error("Function \"" + words[0] + "\" does not exist");
+  }
+  return "";
 }
 
 void Interpreter::printcode() {
@@ -67,14 +71,24 @@ std::vector<std::string> Interpreter::split(std::string str, char delim) {
   std::vector<std::string> returnval;
   std::string temp = "";
   bool instr = false;
+  bool inparens = false;
   for (uint32_t i = 0; i < str.length(); ++i) {
+    if(str[i] == '(' && !instr){
+      inparens = true;
+    }
+    if(str[i] == ')' && !instr){
+      inparens = false;
+    }
     if (str[i] == '"') {
       instr = !instr;
     }
-    if (str[i] == delim && temp != "" && !instr) {
+    if (str[i] == delim && temp != "" && !instr && !inparens) {
       returnval.push_back(temp);
       temp = "";
-    } else if (instr) {
+    } else if(inparens){
+      temp += str[i];
+    }
+    else if (instr) {
       temp += str[i];
     } else {
       temp += tolower(str[i]);
@@ -112,6 +126,19 @@ std::string Interpreter::removequotes(std::string original) {
   }
 }
 
+bool Interpreter::isParens(std::string statement) {
+  return (statement.length() >= 2 && statement[0] == '(' && statement[statement.size() - 1] == ')');
+}
+
+std::string Interpreter::removeparens(std::string original) {
+  if (isParens(original)){
+    return original.substr(1, original.length() - 2);
+  }
+  else{
+    return original;
+  }
+}
+
 void Interpreter::print(std::vector<std::string> words) {
   if (words.size() < 2) {
     std::cout << std::endl;
@@ -119,7 +146,10 @@ void Interpreter::print(std::vector<std::string> words) {
     for (uint32_t i = 1; i < words.size(); ++i) {
       if (isString(words[i])) {
         std::cout << removequotes(words[i]) << std::flush;
-      } else {
+      } else if(isParens(words[i])){
+        std::cout << eval(removeparens(words[i])) << std::flush;
+      }
+      else {
         std::cout << memory.get(words[i]) << std::flush;
       }
     }
@@ -133,7 +163,10 @@ void Interpreter::println(std::vector<std::string> words) {
     for (uint32_t i = 1; i < words.size(); ++i) {
       if (isString(words[i])) {
         std::cout << removequotes(words[i]) << std::flush;
-      } else {
+      } else if(isParens(words[i])){
+        std::cout << eval(removeparens(words[i])) << std::flush;
+      }
+      else {
         std::cout << memory.get(words[i]) << std::flush;
       }
     }
@@ -145,7 +178,11 @@ void Interpreter::quit(std::vector<std::string> words) {
   if (words.size() == 1) {
     exit(EXIT_SUCCESS);
   } else {
-    exit(strtoint(words[1]));
+     if(isParens(words[1])){
+       exit(strtoint(eval(words[1])));
+     }else{
+       exit(strtoint(words[1]));
+     }
   }
 }
 
@@ -154,7 +191,11 @@ void Interpreter::declarestring(std::vector<std::string> vals) {
     throw std::logic_error(
         "Wrong number of parameters for string initialization");
   }
-  memory.createstring(vals[1], removequotes(vals[2]));
+  if(isParens(vals[2])){
+    memory.createstring(vals[1], eval(vals[2]));
+  }else {
+    memory.createstring(vals[1], removequotes(vals[2]));
+  }
 }
 
 void Interpreter::declareboolean(std::vector<std::string> vals) {
@@ -162,8 +203,13 @@ void Interpreter::declareboolean(std::vector<std::string> vals) {
     throw std::logic_error(
         "Wrong number of parameters for boolean initialization");
   }
-  bool a =
-      (vals[2] == "true" || vals[2] == "t" || vals[2] == "1") ? true : false;
+  bool a;
+  if(isParens(vals[2])){
+    std::string temp = eval(vals[2]);
+    a = (temp == "true" || temp == "t" || temp == "1") ? true : false;
+  }else {
+    a = (vals[2] == "true" || vals[2] == "t" || vals[2] == "1") ? true : false;
+  }
   memory.createboolean(vals[1], a);
 }
 
@@ -171,7 +217,11 @@ void Interpreter::declarenum(std::vector<std::string> vals) {
   if (vals.size() != 3) {
     throw std::logic_error("Wrong number of parameters for num initialization");
   }
-  memory.createnum(vals[1], strtonum(vals[2]));
+  if (isParens(vals[2])){
+    memory.createnum(vals[1], strtonum(eval(vals[2])));
+  }else {
+    memory.createnum(vals[1], strtonum(vals[2]));
+  }
 }
 
 void Interpreter::read(std::vector<std::string> vals) {
