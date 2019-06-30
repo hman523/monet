@@ -3,12 +3,13 @@
 //
 
 #include "Memory.h"
+#include <cmath>
 #include <iostream>
 #include <sstream>
 
 Memory::Memory() {
-  functionnamespace.insert(
-      {"print", "println", "quit", "boolean", "num", "string", "read"});
+  functionnamespace.insert({"print", "println", "quit", "boolean", "num",
+                            "string", "read", "add", "sub", "mul", "div"});
 }
 
 std::string Memory::get(std::string var) {
@@ -21,7 +22,11 @@ std::string Memory::get(std::string var) {
       }
     }
     if (variabletypes[var] == "num") {
-      return std::to_string(nums[var]);
+      if (fmod(nums[var], 1) < .000001) {
+        return std::to_string(((int)nums[var]));
+      } else {
+        return std::to_string(nums[var]);
+      }
     }
     if (variabletypes[var] == "string") {
       return strings[var];

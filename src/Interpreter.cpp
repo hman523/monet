@@ -4,8 +4,11 @@
 
 #include "Interpreter.h"
 #include <algorithm>
+#include <cmath>
 #include <fstream>
 #include <iterator>
+#include <numeric>
+#include <random>
 #include <sstream>
 
 Interpreter::Interpreter(std::string filename) {
@@ -46,6 +49,14 @@ std::string Interpreter::eval(std::string value) {
     read(words);
   } else if (words[0] == "printall") {
     printcode();
+  } else if (words[0] == "add") {
+    return normalizenumber(add(words));
+  } else if (words[0] == "sub") {
+    return normalizenumber(sub(words));
+  } else if (words[0] == "mul") {
+    return normalizenumber(mul(words));
+  } else if (words[0] == "div") {
+    return normalizenumber(div(words));
   } else {
     throw std::logic_error("Function \"" + words[0] + "\" does not exist");
   }
@@ -125,6 +136,30 @@ std::string Interpreter::removeparens(std::string original) {
     return original.substr(1, original.length() - 2);
   } else {
     return original;
+  }
+}
+
+bool Interpreter::isNumber(std::string value) {
+  if (value.length() == 0) {
+    return false;
+  }
+  if (value[0] == '-' || isdigit(value[0])) {
+    for (uint32_t x = 0; x < value.length(); x++) {
+      if (!isdigit(value[x])) {
+        return false;
+      }
+    }
+    return true;
+  } else {
+    return false;
+  }
+}
+
+std::string Interpreter::normalizenumber(double x) {
+  if (fmod(x, 1) < .000001) {
+    return std::to_string(((int)x));
+  } else {
+    return std::to_string(x);
   }
 }
 
@@ -222,4 +257,90 @@ void Interpreter::read(std::vector<std::string> vals) {
   std::string input;
   std::cin >> input;
   memory.createstring(vals[1], input);
+}
+
+double Interpreter::add(std::vector<std::string> vals) {
+  if (vals.size() < 2) {
+    throw std::logic_error("Too few inputs for add");
+  }
+  std::vector<double> parameters;
+  std::transform(vals.begin() + 1, vals.end(), std::back_inserter(parameters),
+                 [&](std::string in) -> double {
+                   if (isParens(in)) {
+                     return strtonum(eval(removeparens(in)));
+                   } else {
+                     if (!isNumber(in)) {
+                       return memory.getnum(in);
+                     } else {
+                       return strtonum(in);
+                     }
+                   }
+                 });
+  return std::accumulate(parameters.begin(), parameters.end(), 0);
+}
+
+double Interpreter::sub(std::vector<std::string> vals) {
+  if (vals.size() < 2) {
+    throw std::logic_error("Too few inputs for sub");
+  }
+  std::vector<double> parameters;
+  std::transform(vals.begin() + 1, vals.end(), std::back_inserter(parameters),
+                 [&](std::string in) -> double {
+                   if (isParens(in)) {
+                     return strtonum(eval(removeparens(in)));
+                   } else {
+                     if (!isNumber(in)) {
+                       return memory.getnum(in);
+                     } else {
+                       return strtonum(in);
+                     }
+                   }
+                 });
+  return std::accumulate(parameters.begin(), parameters.end(), 0,
+                         std::minus<>{});
+}
+
+double Interpreter::mul(std::vector<std::string> vals) {
+  if (vals.size() < 2) {
+    throw std::logic_error("Too few inputs for mul");
+  }
+  std::vector<double> parameters;
+  std::transform(vals.begin() + 1, vals.end(), std::back_inserter(parameters),
+                 [&](std::string in) -> double {
+                   if (isParens(in)) {
+                     return strtonum(eval(removeparens(in)));
+                   } else {
+                     if (!isNumber(in)) {
+                       return memory.getnum(in);
+                     } else {
+                       return strtonum(in);
+                     }
+                   }
+                 });
+  return std::accumulate(parameters.begin(), parameters.end(), 1,
+                         std::multiplies<>{});
+}
+
+double Interpreter::div(std::vector<std::string> vals) {
+  if (vals.size() < 2) {
+    throw std::logic_error("Too few inputs for div");
+  }
+  std::vector<double> parameters;
+  std::transform(vals.begin() + 1, vals.end(), std::back_inserter(parameters),
+                 [&](std::string in) -> double {
+                   if (isParens(in)) {
+                     return strtonum(eval(removeparens(in)));
+                   } else {
+                     if (!isNumber(in)) {
+                       return memory.getnum(in);
+                     } else {
+                       return strtonum(in);
+                     }
+                   }
+                 });
+  double curr = parameters[0];
+  for (uint32_t i = 1; i < parameters.size(); ++i) {
+    curr /= parameters[i];
+  }
+  return curr;
 }

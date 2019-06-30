@@ -27,6 +27,8 @@ private:
   std::string removequotes(std::string original);
   bool isParens(std::string statement);
   std::string removeparens(std::string original);
+  bool isNumber(std::string value);
+  std::string normalizenumber(double x);
 
   // command functions for the interpretting
   void printcode();
@@ -37,6 +39,13 @@ private:
   void declareboolean(std::vector<std::string> vals);
   void declarenum(std::vector<std::string> vals);
   void read(std::vector<std::string> vals);
+
+  // Math functions
+  double add(std::vector<std::string> vals);
+  double sub(std::vector<std::string> vals);
+  double mul(std::vector<std::string> vals);
+
+  double div(std::vector<std::string> vals);
 
   // memory
   std::vector<std::string> code;
