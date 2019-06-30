@@ -7,8 +7,7 @@
 #include <sstream>
 
 Memory::Memory() {
-  functionnamespace.insert("print");
-  functionnamespace.insert("quit");
+  functionnamespace.insert({"print", "println", "quit", "boolean", "num", "string", "read"});
 }
 
 std::string Memory::get(std::string var) {
