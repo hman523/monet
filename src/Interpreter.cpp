@@ -296,8 +296,8 @@ double Interpreter::sub(std::vector<std::string> vals) {
                      }
                    }
                  });
-  return std::accumulate(parameters.begin(), parameters.end(), 0,
-                         std::minus<>{});
+  return parameters[0] + std::accumulate(parameters.begin() + 1,
+                                         parameters.end(), 0, std::minus<>{});
 }
 
 double Interpreter::mul(std::vector<std::string> vals) {
