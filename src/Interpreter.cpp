@@ -218,7 +218,7 @@ void Interpreter::declarestring(std::vector<std::string> vals) {
         "Wrong number of parameters for string initialization");
   }
   if (isParens(vals[2])) {
-    memory.createstring(vals[1], eval(vals[2]));
+    memory.createstring(vals[1], eval(removeparens(vals[2])));
   } else {
     memory.createstring(vals[1], removequotes(vals[2]));
   }
@@ -231,7 +231,7 @@ void Interpreter::declareboolean(std::vector<std::string> vals) {
   }
   bool a;
   if (isParens(vals[2])) {
-    std::string temp = eval(vals[2]);
+    std::string temp = eval(removeparens(vals[2]));
     a = (temp == "true" || temp == "t" || temp == "1") ? true : false;
   } else {
     a = (vals[2] == "true" || vals[2] == "t" || vals[2] == "1") ? true : false;
@@ -244,7 +244,7 @@ void Interpreter::declarenum(std::vector<std::string> vals) {
     throw std::logic_error("Wrong number of parameters for num initialization");
   }
   if (isParens(vals[2])) {
-    memory.createnum(vals[1], strtonum(eval(vals[2])));
+    memory.createnum(vals[1], strtonum(eval(removeparens(vals[2]))));
   } else {
     memory.createnum(vals[1], strtonum(vals[2]));
   }
