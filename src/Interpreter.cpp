@@ -72,21 +72,21 @@ std::vector<std::string> Interpreter::split(std::string str, char delim) {
   std::vector<std::string> returnval;
   std::string temp = "";
   bool instr = false;
-  bool inparens = false;
+  int inparens = 0;
   for (uint32_t i = 0; i < str.length(); ++i) {
     if (str[i] == '(' && !instr) {
-      inparens = true;
+      ++inparens;
     }
     if (str[i] == ')' && !instr) {
-      inparens = false;
+      --inparens;
     }
     if (str[i] == '"') {
       instr = !instr;
     }
-    if (str[i] == delim && temp != "" && !instr && !inparens) {
+    if (str[i] == delim && temp != "" && !instr && inparens == 0) {
       returnval.push_back(temp);
       temp = "";
-    } else if (inparens) {
+    } else if (inparens != 0) {
       temp += str[i];
     } else if (instr) {
       temp += str[i];
