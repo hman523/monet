@@ -58,19 +58,19 @@ std::string Interpreter::eval(std::string value) {
   } else if (words[0] == "div") {
     return normalizenumber(div(words));
   } else if (words[0] == "and") {
-    return std::to_string(andfunc(words));
+    return normalizebool(andfunc(words));
   } else if (words[0] == "or") {
-    return std::to_string(orfunc(words));
+    return normalizebool(orfunc(words));
   } else if (words[0] == "not") {
-    return std::to_string(notfunc(words));
+    return normalizebool(notfunc(words));
   } else if (words[0] == "nand") {
-    return std::to_string(nandfunc(words));
+    return normalizebool(nandfunc(words));
   } else if (words[0] == "nor") {
-    return std::to_string(norfunc(words));
+    return normalizebool(norfunc(words));
   } else if (words[0] == "xor") {
-    return std::to_string(xorfunc(words));
+    return normalizebool(xorfunc(words));
   } else if (words[0] == "xnor") {
-    return std::to_string(xnorfunc(words));
+    return normalizebool(xnorfunc(words));
   } else {
     throw std::logic_error("Function \"" + words[0] + "\" does not exist");
   }
@@ -187,6 +187,8 @@ std::string Interpreter::normalizenumber(double x) {
     return std::to_string(x);
   }
 }
+
+std::string Interpreter::normalizebool(bool x) { return x ? "true" : "false"; }
 
 std::vector<bool> Interpreter::parameterstobool(std::vector<std::string> vals) {
   std::vector<bool> parameters;
