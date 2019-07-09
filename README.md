@@ -8,7 +8,7 @@ In the words of Greenspun's tenth rule,
 
 This is my attempt at writing a language. While it will be a simple one, I am just doing this to learn and maybe make a useful scripting tool. Ultimately, I have no plans for this except to learn from it.
 
-##Syntax
+## Syntax
 The syntax is similar to BASIC. Syntax is always 
 `command parameter`. A function can have an arbitrary number of parameters. 
 Commands and functions are case insensitive
@@ -17,14 +17,14 @@ Additionally, nesting is supported using parenthesis. For example:
 `print (add 1 2)`
 
 
-##Functions
+## Functions
 Built in commands so far:
 `print`, `println`, `string`, `boolean`, `num`, `read`, `quit`, 
 `add`, `sub`, `mul`, `div`, `not`, `and`, `or`, `nand`, `nor`, `xor`, `xnor`
 
 Commands coming soon: `if, define, foreach, map, reduce`
 
-##If statements (note not released yet)
+## If statements (note not released yet)
 If statements are very similar to those from Haskell. 
 If you are familiar with that, you should feel right at home. 
 For those who have not really worked with functional programming, 
@@ -41,7 +41,7 @@ println "x is " x
 ```
 Output: `x is 9`
 
-##Lists
+## Lists
 Lists are recursive containers that will be able to hold any datatype, including another list. 
 These lists will be used for iteration and will be closely associated with the map and foreach constructs. 
 A list is said to be null if it is empty. A list can contain a mix of any datatype. 
