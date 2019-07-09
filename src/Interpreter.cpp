@@ -136,7 +136,7 @@ bool Interpreter::strtobool(std::string val) {
   if (!isBoolean(val)) {
     std::cerr << "Calling strtobool on nonboolean value" << std::endl;
   }
-  return (val == "true");
+  return (val == "true" || val == "1");
 }
 
 std::string Interpreter::removequotes(std::string original) {
