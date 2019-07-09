@@ -57,6 +57,20 @@ std::string Interpreter::eval(std::string value) {
     return normalizenumber(mul(words));
   } else if (words[0] == "div") {
     return normalizenumber(div(words));
+  } else if (words[0] == "and") {
+    return std::to_string(andfunc(words));
+  } else if (words[0] == "or") {
+    return std::to_string(orfunc(words));
+  } else if (words[0] == "not") {
+    return std::to_string(notfunc(words));
+  } else if (words[0] == "nand") {
+    return std::to_string(nandfunc(words));
+  } else if (words[0] == "nor") {
+    return std::to_string(norfunc(words));
+  } else if (words[0] == "xor") {
+    return std::to_string(xorfunc(words));
+  } else if (words[0] == "xnor") {
+    return std::to_string(xnorfunc(words));
   } else {
     throw std::logic_error("Function \"" + words[0] + "\" does not exist");
   }
@@ -118,6 +132,13 @@ double Interpreter::strtonum(std::string num) {
   return val;
 }
 
+bool Interpreter::strtobool(std::string val) {
+  if (!isBoolean(val)) {
+    std::cerr << "Calling strtobool on nonboolean value" << std::endl;
+  }
+  return (val == "true");
+}
+
 std::string Interpreter::removequotes(std::string original) {
   if (isString(original)) {
     return original.substr(1, original.length() - 2);
@@ -155,12 +176,51 @@ bool Interpreter::isNumber(std::string value) {
   }
 }
 
+bool Interpreter::isBoolean(std::string value) {
+  return (value == "true" || value == "false");
+}
+
 std::string Interpreter::normalizenumber(double x) {
   if (fmod(x, 1) < .000001) {
     return std::to_string(((int)x));
   } else {
     return std::to_string(x);
   }
+}
+
+std::vector<bool> Interpreter::parameterstobool(std::vector<std::string> vals) {
+  std::vector<bool> parameters;
+  std::transform(vals.begin() + 1, vals.end(), std::back_inserter(parameters),
+                 [&](std::string in) -> bool {
+                   if (isParens(in)) {
+                     return strtobool(eval(removeparens(in)));
+                   } else {
+                     if (!isBoolean(in)) {
+                       return memory.getboolean(in);
+                     } else {
+                       return strtobool(in);
+                     }
+                   }
+                 });
+  return parameters;
+}
+
+std::vector<double>
+Interpreter::parameterstonums(std::vector<std::string> vals) {
+  std::vector<double> parameters;
+  std::transform(vals.begin() + 1, vals.end(), std::back_inserter(parameters),
+                 [&](std::string in) -> double {
+                   if (isParens(in)) {
+                     return strtonum(eval(removeparens(in)));
+                   } else {
+                     if (!isNumber(in)) {
+                       return memory.getnum(in);
+                     } else {
+                       return strtonum(in);
+                     }
+                   }
+                 });
+  return parameters;
 }
 
 void Interpreter::print(std::vector<std::string> words) {
@@ -263,19 +323,7 @@ double Interpreter::add(std::vector<std::string> vals) {
   if (vals.size() < 2) {
     throw std::logic_error("Too few inputs for add");
   }
-  std::vector<double> parameters;
-  std::transform(vals.begin() + 1, vals.end(), std::back_inserter(parameters),
-                 [&](std::string in) -> double {
-                   if (isParens(in)) {
-                     return strtonum(eval(removeparens(in)));
-                   } else {
-                     if (!isNumber(in)) {
-                       return memory.getnum(in);
-                     } else {
-                       return strtonum(in);
-                     }
-                   }
-                 });
+  std::vector<double> parameters = parameterstonums(vals);
   return std::accumulate(parameters.begin(), parameters.end(), 0);
 }
 
@@ -283,19 +331,7 @@ double Interpreter::sub(std::vector<std::string> vals) {
   if (vals.size() < 2) {
     throw std::logic_error("Too few inputs for sub");
   }
-  std::vector<double> parameters;
-  std::transform(vals.begin() + 1, vals.end(), std::back_inserter(parameters),
-                 [&](std::string in) -> double {
-                   if (isParens(in)) {
-                     return strtonum(eval(removeparens(in)));
-                   } else {
-                     if (!isNumber(in)) {
-                       return memory.getnum(in);
-                     } else {
-                       return strtonum(in);
-                     }
-                   }
-                 });
+  std::vector<double> parameters = parameterstonums(vals);
   return parameters[0] + std::accumulate(parameters.begin() + 1,
                                          parameters.end(), 0, std::minus<>{});
 }
@@ -304,19 +340,7 @@ double Interpreter::mul(std::vector<std::string> vals) {
   if (vals.size() < 2) {
     throw std::logic_error("Too few inputs for mul");
   }
-  std::vector<double> parameters;
-  std::transform(vals.begin() + 1, vals.end(), std::back_inserter(parameters),
-                 [&](std::string in) -> double {
-                   if (isParens(in)) {
-                     return strtonum(eval(removeparens(in)));
-                   } else {
-                     if (!isNumber(in)) {
-                       return memory.getnum(in);
-                     } else {
-                       return strtonum(in);
-                     }
-                   }
-                 });
+  std::vector<double> parameters = parameterstonums(vals);
   return std::accumulate(parameters.begin(), parameters.end(), 1,
                          std::multiplies<>{});
 }
@@ -325,22 +349,72 @@ double Interpreter::div(std::vector<std::string> vals) {
   if (vals.size() < 2) {
     throw std::logic_error("Too few inputs for div");
   }
-  std::vector<double> parameters;
-  std::transform(vals.begin() + 1, vals.end(), std::back_inserter(parameters),
-                 [&](std::string in) -> double {
-                   if (isParens(in)) {
-                     return strtonum(eval(removeparens(in)));
-                   } else {
-                     if (!isNumber(in)) {
-                       return memory.getnum(in);
-                     } else {
-                       return strtonum(in);
-                     }
-                   }
-                 });
+  std::vector<double> parameters = parameterstonums(vals);
   double curr = parameters[0];
   for (uint32_t i = 1; i < parameters.size(); ++i) {
     curr /= parameters[i];
   }
   return curr;
+}
+
+bool Interpreter::andfunc(std::vector<std::string> vals) {
+  std::vector<bool> params = parameterstobool(vals);
+  if (params.size() < 2) {
+    throw std::logic_error("and function has too few parameters");
+  }
+  for (uint32_t i = 0; i < params.size(); ++i) {
+    if (!params[i]) {
+      return false;
+    }
+  }
+  return true;
+}
+
+bool Interpreter::orfunc(std::vector<std::string> vals) {
+  std::vector<bool> params = parameterstobool(vals);
+  if (params.size() < 2) {
+    throw std::logic_error("or function has too few parameters");
+  }
+  for (uint32_t i = 0; i < params.size(); ++i) {
+    if (params[i]) {
+      return true;
+    }
+  }
+  return false;
+}
+
+bool Interpreter::notfunc(std::vector<std::string> vals) {
+  if (vals.size() != 2) {
+    throw std::logic_error("Not function can only take one parameter");
+  }
+  return !(strtobool(vals[1]));
+}
+
+bool Interpreter::nandfunc(std::vector<std::string> vals) {
+  if (vals.size() < 3) {
+    throw std::logic_error("nand function has too few parameters");
+  }
+  return !andfunc(vals);
+}
+
+bool Interpreter::norfunc(std::vector<std::string> vals) {
+  if (vals.size() < 3) {
+    throw std::logic_error("nor function has too few parameters");
+  }
+  return !orfunc(vals);
+}
+
+bool Interpreter::xorfunc(std::vector<std::string> vals) {
+  std::vector<bool> params = parameterstobool(vals);
+  if (params.size() != 2) {
+    throw std::logic_error("xor function must have two parameters");
+  }
+  return (params[0] != params[1]);
+}
+
+bool Interpreter::xnorfunc(std::vector<std::string> vals) {
+  if (vals.size() != 3) {
+    throw std::logic_error("xnor function must have two parameters");
+  }
+  return !xorfunc(vals);
 }

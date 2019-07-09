@@ -24,11 +24,15 @@ private:
   bool isString(std::string val);
   int strtoint(std::string num);
   double strtonum(std::string num);
+  bool strtobool(std::string val);
   std::string removequotes(std::string original);
   bool isParens(std::string statement);
   std::string removeparens(std::string original);
   bool isNumber(std::string value);
+  bool isBoolean(std::string value);
   std::string normalizenumber(double x);
+  std::vector<bool> parameterstobool(std::vector<std::string> vals);
+  std::vector<double> parameterstonums(std::vector<std::string> vals);
 
   // command functions for the interpretting
   void printcode();
@@ -44,8 +48,16 @@ private:
   double add(std::vector<std::string> vals);
   double sub(std::vector<std::string> vals);
   double mul(std::vector<std::string> vals);
-
   double div(std::vector<std::string> vals);
+
+  // logic functions
+  bool andfunc(std::vector<std::string> vals);
+  bool orfunc(std::vector<std::string> vals);
+  bool notfunc(std::vector<std::string> vals);
+  bool nandfunc(std::vector<std::string> vals);
+  bool norfunc(std::vector<std::string> vals);
+  bool xorfunc(std::vector<std::string> vals);
+  bool xnorfunc(std::vector<std::string> vals);
 
   // memory
   std::vector<std::string> code;
