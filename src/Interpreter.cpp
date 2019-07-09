@@ -177,7 +177,7 @@ bool Interpreter::isNumber(std::string value) {
 }
 
 bool Interpreter::isBoolean(std::string value) {
-  return (value == "true" || value == "false");
+  return (value == "true" || value == "false" || value == "0" || value == "1");
 }
 
 std::string Interpreter::normalizenumber(double x) {
