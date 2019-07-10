@@ -68,8 +68,8 @@ bool Memory::functioninuse(std::string val) {
 
 void Memory::createboolean(std::string name, bool value) {
   if (!varexists(name)) {
-    booleans[name] = value;
-    variabletypes[name] = "boolean";
+    booleans.insert(std::pair<std::string, bool>(name, value));
+    variabletypes.insert(std::pair<std::string, std::string>(name, "boolean"));
   } else if (variabletypes[name] == "boolean") {
     throw std::logic_error("Reinitialization of variable " + name);
   } else {
@@ -80,7 +80,7 @@ void Memory::createboolean(std::string name, bool value) {
 
 void Memory::createnum(std::string name, double num) {
   if (!varexists(name)) {
-    nums[name] = num;
+    nums.insert(std::pair<std::string, double>(name, num));
     variabletypes.insert(std::pair<std::string, std::string>(name, "num"));
   } else if (variabletypes[name] == "num") {
     throw std::logic_error("Reinitialization of variable " + name);
@@ -92,8 +92,8 @@ void Memory::createnum(std::string name, double num) {
 
 void Memory::createstring(std::string name, std::string str) {
   if (!varexists(name)) {
-    strings[name] = str;
-    variabletypes[name] = "string";
+    strings.insert(std::pair<std::string, std::string>(name, str));
+    variabletypes.insert(std::pair<std::string, std::string>(name, "string"));
   } else if (variabletypes[name] == "string") {
     throw std::logic_error("Reinitialization of variable " + name);
   } else {
