@@ -103,3 +103,7 @@ void Memory::createstring(std::string name, std::string str) {
 }
 
 bool Memory::boolexists(std::string var) { return !(booleans.count(var) == 0); }
+
+bool Memory::strexists(std::string var) { return !(strings.count(var) == 0); }
+
+bool Memory::numexists(std::string var) { return !(nums.count(var) == 0); }

@@ -73,6 +73,20 @@ std::string Interpreter::eval(std::string value) {
     return normalizebool(xorfunc(words));
   } else if (words[0] == "xnor") {
     return normalizebool(xnorfunc(words));
+  } else if (words[0] == "eq") {
+    return normalizebool(comparison(words) == 0);
+  } else if (words[0] == "ne") {
+    return normalizebool(comparison(words) != 0);
+  } else if (words[0] == "gt") {
+    return normalizebool(comparison(words) > 0);
+  } else if (words[0] == "ge") {
+    return normalizebool(comparison(words) >= 0);
+  } else if (words[0] == "lt") {
+    return normalizebool(comparison(words) < 0);
+  } else if (words[0] == "le") {
+    return normalizebool(comparison(words) <= 0);
+  } else if (words[0] == "<=>") {
+    return std::to_string(comparison(words));
   } else {
     throw std::logic_error("Function \"" + words[0] + "\" does not exist");
   }
@@ -128,6 +142,9 @@ int Interpreter::strtoint(std::string num) {
 }
 
 double Interpreter::strtonum(std::string num) {
+  if (memory.numexists(num)) {
+    return memory.getnum(num);
+  }
   std::stringstream ss(num);
   double val;
   ss >> val;
@@ -144,6 +161,14 @@ bool Interpreter::strtobool(std::string val) {
     return memory.getboolean(val);
   }
   return (val == "true" || val == "1");
+}
+
+std::string Interpreter::strtostr(std::string var) {
+  if (memory.strexists(var)) {
+    return memory.getstring(var);
+  } else {
+    return var;
+  }
 }
 
 std::string Interpreter::removequotes(std::string original) {
@@ -168,6 +193,9 @@ std::string Interpreter::removeparens(std::string original) {
 }
 
 bool Interpreter::isNumber(std::string value) {
+  if (memory.numexists(value)) {
+    return true;
+  }
   if (value.length() == 0) {
     return false;
   }
@@ -184,6 +212,9 @@ bool Interpreter::isNumber(std::string value) {
 }
 
 bool Interpreter::isBoolean(std::string value) {
+  if (memory.boolexists(value)) {
+    return true;
+  }
   return (value == "true" || value == "false" || value == "0" || value == "1");
 }
 
@@ -449,4 +480,55 @@ bool Interpreter::xnorfunc(std::vector<std::string> vals) {
     throw std::logic_error("xnor function must have two parameters");
   }
   return !xorfunc(vals);
+}
+
+int Interpreter::comparison(std::vector<std::string> vals) {
+  // return 0 if eq, 1 if greater than, -1 if less than
+  if (vals.size() != 3) {
+    throw std::logic_error("Comparision can only be between two values");
+  }
+  std::string vals1 = isParens(vals[1]) ? eval(removeparens(vals[1])) : vals[1];
+  std::string vals2 = isParens(vals[2]) ? eval(removeparens(vals[2])) : vals[2];
+
+  if (isBoolean(vals1) && isBoolean(vals2)) {
+    bool a, b;
+    a = strtobool(vals1);
+    b = strtobool(vals2);
+    if (a == b) {
+      return 0;
+    } else if (a && !b) {
+      return 1;
+    } else {
+      return -1;
+    }
+  }
+  if (isNumber(vals1) && isNumber(vals2)) {
+    double x, y;
+    x = strtonum(vals1);
+    y = strtonum(vals2);
+    if (x == y) {
+      return 0;
+    } else if (x > y) {
+      return 1;
+    } else {
+      return -1;
+    }
+  }
+  if (isString(vals1) && isString(vals2)) {
+    std::string a, b;
+    a = strtostr(vals1);
+    b = strtostr(vals2);
+    int returnval = a.compare(b);
+    if (returnval == 0) {
+      return 0;
+    } else {
+      if (returnval > 0) {
+        return 1;
+      } else {
+        return -1;
+      }
+    }
+  }
+  throw std::logic_error("Comparison not permitted between different types");
+  return 0;
 }

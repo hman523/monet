@@ -20,6 +20,8 @@ public:
   void createnum(std::string name, double num);
   void createstring(std::string name, std::string str);
   bool boolexists(std::string var);
+  bool strexists(std::string var);
+  bool numexists(std::string var);
 
 private:
   std::map<std::string, bool> booleans;

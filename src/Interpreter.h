@@ -25,6 +25,7 @@ private:
   int strtoint(std::string num);
   double strtonum(std::string num);
   bool strtobool(std::string val);
+  std::string strtostr(std::string);
   std::string removequotes(std::string original);
   bool isParens(std::string statement);
   std::string removeparens(std::string original);
@@ -60,6 +61,9 @@ private:
   bool norfunc(std::vector<std::string> vals);
   bool xorfunc(std::vector<std::string> vals);
   bool xnorfunc(std::vector<std::string> vals);
+
+  // Equality functions
+  int comparison(std::vector<std::string> vals);
 
   // memory
   std::vector<std::string> code;
