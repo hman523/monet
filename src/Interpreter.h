@@ -43,7 +43,8 @@ private:
   void declarestring(std::vector<std::string> vals);
   void declareboolean(std::vector<std::string> vals);
   void declarenum(std::vector<std::string> vals);
-  void read(std::vector<std::string> vals);
+  std::string read(std::vector<std::string> vals);
+  std::string ifstatement(std::vector<std::string> vals);
 
   // Math functions
   double add(std::vector<std::string> vals);

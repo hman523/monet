@@ -20,11 +20,12 @@ Additionally, nesting is supported using parenthesis. For example:
 ## Functions
 Built in commands so far:
 `print`, `println`, `string`, `boolean`, `num`, `read`, `quit`, 
-`add`, `sub`, `mul`, `div`, `not`, `and`, `or`, `nand`, `nor`, `xor`, `xnor`
+`add`, `sub`, `mul`, `div`, `not`, `and`, `or`, `nand`, `nor`, `xor`, `xnor`,
+`if`
 
-Commands coming soon: `if, define, foreach, map, reduce`
+Commands coming soon: `eq, ne, gt, lt, ge, le, define, foreach, map, reduce`
 
-## If statements (note not released yet)
+## If statements
 If statements are very similar to those from Haskell. 
 If you are familiar with that, you should feel right at home. 
 For those who have not really worked with functional programming, 
@@ -41,7 +42,7 @@ println "x is " x
 ```
 Output: `x is 9`
 
-## Lists
+## Lists (note not released yet)
 Lists are recursive containers that will be able to hold any datatype, including another list. 
 These lists will be used for iteration and will be closely associated with the map and foreach constructs. 
 A list is said to be null if it is empty. A list can contain a mix of any datatype. 

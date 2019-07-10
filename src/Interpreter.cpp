@@ -46,7 +46,9 @@ std::string Interpreter::eval(std::string value) {
   } else if (words[0] == "boolean") {
     declareboolean(words);
   } else if (words[0] == "read") {
-    read(words);
+    return read(words);
+  } else if (words[0] == "if") {
+    return ifstatement(words);
   } else if (words[0] == "printall") {
     printcode();
   } else if (words[0] == "add") {
@@ -133,8 +135,13 @@ double Interpreter::strtonum(std::string num) {
 }
 
 bool Interpreter::strtobool(std::string val) {
-  if (!isBoolean(val)) {
-    std::cerr << "Calling strtobool on nonboolean value" << std::endl;
+  bool isVariable = memory.boolexists(val);
+  if ((!isVariable) && !isBoolean(val)) {
+    std::cerr << "Calling strtobool on nonboolean value \"" << val << "\""
+              << std::endl;
+  }
+  if (isVariable) {
+    return memory.getboolean(val);
   }
   return (val == "true" || val == "1");
 }
@@ -312,13 +319,36 @@ void Interpreter::declarenum(std::vector<std::string> vals) {
   }
 }
 
-void Interpreter::read(std::vector<std::string> vals) {
-  if (vals.size() != 2) {
+std::string Interpreter::read(std::vector<std::string> vals) {
+  if (vals.size() > 2) {
     throw std::logic_error("Wrong number of parameters for reading");
   }
   std::string input;
   std::cin >> input;
   memory.createstring(vals[1], input);
+  return input;
+}
+
+std::string Interpreter::ifstatement(std::vector<std::string> vals) {
+  if (vals.size() != 4) {
+    throw std::logic_error("Wrong number of inputs for if statement");
+  }
+  bool expr;
+  if (isParens(vals[1])) {
+    expr = strtobool(eval(removeparens(vals[1])));
+  } else {
+    if (!isBoolean(vals[1])) {
+      throw std::logic_error(
+          "First value must be a boolean value in if statement");
+    }
+    expr = strtobool(vals[1]);
+  }
+  uint8_t index = expr ? 2 : 3;
+  if (isParens(vals[index])) {
+    return eval(removeparens(vals[index]));
+  } else {
+    return vals[index];
+  }
 }
 
 double Interpreter::add(std::vector<std::string> vals) {

@@ -101,3 +101,5 @@ void Memory::createstring(std::string name, std::string str) {
                            variabletypes[name]);
   }
 }
+
+bool Memory::boolexists(std::string var) { return !(booleans.count(var) == 0); }
