@@ -13,7 +13,7 @@ Memory::Memory() {
 }
 
 std::string Memory::get(std::string var) {
-  if (variabletypes.count(var) != 0) {
+  if (varexists(var)) {
     if (variabletypes[var] == "boolean") {
       if (booleans[var]) {
         return "true";
@@ -42,21 +42,21 @@ std::string Memory::get(std::string var) {
 }
 
 std::string Memory::getstring(std::string var) {
-  if (strings.count(var) == 0) {
+  if (!strexists(var)) {
     throw std::logic_error("Variable " + var + " does not exist");
   }
   return strings[var];
 }
 
 bool Memory::getboolean(std::string var) {
-  if (booleans.count(var) == 0) {
+  if (!boolexists(var)) {
     throw std::logic_error("Variable " + var + " does not exist");
   }
   return booleans[var];
 }
 
 double Memory::getnum(std::string var) {
-  if (nums.count(var) == 0) {
+  if (!numexists(var)) {
     throw std::logic_error("Variable " + var + " does not exist");
   }
   return nums[var];
@@ -67,7 +67,7 @@ bool Memory::functioninuse(std::string val) {
 }
 
 void Memory::createboolean(std::string name, bool value) {
-  if (variabletypes.count(name) == 0) {
+  if (!varexists(name)) {
     booleans[name] = value;
     variabletypes[name] = "boolean";
   } else if (variabletypes[name] == "boolean") {
@@ -79,9 +79,9 @@ void Memory::createboolean(std::string name, bool value) {
 }
 
 void Memory::createnum(std::string name, double num) {
-  if (variabletypes.count(name) == 0) {
+  if (!varexists(name)) {
     nums[name] = num;
-    variabletypes[name] = "num";
+    variabletypes.insert(std::pair<std::string, std::string>(name, "num"));
   } else if (variabletypes[name] == "num") {
     throw std::logic_error("Reinitialization of variable " + name);
   } else {
@@ -91,7 +91,7 @@ void Memory::createnum(std::string name, double num) {
 }
 
 void Memory::createstring(std::string name, std::string str) {
-  if (variabletypes.count(name) == 0) {
+  if (!varexists(name)) {
     strings[name] = str;
     variabletypes[name] = "string";
   } else if (variabletypes[name] == "string") {
@@ -102,8 +102,12 @@ void Memory::createstring(std::string name, std::string str) {
   }
 }
 
-bool Memory::boolexists(std::string var) { return !(booleans.count(var) == 0); }
+bool Memory::boolexists(std::string var) { return (booleans.count(var) != 0); }
 
-bool Memory::strexists(std::string var) { return !(strings.count(var) == 0); }
+bool Memory::strexists(std::string var) { return (strings.count(var) != 0); }
 
-bool Memory::numexists(std::string var) { return !(nums.count(var) == 0); }
+bool Memory::numexists(std::string var) { return (nums.count(var) != 0); }
+
+bool Memory::varexists(std::string var) {
+  return (variabletypes.count(var) != 0);
+}

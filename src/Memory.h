@@ -22,6 +22,7 @@ public:
   bool boolexists(std::string var);
   bool strexists(std::string var);
   bool numexists(std::string var);
+  bool varexists(std::string var);
 
 private:
   std::map<std::string, bool> booleans;

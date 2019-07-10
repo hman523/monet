@@ -23,7 +23,7 @@ Built in commands so far:
 `add`, `sub`, `mul`, `div`, `not`, `and`, `or`, `nand`, `nor`, `xor`, `xnor`,
 `if`, `eq`, `ne`, `gt`, `lt`, `ge`, `le` 
 
-Commands coming soon: `define, foreach, map, reduce`
+Commands coming soon: `subroutine, define, foreach, map, reduce`
 
 ## If statements
 If statements are very similar to those from Haskell. 
