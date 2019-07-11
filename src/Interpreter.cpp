@@ -12,12 +12,34 @@
 #include <sstream>
 
 Interpreter::Interpreter(std::string filename) {
+  std::string functiondeclarationname = "define";
+  std::string functionendname = "endfn";
   std::ifstream infile;
   infile.open(filename);
   std::string line;
+  std::string fn;
+  bool inFunction = false;
   while (std::getline(infile, line)) {
-    code.push_back(line);
+
+    if (line.substr(0, functiondeclarationname.length()) ==
+        functiondeclarationname) {
+      inFunction = true;
+    }
+    if (line.substr(0, functionendname.length()) == functionendname) {
+      inFunction = false;
+      code.push_back(fn);
+      fn = "";
+      continue;
+    }
+    if (inFunction) {
+      fn += line;
+      fn += "\17";
+    } else {
+      code.push_back(line);
+    }
   }
+  std::cout << "HI" << std::endl;
+
   interpret();
 }
 
@@ -32,6 +54,9 @@ std::string Interpreter::eval(std::string value) {
     return "";
   } else if (words[0].length() > 1 && words[0].substr(0, 2) == "//") {
     // do nothing, this is a comment
+    return "";
+  } else if (words[0] == "define") {
+    define(split(value, '\17'));
     return "";
   } else if (words[0] == "quit") {
     quit(words);
@@ -87,6 +112,8 @@ std::string Interpreter::eval(std::string value) {
     return normalizebool(comparison(words) <= 0);
   } else if (words[0] == "<=>") {
     return std::to_string(comparison(words));
+  } else if (memory.functioninuse(words[0])) {
+    return call(words);
   } else {
     throw std::logic_error("Function \"" + words[0] + "\" does not exist");
   }
@@ -357,7 +384,7 @@ std::string Interpreter::read(std::vector<std::string> vals) {
   std::string input;
   std::cin >> input;
   if (vals.size() == 2) {
-      memory.createstring(vals[1], input);
+    memory.createstring(vals[1], input);
   }
   return input;
 }
@@ -382,6 +409,18 @@ std::string Interpreter::ifstatement(std::vector<std::string> vals) {
   } else {
     return vals[index];
   }
+}
+
+void Interpreter::define(std::vector<std::string> vals) {
+  memory.createfunction(split(vals[0])[2], vals);
+}
+
+std::string Interpreter::call(std::vector<std::string> vals) {
+  std::string functionname = vals[0];
+  auto fncode = memory.getfn(functionname);
+  // todo: figure out how to pass parameters, or rather call functions without
+  // them using the global namespace
+  return "";
 }
 
 double Interpreter::add(std::vector<std::string> vals) {

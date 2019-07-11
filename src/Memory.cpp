@@ -41,6 +41,13 @@ std::string Memory::get(std::string var) {
   }
 }
 
+std::vector<std::string> Memory::getfn(std::string var) {
+  if (!functioninuse(var)) {
+    throw std::logic_error("Function " + var + " does not exist");
+  }
+  return functions[var];
+}
+
 std::string Memory::getstring(std::string var) {
   if (!strexists(var)) {
     throw std::logic_error("Variable " + var + " does not exist");
@@ -64,6 +71,15 @@ double Memory::getnum(std::string var) {
 
 bool Memory::functioninuse(std::string val) {
   return functionnamespace.count(val) != 0;
+}
+
+void Memory::createfunction(std::string name, std::vector<std::string> code) {
+  if (functioninuse(name)) {
+    throw std::logic_error("Unable to redefine \"" + name + "\"");
+  }
+  functionnamespace.insert(name);
+  functions.insert(
+      std::pair<std::string, std::vector<std::string>>(name, code));
 }
 
 void Memory::createboolean(std::string name, bool value) {

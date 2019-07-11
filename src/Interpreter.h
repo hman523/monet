@@ -47,6 +47,10 @@ private:
   std::string read(std::vector<std::string> vals);
   std::string ifstatement(std::vector<std::string> vals);
 
+  // function functions
+  void define(std::vector<std::string> vals);
+  std::string call(std::vector<std::string> vals);
+
   // Math functions
   double add(std::vector<std::string> vals);
   double sub(std::vector<std::string> vals);
