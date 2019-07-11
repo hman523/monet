@@ -356,7 +356,9 @@ std::string Interpreter::read(std::vector<std::string> vals) {
   }
   std::string input;
   std::cin >> input;
-  memory.createstring(vals[1], input);
+  if (vals.size() == 2) {
+      memory.createstring(vals[1], input);
+  }
   return input;
 }
 
