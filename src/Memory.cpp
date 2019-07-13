@@ -13,26 +13,27 @@ Memory::Memory() {
                             "div",    "and",     "or",   "nand",    "nor",
                             "xor",    "xnor",    "if",   "eq",      "ne",
                             "gt",     "lt",      "ge",   "le",      "define"});
+  enterfn();
 }
 
 std::string Memory::get(std::string var) {
   if (varexists(var)) {
-    if (variabletypes[var] == "boolean") {
-      if (booleans[var]) {
+    if (getType(var) == "boolean") {
+      if (getboolean(var)) {
         return "true";
       } else {
         return "false";
       }
     }
-    if (variabletypes[var] == "num") {
-      if (fmod(nums[var], 1) < .000001) {
-        return std::to_string(((int)nums[var]));
+    if (getType(var) == "num") {
+      if (fmod(getnum(var), 1) < .000001) {
+        return std::to_string(((int)getnum(var)));
       } else {
-        return std::to_string(nums[var]);
+        return std::to_string(getnum(var));
       }
     }
-    if (variabletypes[var] == "string") {
-      return strings[var];
+    if (getType(var) == "string") {
+      return getstring(var);
     } else {
       std::cerr
           << "If you are seeing this message something is very, very wrong"
@@ -55,21 +56,21 @@ std::string Memory::getstring(std::string var) {
   if (!strexists(var)) {
     throw std::logic_error("Variable " + var + " does not exist");
   }
-  return strings[var];
+  return strings.top()[var];
 }
 
 bool Memory::getboolean(std::string var) {
   if (!boolexists(var)) {
     throw std::logic_error("Variable " + var + " does not exist");
   }
-  return booleans[var];
+  return booleans.top()[var];
 }
 
 double Memory::getnum(std::string var) {
   if (!numexists(var)) {
     throw std::logic_error("Variable " + var + " does not exist");
   }
-  return nums[var];
+  return nums.top()[var];
 }
 
 bool Memory::functioninuse(std::string val) {
@@ -87,46 +88,65 @@ void Memory::createfunction(std::string name, std::vector<std::string> code) {
 
 void Memory::createboolean(std::string name, bool value) {
   if (!varexists(name)) {
-    booleans.insert(std::pair<std::string, bool>(name, value));
-    variabletypes.insert(std::pair<std::string, std::string>(name, "boolean"));
-  } else if (variabletypes[name] == "boolean") {
+    booleans.top().insert(std::pair<std::string, bool>(name, value));
+    variabletypes.top().insert(std::pair<std::string, std::string>(name, "boolean"));
+  } else if (getType(name) == "boolean") {
     throw std::logic_error("Reinitialization of variable " + name);
   } else {
     throw std::logic_error("Variable " + name + " already initialized as a " +
-                           variabletypes[name]);
+                           getType(name));
   }
 }
 
 void Memory::createnum(std::string name, double num) {
   if (!varexists(name)) {
-    nums.insert(std::pair<std::string, double>(name, num));
-    variabletypes.insert(std::pair<std::string, std::string>(name, "num"));
-  } else if (variabletypes[name] == "num") {
+    nums.top().insert(std::pair<std::string, double>(name, num));
+    variabletypes.top().insert(std::pair<std::string, std::string>(name, "num"));
+  } else if (getType(name) == "num") {
     throw std::logic_error("Reinitialization of variable " + name);
   } else {
     throw std::logic_error("Variable " + name + " already initialized as a " +
-                           variabletypes[name]);
+                           getType(name));
   }
 }
 
 void Memory::createstring(std::string name, std::string str) {
   if (!varexists(name)) {
-    strings.insert(std::pair<std::string, std::string>(name, str));
-    variabletypes.insert(std::pair<std::string, std::string>(name, "string"));
-  } else if (variabletypes[name] == "string") {
+    strings.top().insert(std::pair<std::string, std::string>(name, str));
+    variabletypes.top().insert(std::pair<std::string, std::string>(name, "string"));
+  } else if (getType(name) == "string") {
     throw std::logic_error("Reinitialization of variable " + name);
   } else {
     throw std::logic_error("Variable " + name + " already initialized as a " +
-                           variabletypes[name]);
+                           getType(name));
   }
 }
 
-bool Memory::boolexists(std::string var) { return (booleans.count(var) != 0); }
+bool Memory::boolexists(std::string var) { return (booleans.top().count(var) != 0); }
 
-bool Memory::strexists(std::string var) { return (strings.count(var) != 0); }
+bool Memory::strexists(std::string var) { return (strings.top().count(var) != 0); }
 
-bool Memory::numexists(std::string var) { return (nums.count(var) != 0); }
+bool Memory::numexists(std::string var) { return (nums.top().count(var) != 0); }
 
 bool Memory::varexists(std::string var) {
-  return (variabletypes.count(var) != 0);
+  return (variabletypes.top().count(var) != 0);
+}
+
+void Memory::enterfn() {
+  variabletypes.push(std::map<std::string, std::string>());
+  booleans.push(std::map<std::string, bool>());
+  strings.push(std::map<std::string, std::string>());
+  nums.push(std::map<std::string, double>());
+
+}
+
+void Memory::leavefn() {
+  variabletypes.pop();
+  booleans.pop();
+  strings.pop();
+  nums.pop();
+}
+
+std::string Memory::getType(std::string var) {
+  return variabletypes.top()[var];
 }

@@ -38,8 +38,6 @@ Interpreter::Interpreter(std::string filename) {
       code.push_back(line);
     }
   }
-  std::cout << "HI" << std::endl;
-
   interpret();
 }
 

@@ -8,6 +8,7 @@
 #include <map>
 #include <set>
 #include <vector>
+#include <stack>
 
 class Memory {
 public:
@@ -26,15 +27,20 @@ public:
   bool strexists(std::string var);
   bool numexists(std::string var);
   bool varexists(std::string var);
+  void enterfn();
+  void leavefn();
 
 private:
-  std::map<std::string, bool> booleans;
-  std::map<std::string, double> nums;
-  std::map<std::string, std::string> strings;
+
+  std::string getType(std::string var);
+
+  std::stack<std::map<std::string, bool>> booleans;
+  std::stack<std::map<std::string, double>> nums;
+  std::stack<std::map<std::string, std::string>> strings;
   std::map<std::string, std::vector<std::string>> functions;
 
   std::set<std::string> functionnamespace;
-  std::map<std::string, std::string> variabletypes;
+  std::stack<std::map<std::string, std::string>> variabletypes;
 };
 
 #endif // BIPL_MEMORY_H
