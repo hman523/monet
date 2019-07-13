@@ -8,8 +8,11 @@
 #include <sstream>
 
 Memory::Memory() {
-  functionnamespace.insert({"print", "println", "quit", "boolean", "num",
-                            "string", "read", "add", "sub", "mul", "div"});
+  functionnamespace.insert({"print",  "println", "quit", "boolean", "num",
+                            "string", "read",    "add",  "sub",     "mul",
+                            "div",    "and",     "or",   "nand",    "nor",
+                            "xor",    "xnor",    "if",   "eq",      "ne",
+                            "gt",     "lt",      "ge",   "le",      "define"});
 }
 
 std::string Memory::get(std::string var) {
