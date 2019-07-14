@@ -153,7 +153,7 @@ std::vector<std::string> Interpreter::split(std::string str, char delim) {
     returnval.push_back(temp);
   }
   returnval.erase(std::remove_if(returnval.begin(), returnval.end(),
-                                 [&](std::string x) -> bool {
+                                 [](std::string x) -> bool {
                                    return (x == "" || x == " ");
                                  }),
                   returnval.end());
