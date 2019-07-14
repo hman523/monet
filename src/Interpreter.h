@@ -53,6 +53,8 @@ private:
   // function functions
   void define(const std::vector<std::string> &vals);
   std::string call(const std::vector<std::string> &vals);
+  void subroutine(const std::vector<std::string> &vals);
+  std::string callsubroutine(const std::string &name);
 
   // Math functions
   num add(const std::vector<std::string> &vals);

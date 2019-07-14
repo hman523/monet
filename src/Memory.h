@@ -20,8 +20,12 @@ public:
   bool getboolean(std::string var);
   num getnum(std::string var);
   std::vector<std::string> getfn(std::string var);
+  std::vector<std::string> getsub(std::string var);
   bool functioninuse(std::string val);
+  bool isFunction(std::string val);
+  bool isSubroutine(std::string val);
   void createfunction(std::string name, std::vector<std::string> code);
+  void createsub(std::string name, std::vector<std::string> code);
   void createboolean(std::string name, bool value);
   void createnum(std::string name, num number);
   void createstring(std::string name, std::string str);
@@ -45,8 +49,10 @@ private:
   std::stack<std::map<std::string, num>> nums;
   std::stack<std::map<std::string, std::string>> strings;
   std::map<std::string, std::vector<std::string>> functions;
+  std::map<std::string, std::vector<std::string>> subroutines;
 
   std::set<std::string> functionnamespace;
+  std::set<std::string> subroutinenamespace;
   std::stack<std::map<std::string, std::string>> variabletypes;
 };
 

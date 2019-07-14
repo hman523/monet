@@ -14,6 +14,8 @@
 Interpreter::Interpreter(std::string filename) {
   std::string functiondeclarationname = "define";
   std::string functionendname = "endfn";
+  std::string subroutinedeclarationname = "subroutine";
+  std::string subrtendname = "endsr";
   std::ifstream infile;
   infile.open(filename);
   std::string line;
@@ -22,10 +24,13 @@ Interpreter::Interpreter(std::string filename) {
   while (std::getline(infile, line)) {
 
     if (line.substr(0, functiondeclarationname.length()) ==
-        functiondeclarationname) {
+            functiondeclarationname ||
+        line.substr(0, subroutinedeclarationname.length()) ==
+            subroutinedeclarationname) {
       inFunction = true;
     }
-    if (line.substr(0, functionendname.length()) == functionendname) {
+    if (line.substr(0, functionendname.length()) == functionendname ||
+        line.substr(0, subrtendname.length()) == subrtendname) {
       inFunction = false;
       code.push_back(fn);
       fn = "";
@@ -55,6 +60,9 @@ std::string Interpreter::eval(const std::string &value) {
     return "";
   } else if (words[0] == "define") {
     define(split(value, '\17'));
+    return "";
+  } else if (words[0] == "subroutine") {
+    subroutine(split(value, '\17'));
     return "";
   } else if (words[0] == "quit") {
     quit(words);
@@ -110,8 +118,10 @@ std::string Interpreter::eval(const std::string &value) {
     return normalizebool(comparison(words) <= 0);
   } else if (words[0] == "<=>") {
     return std::to_string(comparison(words));
-  } else if (memory.functioninuse(words[0])) {
+  } else if (memory.isFunction(words[0])) {
     return call(words);
+  } else if (memory.isSubroutine(words[0])) {
+    return callsubroutine(words[0]);
   } else {
     throw std::logic_error("Function \"" + words[0] + "\" does not exist");
   }
@@ -481,6 +491,17 @@ std::string Interpreter::call(const std::vector<std::string> &vals) {
   }
   memory.leavefn();
   return returnval;
+}
+
+void Interpreter::subroutine(const std::vector<std::string> &vals) {
+  memory.createsub(split(vals[0])[1], vals);
+}
+
+std::string Interpreter::callsubroutine(const std::string &name) {
+  std::vector<std::string> subr = memory.getsub(name);
+  std::for_each(subr.begin() + 1, subr.end(),
+                [&](std::string line) -> void { eval(line); });
+  return "";
 }
 
 num Interpreter::add(const std::vector<std::string> &vals) {

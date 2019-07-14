@@ -9,11 +9,12 @@
 #include <sstream>
 
 Memory::Memory() {
-  functionnamespace.insert({"print",  "println", "quit", "boolean", "num",
-                            "string", "read",    "add",  "sub",     "mul",
-                            "div",    "and",     "or",   "nand",    "nor",
-                            "xor",    "xnor",    "if",   "eq",      "ne",
-                            "gt",     "lt",      "ge",   "le",      "define"});
+  functionnamespace.insert(
+      {"print",  "println", "quit",  "boolean",    "num",  "string",
+       "read",   "add",     "sub",   "mul",        "div",  "and",
+       "or",     "nand",    "nor",   "xor",        "xnor", "if",
+       "eq",     "ne",      "gt",    "lt",         "ge",   "le",
+       "define", "return",  "endfn", "subroutine", "endsr"});
   enterfn();
 }
 
@@ -53,6 +54,10 @@ std::vector<std::string> Memory::getfn(std::string var) {
   return functions[var];
 }
 
+std::vector<std::string> Memory::getsub(std::string var) {
+  return subroutines[var];
+}
+
 std::string Memory::getstring(std::string var) {
   if (!strexists(var)) {
     throw std::logic_error("Variable " + var + " does not exist");
@@ -75,7 +80,15 @@ num Memory::getnum(std::string var) {
 }
 
 bool Memory::functioninuse(std::string val) {
+  return isFunction(val) || isSubroutine(val);
+}
+
+bool Memory::isFunction(std::string val) {
   return functionnamespace.count(val) != 0;
+}
+
+bool Memory::isSubroutine(std::string val) {
+  return subroutines.count(val) != 0;
 }
 
 void Memory::createfunction(std::string name, std::vector<std::string> code) {
@@ -84,6 +97,15 @@ void Memory::createfunction(std::string name, std::vector<std::string> code) {
   }
   functionnamespace.insert(name);
   functions.insert(
+      std::pair<std::string, std::vector<std::string>>(name, code));
+}
+
+void Memory::createsub(std::string name, std::vector<std::string> code) {
+  if (functioninuse(name)) {
+    throw std::logic_error("Unable to redefine \"" + name + "\"");
+  }
+  subroutinenamespace.insert(name);
+  subroutines.insert(
       std::pair<std::string, std::vector<std::string>>(name, code));
 }
 
