@@ -308,8 +308,7 @@ Interpreter::parameterstonums(const std::vector<std::string> &vals) {
 std::vector<std::string>
 Interpreter::evalParameters(const std::vector<std::string> &vals) {
   std::vector<std::string> parameters;
-  std::transform(vals.begin() + 1, vals.end(),
-     std::back_inserter(parameters),
+  std::transform(vals.begin() + 1, vals.end(), std::back_inserter(parameters),
                  [&](std::string in) -> std::string {
                    if (isParens(in)) {
                      return eval(removeparens(in));
@@ -446,7 +445,12 @@ std::string Interpreter::ifstatement(const std::vector<std::string> &vals) {
 }
 
 void Interpreter::define(const std::vector<std::string> &vals) {
-  memory.createfunction(split(vals[0])[2], vals);
+  std::vector<std::string> definition = split(vals[0]);
+  if (definition.size() < 3 || definition.size() % 2 == 0) {
+    throw std::logic_error("Cannot define function \"" + definition[2] +
+                           "\" due to wrong number of parameters");
+  }
+  memory.createfunction(definition[2], vals);
 }
 
 std::string Interpreter::call(const std::vector<std::string> &vals) {
@@ -481,7 +485,12 @@ std::string Interpreter::call(const std::vector<std::string> &vals) {
 }
 
 void Interpreter::subroutine(const std::vector<std::string> &vals) {
-  memory.createsub(split(vals[0])[1], vals);
+  std::vector<std::string> definition = split(vals[0]);
+  if (definition.size() != 2) {
+    throw std::logic_error("Cannot define subroutine \"" + definition[1] +
+                           "\" due to parameters trying to be defined");
+  }
+  memory.createsub(definition[1], vals);
 }
 
 std::string Interpreter::callsubroutine(const std::string &name) {
