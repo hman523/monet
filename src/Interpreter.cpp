@@ -414,11 +414,48 @@ void Interpreter::define(std::vector<std::string> vals) {
 }
 
 std::string Interpreter::call(std::vector<std::string> vals) {
+  std::string returnval = "";
   std::string functionname = vals[0];
-  auto fncode = memory.getfn(functionname);
-  // todo: figure out how to pass parameters, or rather call functions without
-  // them using the global namespace
-  return "";
+  std::vector<std::string> fncode = memory.getfn(functionname);
+  std::vector<std::string> definition = split(fncode[0]);
+  double numberOfParameters = (definition.size()-3)/2.0;
+  if (vals.size()-1 != (numberOfParameters)){
+    throw std::logic_error("Wrong number of parameters for call to function " + vals[0]);
+  }
+
+  memory.enterfn();
+  for (uint32_t x = 1; x < vals.size(); ++x) {
+    std::string type = definition[(2*x)+3];
+    std::string name = definition[(2*x)+4];
+    if (type == "boolean"){
+      memory.createboolean(name, strtobool(vals[x]));
+    }
+    else if (type == "string"){
+      memory.createstring(name, strtostr(vals[x]));
+    }
+    else if (type == "num"){
+      memory.createnum(name, strtonum(vals[x]));
+    }
+  }
+  std::string returnname = "return";
+  for (auto curr = fncode.begin();  curr != fncode.end(); ++curr) {
+
+    if((*curr).substr(0, returnname.length()) == "return"){
+      std::vector<std::string> words = split(*curr);
+      if (isParens(words[1])){
+        returnval = eval(words[1]);
+      }
+      else{
+        returnval = words[1];
+      }
+      break;
+    }
+    else{
+      eval(*curr);
+    }
+  }
+  memory.leavefn();
+  return returnval;
 }
 
 double Interpreter::add(std::vector<std::string> vals) {
