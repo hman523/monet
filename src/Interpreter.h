@@ -55,6 +55,8 @@ private:
   std::string call(const std::vector<std::string> &vals);
   void subroutine(const std::vector<std::string> &vals);
   std::string callsubroutine(const std::string &name);
+  void defmem(const std::vector<std::string> &vals);
+  std::string callmem(const std::vector<std::string> &vals);
 
   // Math functions
   num add(const std::vector<std::string> &vals);

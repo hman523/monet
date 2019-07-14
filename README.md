@@ -31,21 +31,21 @@ To define a function, the following syntax is used.
 define [return type] [function name] [parameter x type] [parameter x name]
 [body]
 [return statement]
-endfn
+end
 ```
 For example:
 
 ```
 define num triple num value
 return (mul value 3)
-endfn
+end
 ```
 
 To define a subroutine, the following syntax is used.
 ```
 subroutine [name]
 [body]
-endsr
+end
 ```
 For example:
 
@@ -53,7 +53,7 @@ For example:
 subroutine hello
 println "Hello"
 println "world"
-endsr
+end
 ```
 
 So what's the difference between a subroutine and a function? 
@@ -63,10 +63,34 @@ Why on earth would you use a subroutine if they are less feature full?
 They have significantly less overhead and should be used for simple abstractions.
 A good use of a subroutine would be printing a welcome message at the beginning of a program. 
 
+Now what if you want to do some crazy deep recursion? 
+Writing a simple Fibonacci function, we can see that as n increase, 
+the time to computer grows. We can solve this with memoization.
+Memoization essentially is the idea that if given a function that 
+for any given input will always have the same output, 
+we can store the output to optimize future calls. A little demo of this is shown below.
+
+Here is a basic Fibonacci function.
+```
+define num fib num x
+return (if (le x 1) x (add (fib (sub x 1)) (fib (sub x 2))))
+end
+```
+When running this on my computer, it took 15.764 seconds to calculate (fib 30).
+While not horrible, we can do better. By changing just one word,
+ we can write the code like this
+ ```
+ defmem num fib num x
+ return (if (le x 1) x (add (fib (sub x 1)) (fib (sub x 2))))
+ end
+ ```
+ When running this solution, (fib 30) is able to run in .006 seconds! 
+ While this optimization is nice, it comes at the cost of a memory overhead.
+
 Built in commands so far:
 `print`, `println`, `string`, `boolean`, `num`, `read`, `quit`, 
 `add`, `sub`, `mul`, `div`, `not`, `and`, `or`, `nand`, `nor`, `xor`, `xnor`,
-`if`, `eq`, `ne`, `gt`, `lt`, `ge`, `le`, `define`, `subroutine`
+`if`, `eq`, `ne`, `gt`, `lt`, `ge`, `le`, `define`, `subroutine`, `defmem`
 
 Commands coming soon: `list, cons, head, tail, map, reduce`
 

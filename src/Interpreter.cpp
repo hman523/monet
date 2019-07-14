@@ -13,9 +13,9 @@
 
 Interpreter::Interpreter(std::string filename) {
   std::string functiondeclarationname = "define";
-  std::string functionendname = "endfn";
+  std::string functionendname = "end";
   std::string subroutinedeclarationname = "subroutine";
-  std::string subrtendname = "endsr";
+  std::string functionmemdeclarationname = "defmem";
   std::ifstream infile;
   infile.open(filename);
   std::string line;
@@ -26,11 +26,12 @@ Interpreter::Interpreter(std::string filename) {
     if (line.substr(0, functiondeclarationname.length()) ==
             functiondeclarationname ||
         line.substr(0, subroutinedeclarationname.length()) ==
-            subroutinedeclarationname) {
+            subroutinedeclarationname ||
+        line.substr(0, functionmemdeclarationname.length()) ==
+            functionmemdeclarationname) {
       inFunction = true;
     }
-    if (line.substr(0, functionendname.length()) == functionendname ||
-        line.substr(0, subrtendname.length()) == subrtendname) {
+    if (line.substr(0, functionendname.length()) == functionendname) {
       inFunction = false;
       code.push_back(fn);
       fn = "";
@@ -63,6 +64,9 @@ std::string Interpreter::eval(const std::string &value) {
     return "";
   } else if (words[0] == "subroutine") {
     subroutine(split(value, '\17'));
+    return "";
+  } else if (words[0] == "defmem") {
+    defmem(split(value, '\17'));
     return "";
   } else if (words[0] == "quit") {
     quit(words);
@@ -122,6 +126,8 @@ std::string Interpreter::eval(const std::string &value) {
     return call(words);
   } else if (memory.isSubroutine(words[0])) {
     return callsubroutine(words[0]);
+  } else if (memory.isMem(words[0])) {
+    return callmem(words);
   } else {
     throw std::logic_error("Function \"" + words[0] + "\" does not exist");
   }
@@ -500,6 +506,51 @@ std::string Interpreter::callsubroutine(const std::string &name) {
   std::for_each(subr.begin() + 1, subr.end(),
                 [&](std::string line) -> void { eval(line); });
   return "";
+}
+
+void Interpreter::defmem(const std::vector<std::string> &vals) {
+  std::vector<std::string> definition = split(vals[0]);
+  if (definition.size() < 3 || definition.size() % 2 == 0) {
+    throw std::logic_error("Cannot define function \"" + definition[2] +
+                           "\" due to wrong number of parameters");
+  }
+  memory.createmem(definition[2], vals);
+}
+
+std::string Interpreter::callmem(const std::vector<std::string> &vals) {
+  std::string returnval = "";
+  std::string functionname = vals[0];
+  std::vector<std::string> fncode = memory.getmem(functionname);
+  std::vector<std::string> definition = split(fncode[0]);
+  double numberOfParameters = (definition.size() - 3) / 2.0;
+  if (vals.size() - 1 != (numberOfParameters)) {
+    throw std::logic_error("Wrong number of parameters for call to function " +
+                           vals[0]);
+  }
+  auto params = evalParameters(vals);
+  std::string *check = memory.checkmem(functionname, params);
+  if (check != nullptr) {
+    return *check;
+  }
+  memory.enterfn(params, definition);
+  std::string returnname = "return";
+  for (auto curr = fncode.begin() + 1; curr != fncode.end(); ++curr) {
+
+    if ((*curr).substr(0, returnname.length()) == "return") {
+      std::vector<std::string> words = split(*curr);
+      if (isParens(words[1])) {
+        returnval = eval(removeparens(words[1]));
+      } else {
+        returnval = words[1];
+      }
+      break;
+    } else {
+      eval(*curr);
+    }
+  }
+  memory.leavefn();
+  memory.insertmem(functionname, params, returnval);
+  return returnval;
 }
 
 num Interpreter::add(const std::vector<std::string> &vals) {

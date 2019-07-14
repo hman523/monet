@@ -10,11 +10,11 @@
 
 Memory::Memory() {
   functionnamespace.insert(
-      {"print",  "println", "quit",  "boolean",    "num",  "string",
-       "read",   "add",     "sub",   "mul",        "div",  "and",
-       "or",     "nand",    "nor",   "xor",        "xnor", "if",
-       "eq",     "ne",      "gt",    "lt",         "ge",   "le",
-       "define", "return",  "endfn", "subroutine", "endsr"});
+      {"print",  "println", "quit", "boolean",    "num",   "string",
+       "read",   "add",     "sub",  "mul",        "div",   "and",
+       "or",     "nand",    "nor",  "xor",        "xnor",  "if",
+       "eq",     "ne",      "gt",   "lt",         "ge",    "le",
+       "define", "return",  "end",  "subroutine", "defmem"});
   enterfn();
 }
 
@@ -58,6 +58,8 @@ std::vector<std::string> Memory::getsub(std::string var) {
   return subroutines[var];
 }
 
+std::vector<std::string> Memory::getmem(std::string var) { return mems[var]; }
+
 std::string Memory::getstring(std::string var) {
   if (!strexists(var)) {
     throw std::logic_error("Variable " + var + " does not exist");
@@ -80,7 +82,7 @@ num Memory::getnum(std::string var) {
 }
 
 bool Memory::functioninuse(std::string val) {
-  return isFunction(val) || isSubroutine(val);
+  return isFunction(val) || isSubroutine(val) || isMem(val);
 }
 
 bool Memory::isFunction(std::string val) {
@@ -90,6 +92,8 @@ bool Memory::isFunction(std::string val) {
 bool Memory::isSubroutine(std::string val) {
   return subroutines.count(val) != 0;
 }
+
+bool Memory::isMem(std::string val) { return mems.count(val) != 0; }
 
 void Memory::createfunction(std::string name, std::vector<std::string> code) {
   if (functioninuse(name)) {
@@ -107,6 +111,14 @@ void Memory::createsub(std::string name, std::vector<std::string> code) {
   subroutinenamespace.insert(name);
   subroutines.insert(
       std::pair<std::string, std::vector<std::string>>(name, code));
+}
+
+void Memory::createmem(std::string name, std::vector<std::string> code) {
+  if (functioninuse(name)) {
+    throw std::logic_error("Unable to redefine \"" + name + "\"");
+  }
+  memnamespace.insert(name);
+  mems.insert(std::pair<std::string, std::vector<std::string>>(name, code));
 }
 
 void Memory::createboolean(std::string name, bool value) {
@@ -250,4 +262,17 @@ std::string Memory::strtostr(std::string var) {
   } else {
     return var;
   }
+}
+
+std::string *Memory::checkmem(std::string name, std::vector<std::string> call) {
+  if (memvalues[name].count(call) == 0) {
+    return nullptr;
+  } else {
+    return &memvalues[name][call];
+  }
+}
+
+void Memory::insertmem(std::string name, std::vector<std::string> call,
+                       std::string result) {
+  memvalues[name][call] = result;
 }
