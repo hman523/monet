@@ -439,6 +439,8 @@ std::string Interpreter::ifstatement(const std::vector<std::string> &vals) {
   uint8_t index = expr ? 2 : 3;
   if (isParens(vals[index])) {
     return eval(removeparens(vals[index]));
+  } else if (memory.varexists(vals[index])) {
+    return memory.get(vals[index]);
   } else {
     return vals[index];
   }
