@@ -11,6 +11,8 @@
 #include <set>
 #include <vector>
 
+typedef double num;
+
 class Interpreter {
 public:
   Interpreter() = delete;
@@ -23,7 +25,7 @@ private:
   std::vector<std::string> split(std::string str, char delim = ' ');
   bool isString(std::string val);
   int strtoint(std::string num);
-  double strtonum(std::string num);
+  num strtonum(std::string num);
   bool strtobool(std::string val);
   std::string strtostr(std::string);
   std::string removequotes(std::string original);
@@ -31,10 +33,10 @@ private:
   std::string removeparens(std::string original);
   bool isNumber(std::string value);
   bool isBoolean(std::string value);
-  std::string normalizenumber(double x);
+  std::string normalizenumber(num x);
   std::string normalizebool(bool x);
   std::vector<bool> parameterstobool(std::vector<std::string> vals);
-  std::vector<double> parameterstonums(std::vector<std::string> vals);
+  std::vector<num> parameterstonums(std::vector<std::string> vals);
   std::vector<std::string> evalParameters(std::vector<std::string> vals);
 
   // command functions for the interpreting
@@ -53,10 +55,10 @@ private:
   std::string call(std::vector<std::string> vals);
 
   // Math functions
-  double add(std::vector<std::string> vals);
-  double sub(std::vector<std::string> vals);
-  double mul(std::vector<std::string> vals);
-  double div(std::vector<std::string> vals);
+  num add(std::vector<std::string> vals);
+  num sub(std::vector<std::string> vals);
+  num mul(std::vector<std::string> vals);
+  num div(std::vector<std::string> vals);
 
   // logic functions
   bool andfunc(std::vector<std::string> vals);

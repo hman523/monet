@@ -476,38 +476,38 @@ std::string Interpreter::call(std::vector<std::string> vals) {
   return returnval;
 }
 
-double Interpreter::add(std::vector<std::string> vals) {
+num Interpreter::add(std::vector<std::string> vals) {
   if (vals.size() < 2) {
     throw std::logic_error("Too few inputs for add");
   }
-  std::vector<double> parameters = parameterstonums(vals);
+  std::vector<num> parameters = parameterstonums(vals);
   return std::accumulate(parameters.begin(), parameters.end(), 0);
 }
 
-double Interpreter::sub(std::vector<std::string> vals) {
+num Interpreter::sub(std::vector<std::string> vals) {
   if (vals.size() < 2) {
     throw std::logic_error("Too few inputs for sub");
   }
-  std::vector<double> parameters = parameterstonums(vals);
+  std::vector<num> parameters = parameterstonums(vals);
   return parameters[0] + std::accumulate(parameters.begin() + 1,
                                          parameters.end(), 0, std::minus<>{});
 }
 
-double Interpreter::mul(std::vector<std::string> vals) {
+num Interpreter::mul(std::vector<std::string> vals) {
   if (vals.size() < 2) {
     throw std::logic_error("Too few inputs for mul");
   }
-  std::vector<double> parameters = parameterstonums(vals);
+  std::vector<num> parameters = parameterstonums(vals);
   return std::accumulate(parameters.begin(), parameters.end(), 1,
                          std::multiplies<>{});
 }
 
-double Interpreter::div(std::vector<std::string> vals) {
+num Interpreter::div(std::vector<std::string> vals) {
   if (vals.size() < 2) {
     throw std::logic_error("Too few inputs for div");
   }
-  std::vector<double> parameters = parameterstonums(vals);
-  double curr = parameters[0];
+  std::vector<num> parameters = parameterstonums(vals);
+  num curr = parameters[0];
   for (uint32_t i = 1; i < parameters.size(); ++i) {
     curr /= parameters[i];
   }
@@ -597,7 +597,7 @@ int Interpreter::comparison(std::vector<std::string> vals) {
     }
   }
   if (isNumber(vals1) && isNumber(vals2)) {
-    double x, y;
+    num x, y;
     x = strtonum(vals1);
     y = strtonum(vals2);
     if (x == y) {

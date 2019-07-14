@@ -10,18 +10,20 @@
 #include <stack>
 #include <vector>
 
+typedef double num;
+
 class Memory {
 public:
   Memory();
   std::string get(std::string var);
   std::string getstring(std::string var);
   bool getboolean(std::string var);
-  double getnum(std::string var);
+  num getnum(std::string var);
   std::vector<std::string> getfn(std::string var);
   bool functioninuse(std::string val);
   void createfunction(std::string name, std::vector<std::string> code);
   void createboolean(std::string name, bool value);
-  void createnum(std::string name, double num);
+  void createnum(std::string name, num number);
   void createstring(std::string name, std::string str);
   bool boolexists(std::string var);
   bool strexists(std::string var);
@@ -35,12 +37,12 @@ public:
 private:
   std::string getType(std::string var);
 
-  double strtonum(std::string);
+  num strtonum(std::string);
   bool strtobool(std::string);
   std::string strtostr(std::string);
 
   std::stack<std::map<std::string, bool>> booleans;
-  std::stack<std::map<std::string, double>> nums;
+  std::stack<std::map<std::string, num>> nums;
   std::stack<std::map<std::string, std::string>> strings;
   std::map<std::string, std::vector<std::string>> functions;
 

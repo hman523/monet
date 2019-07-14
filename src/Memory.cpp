@@ -67,7 +67,7 @@ bool Memory::getboolean(std::string var) {
   return booleans.top()[var];
 }
 
-double Memory::getnum(std::string var) {
+num Memory::getnum(std::string var) {
   if (!numexists(var)) {
     throw std::logic_error("Variable " + var + " does not exist");
   }
@@ -100,9 +100,9 @@ void Memory::createboolean(std::string name, bool value) {
   }
 }
 
-void Memory::createnum(std::string name, double num) {
+void Memory::createnum(std::string name, num number) {
   if (!varexists(name)) {
-    nums.top().insert(std::pair<std::string, double>(name, num));
+    nums.top().insert(std::pair<std::string, num>(name, number));
     variabletypes.top().insert(
         std::pair<std::string, std::string>(name, "num"));
   } else if (getType(name) == "num") {
@@ -143,7 +143,7 @@ bool Memory::varexists(std::string var) {
 void Memory::enterfn() {
   variabletypes.push(std::map<std::string, std::string>());
   booleans.push(std::map<std::string, bool>());
-  nums.push(std::map<std::string, double>());
+  nums.push(std::map<std::string, num>());
   strings.push(std::map<std::string, std::string>());
 }
 
@@ -155,9 +155,9 @@ void Memory::enterfn(std::vector<std::string> vals,
   std::map<std::string, bool> nextbool = std::map<std::string, bool>();
   std::map<std::string, std::string> nextstring =
       std::map<std::string, std::string>();
-  std::map<std::string, double> nextnum = std::map<std::string, double>();
+  std::map<std::string, num> nextnum = std::map<std::string, num>();
 
-  double numberOfParameters = (fndefinition.size() - 3) / 2.0;
+  num numberOfParameters = (fndefinition.size() - 3) / 2.0;
   for (uint32_t x = 0; x < numberOfParameters; ++x) {
     std::string type = fndefinition.at((2 * x) + 3);
     std::string name = fndefinition.at((2 * x) + 4);
@@ -170,7 +170,7 @@ void Memory::enterfn(std::vector<std::string> vals,
           std::pair<std::string, std::string>(name, strtostr(value)));
       nexttypes.insert(std::pair<std::string, std::string>(name, "string"));
     } else if (type == "num") {
-      nextnum.insert(std::pair<std::string, double>(name, strtonum(value)));
+      nextnum.insert(std::pair<std::string, num>(name, strtonum(value)));
       nexttypes.insert(std::pair<std::string, std::string>(name, "num"));
     } else {
       std::cerr << "Type " << type << " does not exist" << std::endl;
@@ -193,12 +193,12 @@ std::string Memory::getType(std::string var) {
   return variabletypes.top()[var];
 }
 
-double Memory::strtonum(std::string num) {
-  if (numexists(num)) {
-    return getnum(num);
+num Memory::strtonum(std::string number) {
+  if (numexists(number)) {
+    return getnum(number);
   }
-  std::stringstream ss(num);
-  double val;
+  std::stringstream ss(number);
+  num val;
   ss >> val;
   return val;
 }
