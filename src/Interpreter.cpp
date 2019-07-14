@@ -308,7 +308,7 @@ Interpreter::parameterstonums(const std::vector<std::string> &vals) {
 std::vector<std::string>
 Interpreter::evalParameters(const std::vector<std::string> &vals) {
   std::vector<std::string> parameters;
-  /**std::transform(vals.begin() + 1, vals.end(),
+  std::transform(vals.begin() + 1, vals.end(),
      std::back_inserter(parameters),
                  [&](std::string in) -> std::string {
                    if (isParens(in)) {
@@ -320,20 +320,7 @@ Interpreter::evalParameters(const std::vector<std::string> &vals) {
                        return in;
                      }
                    }
-                 });**/
-  for (uint32_t i = 1; i < vals.size(); ++i) {
-    std::string value;
-    if (isParens(vals[i])) {
-      value = eval(removeparens(vals[i]));
-    } else {
-      if (memory.varexists(vals[i])) {
-        value = memory.get(vals[i]);
-      } else {
-        value = vals[i];
-      }
-    }
-    parameters.push_back(value);
-  }
+                 });
   return parameters;
 }
 
