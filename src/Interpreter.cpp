@@ -46,7 +46,7 @@ void Interpreter::interpret() {
                 [&](std::string line) -> void { eval(line); });
 }
 
-std::string Interpreter::eval(std::string value) {
+std::string Interpreter::eval(const std::string &value) {
   std::vector<std::string> words = split(value);
   if (words.size() == 0) {
     return "";
@@ -123,7 +123,7 @@ void Interpreter::printcode() {
             std::ostream_iterator<std::string>(std::cout, "\n"));
 }
 
-std::vector<std::string> Interpreter::split(std::string str, char delim) {
+std::vector<std::string> Interpreter::split(const std::string &str, const char delim) {
   std::vector<std::string> returnval;
   std::string temp = "";
   bool instr = false;
@@ -160,18 +160,18 @@ std::vector<std::string> Interpreter::split(std::string str, char delim) {
   return returnval;
 }
 
-bool Interpreter::isString(std::string val) {
+bool Interpreter::isString(const std::string &val) {
   return (val.length() >= 2 && val[0] == '"' && val[val.size() - 1] == '"');
 }
 
-int Interpreter::strtoint(std::string num) {
+int Interpreter::strtoint(const std::string &num) {
   std::stringstream ss(num);
   int val;
   ss >> val;
   return val;
 }
 
-double Interpreter::strtonum(std::string num) {
+double Interpreter::strtonum(const std::string &num) {
   if (memory.numexists(num)) {
     return memory.getnum(num);
   }
@@ -181,7 +181,7 @@ double Interpreter::strtonum(std::string num) {
   return val;
 }
 
-bool Interpreter::strtobool(std::string val) {
+bool Interpreter::strtobool(const std::string &val) {
   bool isVariable = memory.boolexists(val);
   if ((!isVariable) && !isBoolean(val)) {
     std::cerr << "Calling strtobool on nonboolean value \"" << val << "\""
@@ -193,7 +193,7 @@ bool Interpreter::strtobool(std::string val) {
   return (val == "true" || val == "1");
 }
 
-std::string Interpreter::strtostr(std::string var) {
+std::string Interpreter::strtostr(const std::string &var) {
   if (memory.strexists(var)) {
     return memory.getstring(var);
   } else {
@@ -201,7 +201,7 @@ std::string Interpreter::strtostr(std::string var) {
   }
 }
 
-std::string Interpreter::removequotes(std::string original) {
+std::string Interpreter::removequotes(const std::string &original) {
   if (isString(original)) {
     return original.substr(1, original.length() - 2);
   } else {
@@ -209,12 +209,12 @@ std::string Interpreter::removequotes(std::string original) {
   }
 }
 
-bool Interpreter::isParens(std::string statement) {
+bool Interpreter::isParens(const std::string &statement) {
   return (statement.length() >= 2 && statement[0] == '(' &&
           statement[statement.size() - 1] == ')');
 }
 
-std::string Interpreter::removeparens(std::string original) {
+std::string Interpreter::removeparens(const std::string &original) {
   if (isParens(original)) {
     return original.substr(1, original.length() - 2);
   } else {
@@ -222,7 +222,7 @@ std::string Interpreter::removeparens(std::string original) {
   }
 }
 
-bool Interpreter::isNumber(std::string value) {
+bool Interpreter::isNumber(const std::string &value) {
   if (memory.numexists(value)) {
     return true;
   }
@@ -241,14 +241,14 @@ bool Interpreter::isNumber(std::string value) {
   }
 }
 
-bool Interpreter::isBoolean(std::string value) {
+bool Interpreter::isBoolean(const std::string &value) {
   if (memory.boolexists(value)) {
     return true;
   }
   return (value == "true" || value == "false" || value == "0" || value == "1");
 }
 
-std::string Interpreter::normalizenumber(double x) {
+std::string Interpreter::normalizenumber(const num &x) {
   if (fmod(x, 1) < .000001) {
     return std::to_string(((int)x));
   } else {
@@ -256,9 +256,9 @@ std::string Interpreter::normalizenumber(double x) {
   }
 }
 
-std::string Interpreter::normalizebool(bool x) { return x ? "true" : "false"; }
+std::string Interpreter::normalizebool(const bool &x) { return x ? "true" : "false"; }
 
-std::vector<bool> Interpreter::parameterstobool(std::vector<std::string> vals) {
+std::vector<bool> Interpreter::parameterstobool(const std::vector<std::string> &vals) {
   std::vector<bool> parameters;
   std::transform(vals.begin() + 1, vals.end(), std::back_inserter(parameters),
                  [&](std::string in) -> bool {
@@ -275,11 +275,11 @@ std::vector<bool> Interpreter::parameterstobool(std::vector<std::string> vals) {
   return parameters;
 }
 
-std::vector<double>
-Interpreter::parameterstonums(std::vector<std::string> vals) {
-  std::vector<double> parameters;
+std::vector<num>
+Interpreter::parameterstonums(const std::vector<std::string> &vals) {
+  std::vector<num> parameters;
   std::transform(vals.begin() + 1, vals.end(), std::back_inserter(parameters),
-                 [&](std::string in) -> double {
+                 [&](std::string in) -> num {
                    if (isParens(in)) {
                      return strtonum(eval(removeparens(in)));
                    } else {
@@ -294,7 +294,7 @@ Interpreter::parameterstonums(std::vector<std::string> vals) {
 }
 
 std::vector<std::string>
-Interpreter::evalParameters(std::vector<std::string> vals) {
+Interpreter::evalParameters(const std::vector<std::string> &vals) {
   std::vector<std::string> parameters;
   /**std::transform(vals.begin() + 1, vals.end(),
      std::back_inserter(parameters),
@@ -325,7 +325,7 @@ Interpreter::evalParameters(std::vector<std::string> vals) {
   return parameters;
 }
 
-void Interpreter::print(std::vector<std::string> words) {
+void Interpreter::print(const std::vector<std::string> &words) {
   if (words.size() < 2) {
     std::cout << std::endl;
   } else {
@@ -343,7 +343,7 @@ void Interpreter::print(std::vector<std::string> words) {
   }
 }
 
-void Interpreter::println(std::vector<std::string> words) {
+void Interpreter::println(const std::vector<std::string> &words) {
   if (words.size() < 2) {
     // do nothing
   } else {
@@ -362,7 +362,7 @@ void Interpreter::println(std::vector<std::string> words) {
   std::cout << std::endl;
 }
 
-void Interpreter::quit(std::vector<std::string> words) {
+void Interpreter::quit(const std::vector<std::string> &words) {
   if (words.size() == 1) {
     exit(EXIT_SUCCESS);
   } else {
@@ -374,7 +374,7 @@ void Interpreter::quit(std::vector<std::string> words) {
   }
 }
 
-void Interpreter::declarestring(std::vector<std::string> vals) {
+void Interpreter::declarestring(const std::vector<std::string> &vals) {
   if (vals.size() != 3) {
     throw std::logic_error(
         "Wrong number of parameters for string initialization");
@@ -386,7 +386,7 @@ void Interpreter::declarestring(std::vector<std::string> vals) {
   }
 }
 
-void Interpreter::declareboolean(std::vector<std::string> vals) {
+void Interpreter::declareboolean(const std::vector<std::string> &vals) {
   if (vals.size() != 3) {
     throw std::logic_error(
         "Wrong number of parameters for boolean initialization");
@@ -401,7 +401,7 @@ void Interpreter::declareboolean(std::vector<std::string> vals) {
   memory.createboolean(vals[1], a);
 }
 
-void Interpreter::declarenum(std::vector<std::string> vals) {
+void Interpreter::declarenum(const std::vector<std::string> &vals) {
   if (vals.size() != 3) {
     throw std::logic_error("Wrong number of parameters for num initialization");
   }
@@ -412,7 +412,7 @@ void Interpreter::declarenum(std::vector<std::string> vals) {
   }
 }
 
-std::string Interpreter::read(std::vector<std::string> vals) {
+std::string Interpreter::read(const std::vector<std::string> &vals) {
   if (vals.size() > 2) {
     throw std::logic_error("Wrong number of parameters for reading");
   }
@@ -424,7 +424,7 @@ std::string Interpreter::read(std::vector<std::string> vals) {
   return input;
 }
 
-std::string Interpreter::ifstatement(std::vector<std::string> vals) {
+std::string Interpreter::ifstatement(const std::vector<std::string> &vals) {
   if (vals.size() != 4) {
     throw std::logic_error("Wrong number of inputs for if statement");
   }
@@ -446,11 +446,11 @@ std::string Interpreter::ifstatement(std::vector<std::string> vals) {
   }
 }
 
-void Interpreter::define(std::vector<std::string> vals) {
+void Interpreter::define(const std::vector<std::string> &vals) {
   memory.createfunction(split(vals[0])[2], vals);
 }
 
-std::string Interpreter::call(std::vector<std::string> vals) {
+std::string Interpreter::call(const std::vector<std::string> &vals) {
   std::string returnval = "";
   std::string functionname = vals[0];
   std::vector<std::string> fncode = memory.getfn(functionname);
@@ -481,7 +481,7 @@ std::string Interpreter::call(std::vector<std::string> vals) {
   return returnval;
 }
 
-num Interpreter::add(std::vector<std::string> vals) {
+num Interpreter::add(const std::vector<std::string> &vals) {
   if (vals.size() < 2) {
     throw std::logic_error("Too few inputs for add");
   }
@@ -489,7 +489,7 @@ num Interpreter::add(std::vector<std::string> vals) {
   return std::accumulate(parameters.begin(), parameters.end(), 0);
 }
 
-num Interpreter::sub(std::vector<std::string> vals) {
+num Interpreter::sub(const std::vector<std::string> &vals) {
   if (vals.size() < 2) {
     throw std::logic_error("Too few inputs for sub");
   }
@@ -498,7 +498,7 @@ num Interpreter::sub(std::vector<std::string> vals) {
                                          parameters.end(), 0, std::minus<>{});
 }
 
-num Interpreter::mul(std::vector<std::string> vals) {
+num Interpreter::mul(const std::vector<std::string> &vals) {
   if (vals.size() < 2) {
     throw std::logic_error("Too few inputs for mul");
   }
@@ -507,7 +507,7 @@ num Interpreter::mul(std::vector<std::string> vals) {
                          std::multiplies<>{});
 }
 
-num Interpreter::div(std::vector<std::string> vals) {
+num Interpreter::div(const std::vector<std::string> &vals) {
   if (vals.size() < 2) {
     throw std::logic_error("Too few inputs for div");
   }
@@ -519,7 +519,7 @@ num Interpreter::div(std::vector<std::string> vals) {
   return curr;
 }
 
-bool Interpreter::andfunc(std::vector<std::string> vals) {
+bool Interpreter::andfunc(const std::vector<std::string> &vals) {
   std::vector<bool> params = parameterstobool(vals);
   if (params.size() < 2) {
     throw std::logic_error("and function has too few parameters");
@@ -532,7 +532,7 @@ bool Interpreter::andfunc(std::vector<std::string> vals) {
   return true;
 }
 
-bool Interpreter::orfunc(std::vector<std::string> vals) {
+bool Interpreter::orfunc(const std::vector<std::string> &vals) {
   std::vector<bool> params = parameterstobool(vals);
   if (params.size() < 2) {
     throw std::logic_error("or function has too few parameters");
@@ -545,28 +545,28 @@ bool Interpreter::orfunc(std::vector<std::string> vals) {
   return false;
 }
 
-bool Interpreter::notfunc(std::vector<std::string> vals) {
+bool Interpreter::notfunc(const std::vector<std::string> &vals) {
   if (vals.size() != 2) {
     throw std::logic_error("Not function can only take one parameter");
   }
   return !(strtobool(vals[1]));
 }
 
-bool Interpreter::nandfunc(std::vector<std::string> vals) {
+bool Interpreter::nandfunc(const std::vector<std::string> &vals) {
   if (vals.size() < 3) {
     throw std::logic_error("nand function has too few parameters");
   }
   return !andfunc(vals);
 }
 
-bool Interpreter::norfunc(std::vector<std::string> vals) {
+bool Interpreter::norfunc(const std::vector<std::string> &vals) {
   if (vals.size() < 3) {
     throw std::logic_error("nor function has too few parameters");
   }
   return !orfunc(vals);
 }
 
-bool Interpreter::xorfunc(std::vector<std::string> vals) {
+bool Interpreter::xorfunc(const std::vector<std::string> &vals) {
   std::vector<bool> params = parameterstobool(vals);
   if (params.size() != 2) {
     throw std::logic_error("xor function must have two parameters");
@@ -574,14 +574,14 @@ bool Interpreter::xorfunc(std::vector<std::string> vals) {
   return (params[0] != params[1]);
 }
 
-bool Interpreter::xnorfunc(std::vector<std::string> vals) {
+bool Interpreter::xnorfunc(const std::vector<std::string> &vals) {
   if (vals.size() != 3) {
     throw std::logic_error("xnor function must have two parameters");
   }
   return !xorfunc(vals);
 }
 
-int Interpreter::comparison(std::vector<std::string> vals) {
+int Interpreter::comparison(const std::vector<std::string> &vals) {
   // return 0 if eq, 1 if greater than, -1 if less than
   if (vals.size() != 3) {
     throw std::logic_error("Comparision can only be between two values");
