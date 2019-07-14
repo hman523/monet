@@ -7,8 +7,8 @@
 
 #include <map>
 #include <set>
-#include <vector>
 #include <stack>
+#include <vector>
 
 class Memory {
 public:
@@ -28,11 +28,16 @@ public:
   bool numexists(std::string var);
   bool varexists(std::string var);
   void enterfn();
+  void enterfn(std::vector<std::string> parameters,
+               std::vector<std::string> fndefinition);
   void leavefn();
 
 private:
-
   std::string getType(std::string var);
+
+  double strtonum(std::string);
+  bool strtobool(std::string);
+  std::string strtostr(std::string);
 
   std::stack<std::map<std::string, bool>> booleans;
   std::stack<std::map<std::string, double>> nums;

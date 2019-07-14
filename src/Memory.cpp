@@ -3,6 +3,7 @@
 //
 
 #include "Memory.h"
+#include "Interpreter.h"
 #include <cmath>
 #include <iostream>
 #include <sstream>
@@ -89,7 +90,8 @@ void Memory::createfunction(std::string name, std::vector<std::string> code) {
 void Memory::createboolean(std::string name, bool value) {
   if (!varexists(name)) {
     booleans.top().insert(std::pair<std::string, bool>(name, value));
-    variabletypes.top().insert(std::pair<std::string, std::string>(name, "boolean"));
+    variabletypes.top().insert(
+        std::pair<std::string, std::string>(name, "boolean"));
   } else if (getType(name) == "boolean") {
     throw std::logic_error("Reinitialization of variable " + name);
   } else {
@@ -101,7 +103,8 @@ void Memory::createboolean(std::string name, bool value) {
 void Memory::createnum(std::string name, double num) {
   if (!varexists(name)) {
     nums.top().insert(std::pair<std::string, double>(name, num));
-    variabletypes.top().insert(std::pair<std::string, std::string>(name, "num"));
+    variabletypes.top().insert(
+        std::pair<std::string, std::string>(name, "num"));
   } else if (getType(name) == "num") {
     throw std::logic_error("Reinitialization of variable " + name);
   } else {
@@ -113,7 +116,8 @@ void Memory::createnum(std::string name, double num) {
 void Memory::createstring(std::string name, std::string str) {
   if (!varexists(name)) {
     strings.top().insert(std::pair<std::string, std::string>(name, str));
-    variabletypes.top().insert(std::pair<std::string, std::string>(name, "string"));
+    variabletypes.top().insert(
+        std::pair<std::string, std::string>(name, "string"));
   } else if (getType(name) == "string") {
     throw std::logic_error("Reinitialization of variable " + name);
   } else {
@@ -122,9 +126,13 @@ void Memory::createstring(std::string name, std::string str) {
   }
 }
 
-bool Memory::boolexists(std::string var) { return (booleans.top().count(var) != 0); }
+bool Memory::boolexists(std::string var) {
+  return (booleans.top().count(var) != 0);
+}
 
-bool Memory::strexists(std::string var) { return (strings.top().count(var) != 0); }
+bool Memory::strexists(std::string var) {
+  return (strings.top().count(var) != 0);
+}
 
 bool Memory::numexists(std::string var) { return (nums.top().count(var) != 0); }
 
@@ -135,9 +143,42 @@ bool Memory::varexists(std::string var) {
 void Memory::enterfn() {
   variabletypes.push(std::map<std::string, std::string>());
   booleans.push(std::map<std::string, bool>());
-  strings.push(std::map<std::string, std::string>());
   nums.push(std::map<std::string, double>());
+  strings.push(std::map<std::string, std::string>());
+}
 
+void Memory::enterfn(std::vector<std::string> vals,
+                     std::vector<std::string> fndefinition) {
+
+  std::map<std::string, std::string> nexttypes =
+      std::map<std::string, std::string>();
+  std::map<std::string, bool> nextbool = std::map<std::string, bool>();
+  std::map<std::string, std::string> nextstring =
+      std::map<std::string, std::string>();
+  std::map<std::string, double> nextnum = std::map<std::string, double>();
+
+  double numberOfParameters = (fndefinition.size() - 3) / 2.0;
+  for (uint32_t x = 0; x < numberOfParameters; ++x) {
+    std::string type = fndefinition[(2 * x) + 3];
+    std::string name = fndefinition[(2 * x) + 4];
+    std::string value = vals[x + 1];
+    if (type == "boolean") {
+      nextbool.insert(std::pair<std::string, bool>(name, strtobool(value)));
+      nexttypes.insert(std::pair<std::string, std::string>(name, "boolean"));
+    } else if (type == "string") {
+      nextstring.insert(std::pair<std::string, std::string>(name, strtostr(value)));
+      nexttypes.insert(std::pair<std::string, std::string>(name, "string"));
+    } else if (type == "num") {
+      nextnum.insert(std::pair<std::string, double>(name, strtonum(value)));
+      nexttypes.insert(std::pair<std::string, std::string>(name, "num"));
+    } else {
+      std::cerr << "Type " << type << " does not exist" << std::endl;
+    }
+  }
+  variabletypes.push(nexttypes);
+  booleans.push(nextbool);
+  nums.push(nextnum);
+  strings.push(nextstring);
 }
 
 void Memory::leavefn() {
@@ -149,4 +190,41 @@ void Memory::leavefn() {
 
 std::string Memory::getType(std::string var) {
   return variabletypes.top()[var];
+}
+
+double Memory::strtonum(std::string num) {
+  if (numexists(num)) {
+    return getnum(num);
+  }
+  std::stringstream ss(num);
+  double val;
+  ss >> val;
+  return val;
+}
+
+bool Memory::strtobool(std::string val) {
+  bool isVariable = boolexists(val);
+  auto isBoolean = [&](std::string value) -> bool {
+    if (boolexists(value)) {
+      return true;
+    }
+    return (value == "true" || value == "false" || value == "0" ||
+            value == "1");
+  };
+  if ((!isVariable) && !isBoolean(val)) {
+    std::cerr << "Calling strtobool on nonboolean value \"" << val << "\""
+              << std::endl;
+  }
+  if (isVariable) {
+    return getboolean(val);
+  }
+  return (val == "true" || val == "1");
+}
+
+std::string Memory::strtostr(std::string var) {
+  if (strexists(var)) {
+    return getstring(var);
+  } else {
+    return var;
+  }
 }
