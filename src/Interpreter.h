@@ -35,8 +35,9 @@ private:
   std::string normalizebool(bool x);
   std::vector<bool> parameterstobool(std::vector<std::string> vals);
   std::vector<double> parameterstonums(std::vector<std::string> vals);
+  std::vector<std::string> evalParameters(std::vector<std::string> vals);
 
-  // command functions for the interpretting
+  // command functions for the interpreting
   void printcode();
   void quit(std::vector<std::string> vals);
   void print(std::vector<std::string> vals);

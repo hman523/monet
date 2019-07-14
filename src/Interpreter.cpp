@@ -288,6 +288,38 @@ Interpreter::parameterstonums(std::vector<std::string> vals) {
   return parameters;
 }
 
+std::vector<std::string>
+Interpreter::evalParameters(std::vector<std::string> vals) {
+  std::vector<std::string> parameters;
+  /**std::transform(vals.begin() + 1, vals.end(),
+     std::back_inserter(parameters),
+                 [&](std::string in) -> std::string {
+                   if (isParens(in)) {
+                     return eval(removeparens(in));
+                   } else {
+                     if (memory.varexists(in)) {
+                       return memory.get(in);
+                     } else {
+                       return in;
+                     }
+                   }
+                 });**/
+  for (uint32_t i = 1; i < vals.size(); ++i) {
+    std::string value;
+    if (isParens(vals[i])) {
+      value = eval(removeparens(vals[i]));
+    } else {
+      if (memory.varexists(vals[i])) {
+        value = memory.get(vals[i]);
+      } else {
+        value = vals[i];
+      }
+    }
+    parameters.push_back(value);
+  }
+  return parameters;
+}
+
 void Interpreter::print(std::vector<std::string> words) {
   if (words.size() < 2) {
     std::cout << std::endl;
@@ -423,8 +455,8 @@ std::string Interpreter::call(std::vector<std::string> vals) {
     throw std::logic_error("Wrong number of parameters for call to function " +
                            vals[0]);
   }
-
-  memory.enterfn(vals, definition);
+  auto params = evalParameters(vals);
+  memory.enterfn(params, definition);
   std::string returnname = "return";
   for (auto curr = fncode.begin() + 1; curr != fncode.end(); ++curr) {
 

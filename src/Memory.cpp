@@ -159,14 +159,15 @@ void Memory::enterfn(std::vector<std::string> vals,
 
   double numberOfParameters = (fndefinition.size() - 3) / 2.0;
   for (uint32_t x = 0; x < numberOfParameters; ++x) {
-    std::string type = fndefinition[(2 * x) + 3];
-    std::string name = fndefinition[(2 * x) + 4];
-    std::string value = vals[x + 1];
+    std::string type = fndefinition.at((2 * x) + 3);
+    std::string name = fndefinition.at((2 * x) + 4);
+    std::string value = vals[x];
     if (type == "boolean") {
       nextbool.insert(std::pair<std::string, bool>(name, strtobool(value)));
       nexttypes.insert(std::pair<std::string, std::string>(name, "boolean"));
     } else if (type == "string") {
-      nextstring.insert(std::pair<std::string, std::string>(name, strtostr(value)));
+      nextstring.insert(
+          std::pair<std::string, std::string>(name, strtostr(value)));
       nexttypes.insert(std::pair<std::string, std::string>(name, "string"));
     } else if (type == "num") {
       nextnum.insert(std::pair<std::string, double>(name, strtonum(value)));
