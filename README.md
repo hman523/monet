@@ -68,7 +68,7 @@ Built in commands so far:
 `add`, `sub`, `mul`, `div`, `not`, `and`, `or`, `nand`, `nor`, `xor`, `xnor`,
 `if`, `eq`, `ne`, `gt`, `lt`, `ge`, `le`, `define`, `subroutine`
 
-Commands coming soon: `foreach, map, reduce`
+Commands coming soon: `list, cons, head, tail, map, reduce`
 
 ## If statements
 If statements are very similar to those from Haskell. 
@@ -89,6 +89,6 @@ Output: `x is 9`
 
 ## Lists (note not released yet)
 Lists are recursive containers that will be able to hold any datatype, including another list. 
-These lists will be used for iteration and will be closely associated with the map and foreach constructs. 
+These lists will be used for iteration and will be closely associated with the map and reduce functions. 
 A list is said to be null if it is empty. A list can contain a mix of any datatype. 
 A future feature should allow for functions to be held in a list.
