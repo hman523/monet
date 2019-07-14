@@ -66,9 +66,9 @@ A good use of a subroutine would be printing a welcome message at the beginning 
 Built in commands so far:
 `print`, `println`, `string`, `boolean`, `num`, `read`, `quit`, 
 `add`, `sub`, `mul`, `div`, `not`, `and`, `or`, `nand`, `nor`, `xor`, `xnor`,
-`if`, `eq`, `ne`, `gt`, `lt`, `ge`, `le` 
+`if`, `eq`, `ne`, `gt`, `lt`, `ge`, `le`, `define`
 
-Commands coming soon: `subroutine, define, foreach, map, reduce`
+Commands coming soon: `subroutine, foreach, map, reduce`
 
 ## If statements
 If statements are very similar to those from Haskell. 
