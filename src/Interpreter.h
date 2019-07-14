@@ -22,7 +22,7 @@ private:
   // helper functions
   void interpret();
   std::string eval(const std::string &value);
-  std::vector<std::string> split(const std::string &str, const char delim = ' ');
+  std::vector<std::string> split(const std::string &str, char delim = ' ');
   bool isString(const std::string &val);
   int strtoint(const std::string &num);
   num strtonum(const std::string &num);
@@ -33,8 +33,8 @@ private:
   std::string removeparens(const std::string &original);
   bool isNumber(const std::string &value);
   bool isBoolean(const std::string &value);
-  std::string normalizenumber(const num &x);
-  std::string normalizebool(const bool &x);
+  std::string normalizenumber(num x);
+  std::string normalizebool(bool x);
   std::vector<bool> parameterstobool(const std::vector<std::string> &vals);
   std::vector<num> parameterstonums(const std::vector<std::string> &vals);
   std::vector<std::string> evalParameters(const std::vector<std::string> &vals);

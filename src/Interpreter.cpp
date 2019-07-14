@@ -123,7 +123,8 @@ void Interpreter::printcode() {
             std::ostream_iterator<std::string>(std::cout, "\n"));
 }
 
-std::vector<std::string> Interpreter::split(const std::string &str, const char delim) {
+std::vector<std::string> Interpreter::split(const std::string &str,
+                                            char delim) {
   std::vector<std::string> returnval;
   std::string temp = "";
   bool instr = false;
@@ -248,7 +249,7 @@ bool Interpreter::isBoolean(const std::string &value) {
   return (value == "true" || value == "false" || value == "0" || value == "1");
 }
 
-std::string Interpreter::normalizenumber(const num &x) {
+std::string Interpreter::normalizenumber(num x) {
   if (fmod(x, 1) < .000001) {
     return std::to_string(((int)x));
   } else {
@@ -256,9 +257,10 @@ std::string Interpreter::normalizenumber(const num &x) {
   }
 }
 
-std::string Interpreter::normalizebool(const bool &x) { return x ? "true" : "false"; }
+std::string Interpreter::normalizebool(bool x) { return x ? "true" : "false"; }
 
-std::vector<bool> Interpreter::parameterstobool(const std::vector<std::string> &vals) {
+std::vector<bool>
+Interpreter::parameterstobool(const std::vector<std::string> &vals) {
   std::vector<bool> parameters;
   std::transform(vals.begin() + 1, vals.end(), std::back_inserter(parameters),
                  [&](std::string in) -> bool {
