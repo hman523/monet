@@ -56,7 +56,6 @@ private:
   bool strtobool(std::string);
   std::string strtostr(std::string);
 
-
   std::stack<std::map<std::string, bool>> booleans;
   std::stack<std::map<std::string, num>> nums;
   std::stack<std::map<std::string, std::string>> strings;

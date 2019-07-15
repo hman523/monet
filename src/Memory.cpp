@@ -50,25 +50,21 @@ std::string Memory::get(std::string var) {
 std::vector<std::string> Memory::getfn(std::string var) {
   if (!functioninuse(var)) {
     throw std::logic_error("Cannot make call to " + var);
-  }
-  else if (!functionbindings.empty()){
-    if(functionbindings.top().count(var) != 0){
+  } else if (!functionbindings.empty()) {
+    if (functionbindings.top().count(var) != 0) {
       return getfn(functionbindings.top()[var]);
     }
   }
-  if(isFunction(var)){
+  if (isFunction(var)) {
     return functions[var];
-  }
-  else if(isSubroutine(var)){
-      return subroutines[var];
-  }
-  else if (isMem(var)){
-      return mems[var];
-  }
-  else{
+  } else if (isSubroutine(var)) {
+    return subroutines[var];
+  } else if (isMem(var)) {
+    return mems[var];
+  } else {
     throw std::logic_error("Fatal implementation error in the interpreter");
   }
-  //The code will never reach this point, this is just to shush the compiler
+  // The code will never reach this point, this is just to shush the compiler
   return std::vector<std::string>();
 }
 
@@ -202,7 +198,8 @@ void Memory::enterfn(std::vector<std::string> vals,
   std::map<std::string, std::string> nextstring =
       std::map<std::string, std::string>();
   std::map<std::string, num> nextnum = std::map<std::string, num>();
-  std::map<std::string, std::string> nextfns = std::map<std::string, std::string>();
+  std::map<std::string, std::string> nextfns =
+      std::map<std::string, std::string>();
   num numberOfParameters = (fndefinition.size() - 3) / 2.0;
   for (uint32_t x = 0; x < numberOfParameters; ++x) {
     std::string type = fndefinition.at((2 * x) + 3);
@@ -218,10 +215,9 @@ void Memory::enterfn(std::vector<std::string> vals,
     } else if (type == "num") {
       nextnum.insert(std::pair<std::string, num>(name, strtonum(value)));
       nexttypes.insert(std::pair<std::string, std::string>(name, "num"));
-    } else if (type == "fn"){
+    } else if (type == "fn") {
       nextfns.insert(std::pair<std::string, std::string>(name, value));
-    }
-    else {
+    } else {
       std::cerr << "Type " << type << " does not exist" << std::endl;
     }
   }
@@ -230,7 +226,6 @@ void Memory::enterfn(std::vector<std::string> vals,
   nums.push(nextnum);
   strings.push(nextstring);
   functionbindings.push(nextfns);
-
 }
 
 void Memory::leavefn() {
