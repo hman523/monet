@@ -526,7 +526,7 @@ void Interpreter::subroutine(const std::vector<std::string> &vals) {
 }
 
 std::string Interpreter::callsubroutine(const std::string &name) {
-  std::vector<std::string> subr = memory.getsub(name);
+  std::vector<std::string> subr = memory.getfn(name);
   std::for_each(subr.begin() + 1, subr.end(),
                 [&](std::string line) -> void { eval(line); });
   return "";
@@ -544,7 +544,7 @@ void Interpreter::defmem(const std::vector<std::string> &vals) {
 std::string Interpreter::callmem(const std::vector<std::string> &vals) {
   std::string returnval = "";
   std::string functionname = vals[0];
-  std::vector<std::string> fncode = memory.getmem(functionname);
+  std::vector<std::string> fncode = memory.getfn(functionname);
   std::vector<std::string> definition = split(fncode[0]);
   double numberOfParameters = (definition.size() - 3) / 2.0;
   if (vals.size() - 1 != (numberOfParameters)) {
@@ -560,7 +560,7 @@ std::string Interpreter::callmem(const std::vector<std::string> &vals) {
   std::string returnname = "return";
   for (auto curr = fncode.begin() + 1; curr != fncode.end(); ++curr) {
 
-    if ((*curr).substr(0, returnname.length()) == "return") {
+    if ((*curr).substr(0, returnname.length()) == returnname) {
       std::vector<std::string> words = split(*curr);
       if (isParens(words[1])) {
         returnval = eval(removeparens(words[1]));

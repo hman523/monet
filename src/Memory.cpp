@@ -49,16 +49,28 @@ std::string Memory::get(std::string var) {
 
 std::vector<std::string> Memory::getfn(std::string var) {
   if (!functioninuse(var)) {
-    throw std::logic_error("Function " + var + " does not exist");
+    throw std::logic_error("Cannot make call to " + var);
   }
-  return functions[var];
+  else if (!functionbindings.empty()){
+    if(functionbindings.top().count(var) != 0){
+      return getfn(functionbindings.top()[var]);
+    }
+  }
+  if(isFunction(var)){
+    return functions[var];
+  }
+  else if(isSubroutine(var)){
+      return subroutines[var];
+  }
+  else if (isMem(var)){
+      return mems[var];
+  }
+  else{
+    throw std::logic_error("Fatal implementation error in the interpreter");
+  }
+  //The code will never reach this point, this is just to shush the compiler
+  return std::vector<std::string>();
 }
-
-std::vector<std::string> Memory::getsub(std::string var) {
-  return subroutines[var];
-}
-
-std::vector<std::string> Memory::getmem(std::string var) { return mems[var]; }
 
 std::string Memory::getstring(std::string var) {
   if (!strexists(var)) {
@@ -90,10 +102,10 @@ bool Memory::isFunction(std::string val) {
 }
 
 bool Memory::isSubroutine(std::string val) {
-  return subroutines.count(val) != 0;
+  return subroutinenamespace.count(val) != 0;
 }
 
-bool Memory::isMem(std::string val) { return mems.count(val) != 0; }
+bool Memory::isMem(std::string val) { return memnamespace.count(val) != 0; }
 
 void Memory::createfunction(std::string name, std::vector<std::string> code) {
   if (functioninuse(name)) {
@@ -190,7 +202,7 @@ void Memory::enterfn(std::vector<std::string> vals,
   std::map<std::string, std::string> nextstring =
       std::map<std::string, std::string>();
   std::map<std::string, num> nextnum = std::map<std::string, num>();
-
+  std::map<std::string, std::string> nextfns = std::map<std::string, std::string>();
   num numberOfParameters = (fndefinition.size() - 3) / 2.0;
   for (uint32_t x = 0; x < numberOfParameters; ++x) {
     std::string type = fndefinition.at((2 * x) + 3);
@@ -207,7 +219,7 @@ void Memory::enterfn(std::vector<std::string> vals,
       nextnum.insert(std::pair<std::string, num>(name, strtonum(value)));
       nexttypes.insert(std::pair<std::string, std::string>(name, "num"));
     } else if (type == "fn"){
-
+      nextfns.insert(std::pair<std::string, std::string>(name, value));
     }
     else {
       std::cerr << "Type " << type << " does not exist" << std::endl;
@@ -217,6 +229,8 @@ void Memory::enterfn(std::vector<std::string> vals,
   booleans.push(nextbool);
   nums.push(nextnum);
   strings.push(nextstring);
+  functionbindings.push(nextfns);
+
 }
 
 void Memory::leavefn() {
@@ -224,6 +238,7 @@ void Memory::leavefn() {
   booleans.pop();
   strings.pop();
   nums.pop();
+  functionbindings.pop();
 }
 
 std::string Memory::getType(std::string var) {

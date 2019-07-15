@@ -2,8 +2,8 @@
 // Created by hunter on 6/29/19.
 //
 
-#ifndef BIPL_INTERPRETER_H
-#define BIPL_INTERPRETER_H
+#ifndef MONET_INTERPRETER_H
+#define MONET_INTERPRETER_H
 
 #include "Memory.h"
 #include <iostream>
@@ -81,4 +81,4 @@ private:
   Memory memory;
 };
 
-#endif // BIPL_INTERPRETER_H
+#endif // MONET_INTERPRETER_H

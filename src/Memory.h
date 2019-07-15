@@ -2,8 +2,8 @@
 // Created by hunter on 6/29/19.
 //
 
-#ifndef BIPL_MEMORY_H
-#define BIPL_MEMORY_H
+#ifndef MONET_MEMORY_H
+#define MONET_MEMORY_H
 
 #include <map>
 #include <set>
@@ -21,8 +21,6 @@ public:
   num getnum(std::string var);
 
   std::vector<std::string> getfn(std::string var);
-  std::vector<std::string> getsub(std::string var);
-  std::vector<std::string> getmem(std::string var);
 
   bool functioninuse(std::string val);
   bool isFunction(std::string val);
@@ -58,6 +56,7 @@ private:
   bool strtobool(std::string);
   std::string strtostr(std::string);
 
+
   std::stack<std::map<std::string, bool>> booleans;
   std::stack<std::map<std::string, num>> nums;
   std::stack<std::map<std::string, std::string>> strings;
@@ -72,6 +71,7 @@ private:
   std::set<std::string> subroutinenamespace;
   std::set<std::string> memnamespace;
   std::stack<std::map<std::string, std::string>> variabletypes;
+  std::stack<std::map<std::string, std::string>> functionbindings;
 };
 
-#endif // BIPL_MEMORY_H
+#endif // MONET_MEMORY_H
