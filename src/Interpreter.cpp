@@ -136,12 +136,33 @@ std::string Interpreter::eval(const std::string &value) {
     return normalizebool(comparison(words) <= 0);
   } else if (words[0] == "<=>") {
     return std::to_string(comparison(words));
-  } else if (memory.isFunction(words[0])) {
-    return call(words);
-  } else if (memory.isSubroutine(words[0])) {
-    return callsubroutine(words[0]);
-  } else if (memory.isMem(words[0])) {
-    return callmem(words);
+  } else if (memory.functioninuse(words[0])) {
+    if (memory.isFunction(words[0])) {
+      return call(words);
+    } else if (memory.isSubroutine(words[0])) {
+      return callsubroutine(words[0]);
+    } else if (memory.isMem(words[0])) {
+      return callmem(words);
+    } else {
+      std::string fn = memory.getBinding(words[0]);
+      if (memory.isBuiltInFn(fn)) {
+        words[0] = fn;
+        std::string s = "";
+        for (uint32_t i = 0; i < words.size(); ++i) {
+          s += words[i];
+          if (i != words.size() - 1) {
+            s += " ";
+          }
+        }
+        return eval(s);
+      } else if (memory.isFunction(fn)) {
+        return call(words);
+      } else if (memory.isSubroutine(fn)) {
+        return callsubroutine(words[0]);
+      } else if (memory.isMem(fn)) {
+        return callmem(words);
+      }
+    }
   } else {
     throw std::logic_error("Function \"" + words[0] + "\" does not exist");
   }

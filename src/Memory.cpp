@@ -9,12 +9,12 @@
 #include <sstream>
 
 Memory::Memory() {
-  functionnamespace.insert(
-      {"print",  "println", "quit", "boolean",    "num",   "string",
-       "read",   "add",     "sub",  "mul",        "div",   "and",
-       "or",     "nand",    "nor",  "xor",        "xnor",  "if",
-       "eq",     "ne",      "gt",   "lt",         "ge",    "le",
-       "define", "return",  "end",  "subroutine", "defmem"});
+  reservedwords.insert({"print",  "println", "quit",       "boolean", "num",
+                        "string", "read",    "add",        "sub",     "mul",
+                        "div",    "and",     "or",         "nand",    "nor",
+                        "xor",    "xnor",    "if",         "eq",      "ne",
+                        "gt",     "lt",      "ge",         "le",      "define",
+                        "return", "end",     "subroutine", "defmem"});
   enterfn();
 }
 
@@ -90,7 +90,16 @@ num Memory::getnum(std::string var) {
 }
 
 bool Memory::functioninuse(std::string val) {
-  return isFunction(val) || isSubroutine(val) || isMem(val);
+  bool inStack = false;
+  if (!functionbindings.empty()) {
+    inStack = functionbindings.top().count(val) != 0;
+  }
+  return isBuiltInFn(val) || isFunction(val) || isSubroutine(val) ||
+         isMem(val) || inStack;
+}
+
+bool Memory::isBuiltInFn(std::string val) {
+  return reservedwords.count(val) != 0;
 }
 
 bool Memory::isFunction(std::string val) {
@@ -288,4 +297,8 @@ std::string *Memory::checkmem(std::string name, std::vector<std::string> call) {
 void Memory::insertmem(std::string name, std::vector<std::string> call,
                        std::string result) {
   memvalues[name][call] = result;
+}
+
+std::string Memory::getBinding(std::string var) {
+  return functionbindings.top()[var];
 }

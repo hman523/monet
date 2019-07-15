@@ -23,6 +23,7 @@ public:
   std::vector<std::string> getfn(std::string var);
 
   bool functioninuse(std::string val);
+  bool isBuiltInFn(std::string val);
   bool isFunction(std::string val);
   bool isSubroutine(std::string val);
   bool isMem(std::string val);
@@ -49,6 +50,8 @@ public:
   void insertmem(std::string name, std::vector<std::string> call,
                  std::string result);
 
+  std::string getBinding(std::string var);
+
 private:
   std::string getType(std::string var);
 
@@ -66,6 +69,7 @@ private:
   std::map<std::string, std::map<std::vector<std::string>, std::string>>
       memvalues;
 
+  std::set<std::string> reservedwords;
   std::set<std::string> functionnamespace;
   std::set<std::string> subroutinenamespace;
   std::set<std::string> memnamespace;
