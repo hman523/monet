@@ -97,6 +97,14 @@ Built in commands so far:
 
 Commands coming soon: `list, cons, head, tail, map, reduce`
 
+High order functions are supported. To use one, use fn as the type.
+For example, 
+```
+define num oneandone fn func
+return (func 1 1)
+end
+```
+
 ## If statements
 If statements are very similar to those from Haskell. 
 If you are familiar with that, you should feel right at home. 
