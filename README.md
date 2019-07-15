@@ -65,7 +65,7 @@ A good use of a subroutine would be printing a welcome message at the beginning 
 
 Now what if you want to do some crazy deep recursion? 
 Writing a simple Fibonacci function, we can see that as n increase, 
-the time to computer grows. We can solve this with memoization.
+the time to compute grows. We can solve this with memoization.
 Memoization essentially is the idea that if given a function that 
 for any given input will always have the same output, 
 we can store the output to optimize future calls. A little demo of this is shown below.

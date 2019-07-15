@@ -3,6 +3,12 @@
 
 // Welcome to Monet (A Basic Inspired Programming Language)
 
+/**
+ * Main function
+ * @param argc number of cmd args
+ * @param argv cmd args
+ * @return 0 on success, else on failure
+ */
 int main(int argc, char *argv[]) {
   std::cout << "Welcome to the Monet Interpreter" << std::endl;
   if (argc != 2) {

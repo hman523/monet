@@ -11,6 +11,10 @@
 #include <random>
 #include <sstream>
 
+/**
+ * Constructor
+ * @param filename - the file you want to interpret
+ */
 Interpreter::Interpreter(std::string filename) {
   std::string functiondeclarationname = "define";
   std::string functionendname = "end";
@@ -22,7 +26,7 @@ Interpreter::Interpreter(std::string filename) {
   std::string fn;
   bool inFunction = false;
   while (std::getline(infile, line)) {
-
+    // Some logic to make it so function declarations are not split up
     if (line.substr(0, functiondeclarationname.length()) ==
             functiondeclarationname ||
         line.substr(0, subroutinedeclarationname.length()) ==
@@ -39,7 +43,8 @@ Interpreter::Interpreter(std::string filename) {
     }
     if (inFunction) {
       fn += line;
-      fn += "\17";
+      // Use end of transmission character in between each line
+      fn += '\17';
     } else {
       code.push_back(line);
     }
@@ -47,11 +52,20 @@ Interpreter::Interpreter(std::string filename) {
   interpret();
 }
 
+/**
+ * interpret function- essentially iterates over the code and runs eval on each
+ * line
+ */
 void Interpreter::interpret() {
   std::for_each(code.begin(), code.end(),
                 [&](std::string line) -> void { eval(line); });
 }
 
+/**
+ * Eval function
+ * @param value the line you want to evauluate
+ * @return what the command evaluates to
+ */
 std::string Interpreter::eval(const std::string &value) {
   std::vector<std::string> words = split(value);
   if (words.size() == 0) {
@@ -134,11 +148,21 @@ std::string Interpreter::eval(const std::string &value) {
   return "";
 }
 
+/**
+ * printcode- a function that prints the code, really just for debugging
+ */
 void Interpreter::printcode() {
   std::copy(code.begin(), code.end(),
             std::ostream_iterator<std::string>(std::cout, "\n"));
 }
 
+/**
+ * split function
+ * @param str string you want to split
+ * @param delim the delim char that is used to split words, default = ' '
+ * @return a vector of strings, each is one statement (can be a string,
+ * parenthesised statement, or just a value)
+ */
 std::vector<std::string> Interpreter::split(const std::string &str,
                                             char delim) {
   std::vector<std::string> returnval;
