@@ -1,0 +1,24 @@
+Method: print
+Parameters: any number of values
+Return: null
+Side effects: prints to terminal
+
+Method: println
+Parameters: any number of values
+Return: null
+Side effects: prints to terminal and adds a newline
+
+Method: string
+Parameters: name of variable, value you want to save
+Return: null
+Side effects: stores the value as a string with that value
+
+Method: boolean
+Parameters: name of variable, value you want to save
+Return: null
+Side effects: stores the value as a boolean with that value
+
+Method: num
+Parameters: name of variable, value you want to save
+Return: null
+Side effects: stores the value as a num with that value

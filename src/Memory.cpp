@@ -206,7 +206,10 @@ void Memory::enterfn(std::vector<std::string> vals,
     } else if (type == "num") {
       nextnum.insert(std::pair<std::string, num>(name, strtonum(value)));
       nexttypes.insert(std::pair<std::string, std::string>(name, "num"));
-    } else {
+    } else if (type == "fn"){
+
+    }
+    else {
       std::cerr << "Type " << type << " does not exist" << std::endl;
     }
   }

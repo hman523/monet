@@ -4,9 +4,12 @@ A Basic Inspired Programming Language
 Imagine a mix of BASIC, LISP, and whatever other language you can think of.
 The more I work on this, the more I realize I am slowly implementing LISP.
 In the words of Greenspun's tenth rule,
-"Any sufficiently complicated C or Fortran program contains an ad-hoc, informally-specified, bug-ridden, slow implementation of half of Common Lisp."
+"Any sufficiently complicated C or Fortran program contains an ad-hoc, 
+informally-specified, bug-ridden, slow implementation of half of Common Lisp."
 
-This is my attempt at writing a language. While it will be a simple one, I am just doing this to learn and maybe make a useful scripting tool. Ultimately, I have no plans for this except to learn from it.
+This is my attempt at writing a language. While it will be a simple one,
+ I am just doing this to learn and maybe make a useful scripting tool. 
+ Ultimately, I have no plans for this except to learn from it.
 
 ## Syntax
 The syntax is similar to BASIC. Syntax is always 
