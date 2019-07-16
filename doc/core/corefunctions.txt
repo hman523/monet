@@ -22,3 +22,49 @@ Method: num
 Parameters: name of variable, value you want to save
 Return: null
 Side effects: stores the value as a num with that value
+
+Method: read
+Parameters: one optional, name of variable you would like to save the value to
+Return: Whatever the user inputs
+Side effects: stores the input as a string if provided an input
+
+Method: quit
+Parameters: one optional, a numeric value used as the exit code
+Return: Does not reach this
+Side effects: quits the program
+
+Method: add
+Parameters: at least two, up to infinite
+Return: Sum of values
+Side effects: none
+
+Method: sub
+Parameters: at least two, up to infinite
+Return: difference of values
+Side effects: none
+
+Method: mul
+Parameters: at least two, up to infinite
+Return: product of values
+Side effects: none
+
+Method: div
+Parameters: at least two, up to infinite
+Return: quotient of values
+Side effects: none
+
+Method: not
+Parameters: one
+Return: the boolean opposite of the value
+Side effects: none
+
+Method: and
+Parameters: at least two, up to infinite
+Return: true if all are true
+Side effects: none
+
+Method: or
+Parameters: at least two, up to infinite
+Return: true if one is true
+Side effects: none
+
