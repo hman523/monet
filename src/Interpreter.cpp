@@ -222,27 +222,50 @@ std::vector<std::string> Interpreter::split(const std::string &str,
   return returnval;
 }
 
+/**
+ * isString function
+ * @param val you want to check
+ * @return true if val is a string in code
+ */
 bool Interpreter::isString(const std::string &val) {
   return (val.length() >= 2 && val[0] == '"' && val[val.size() - 1] == '"');
 }
 
+/**
+ * strtoint
+ * @param num you want to convert
+ * @return an integer evaluated from the number, only used in quit
+ */
 int Interpreter::strtoint(const std::string &num) {
+  if (memory.numexists(num)) {
+    return (int)memory.getnum(num);
+  }
   std::stringstream ss(num);
   int val;
   ss >> val;
   return val;
 }
 
-double Interpreter::strtonum(const std::string &num) {
-  if (memory.numexists(num)) {
-    return memory.getnum(num);
+/**
+ * strtonum
+ * @param num you want to convert
+ * @return a num that was the string
+ */
+num Interpreter::strtonum(const std::string &number) {
+  if (memory.numexists(number)) {
+    return memory.getnum(number);
   }
-  std::stringstream ss(num);
-  double val;
+  std::stringstream ss(number);
+  num val;
   ss >> val;
   return val;
 }
 
+/**
+ * strtobool
+ * @param bool you want to convert
+ * @return a bool that was the string
+ */
 bool Interpreter::strtobool(const std::string &val) {
   bool isVariable = memory.boolexists(val);
   if ((!isVariable) && !isBoolean(val)) {
@@ -255,6 +278,11 @@ bool Interpreter::strtobool(const std::string &val) {
   return (val == "true" || val == "1");
 }
 
+/**
+ * strtostr
+ * @param string you want to convert
+ * @return a string that was the string, checks variables
+ */
 std::string Interpreter::strtostr(const std::string &var) {
   if (memory.strexists(var)) {
     return memory.getstring(var);
