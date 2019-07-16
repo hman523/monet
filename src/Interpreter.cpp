@@ -407,7 +407,9 @@ void Interpreter::print(const std::vector<std::string> &words) {
     std::cout << std::endl;
   } else {
     for (uint32_t i = 1; i < words.size(); ++i) {
-      if (isString(words[i])) {
+      if (isNumber(words[i])) {
+        std::cout << words[i] << std::endl;
+      } else if (isString(words[i])) {
         std::cout << removequotes(words[i]) << std::flush;
       } else if (isParens(words[i])) {
         std::cout << eval(removeparens(words[i])) << std::flush;
@@ -425,7 +427,9 @@ void Interpreter::println(const std::vector<std::string> &words) {
     // do nothing
   } else {
     for (uint32_t i = 1; i < words.size(); ++i) {
-      if (isString(words[i])) {
+      if (isNumber(words[i])) {
+        std::cout << words[i] << std::endl;
+      } else if (isString(words[i])) {
         std::cout << removequotes(words[i]) << std::flush;
       } else if (isParens(words[i])) {
         std::cout << eval(removeparens(words[i])) << std::flush;
