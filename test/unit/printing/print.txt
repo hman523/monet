@@ -1,0 +1,7 @@
+Welcome to the Monet Interpreter
+
+
+Hello World
+a
+1
+
