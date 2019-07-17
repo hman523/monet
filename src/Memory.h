@@ -15,18 +15,18 @@ typedef double num;
 class Memory {
 public:
   Memory();
-  std::string get(std::string var);
-  std::string getstring(std::string var);
-  bool getboolean(std::string var);
-  num getnum(std::string var);
+  std::string get(std::string var) const;
+  std::string getstring(std::string var) const;
+  bool getboolean(std::string var) const;
+  num getnum(std::string var) const;
 
-  std::vector<std::string> getfn(std::string var);
+  std::vector<std::string> getfn(std::string var) const;
 
-  bool functioninuse(std::string val);
-  bool isBuiltInFn(std::string val);
-  bool isFunction(std::string val);
-  bool isSubroutine(std::string val);
-  bool isMem(std::string val);
+  bool functioninuse(std::string val) const;
+  bool isBuiltInFn(std::string val) const;
+  bool isFunction(std::string val) const;
+  bool isSubroutine(std::string val) const;
+  bool isMem(std::string val) const;
 
   void createfunction(std::string name, std::vector<std::string> code);
   void createsub(std::string name, std::vector<std::string> code);
@@ -36,10 +36,10 @@ public:
   void createnum(std::string name, num number);
   void createstring(std::string name, std::string str);
 
-  bool boolexists(std::string var);
-  bool strexists(std::string var);
-  bool numexists(std::string var);
-  bool varexists(std::string var);
+  bool boolexists(std::string var) const;
+  bool strexists(std::string var) const;
+  bool numexists(std::string var) const;
+  bool varexists(std::string var) const;
 
   void enterfn();
   void enterfn(std::vector<std::string> parameters,
@@ -50,14 +50,14 @@ public:
   void insertmem(std::string name, std::vector<std::string> call,
                  std::string result);
 
-  std::string getBinding(std::string var);
+  std::string getBinding(std::string var) const;
 
 private:
-  std::string getType(std::string var);
+  std::string getType(std::string var) const;
 
-  num strtonum(std::string);
-  bool strtobool(std::string);
-  std::string strtostr(std::string);
+  num strtonum(std::string) const;
+  bool strtobool(std::string) const;
+  std::string strtostr(std::string) const;
 
   std::stack<std::map<std::string, bool>> booleans;
   std::stack<std::map<std::string, num>> nums;

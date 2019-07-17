@@ -200,7 +200,7 @@ void Interpreter::printcode() {
  * parenthesised statement, or just a value)
  */
 std::vector<std::string> Interpreter::split(const std::string &str,
-                                            char delim) {
+                                            char delim) const {
   std::vector<std::string> returnval;
   std::string temp = "";
   bool instr = false;
@@ -242,7 +242,7 @@ std::vector<std::string> Interpreter::split(const std::string &str,
  * @param val you want to check
  * @return true if val is a string in code
  */
-bool Interpreter::isString(const std::string &val) {
+bool Interpreter::isString(const std::string &val) const {
   return (val.length() >= 2 && val[0] == '"' && val[val.size() - 1] == '"');
 }
 
@@ -251,7 +251,7 @@ bool Interpreter::isString(const std::string &val) {
  * @param num you want to convert
  * @return an integer evaluated from the number, only used in quit
  */
-int Interpreter::strtoint(const std::string &num) {
+int Interpreter::strtoint(const std::string &num) const {
   if (memory.numexists(num)) {
     return (int)memory.getnum(num);
   }
@@ -266,7 +266,7 @@ int Interpreter::strtoint(const std::string &num) {
  * @param num you want to convert
  * @return a num that was the string
  */
-num Interpreter::strtonum(const std::string &number) {
+num Interpreter::strtonum(const std::string &number) const {
   if (memory.numexists(number)) {
     return memory.getnum(number);
   }
@@ -281,7 +281,7 @@ num Interpreter::strtonum(const std::string &number) {
  * @param bool you want to convert
  * @return a bool that was the string
  */
-bool Interpreter::strtobool(const std::string &val) {
+bool Interpreter::strtobool(const std::string &val) const {
   bool isVariable = memory.boolexists(val);
   if ((!isVariable) && !isBoolean(val)) {
     std::cerr << "Calling strtobool on nonboolean value \"" << val << "\""
@@ -298,7 +298,7 @@ bool Interpreter::strtobool(const std::string &val) {
  * @param string you want to convert
  * @return a string that was the string, checks variables
  */
-std::string Interpreter::strtostr(const std::string &var) {
+std::string Interpreter::strtostr(const std::string &var) const {
   if (memory.strexists(var)) {
     return memory.getstring(var);
   } else {
@@ -306,7 +306,7 @@ std::string Interpreter::strtostr(const std::string &var) {
   }
 }
 
-std::string Interpreter::removequotes(const std::string &original) {
+std::string Interpreter::removequotes(const std::string &original) const {
   if (isString(original)) {
     return original.substr(1, original.length() - 2);
   } else {
@@ -314,12 +314,12 @@ std::string Interpreter::removequotes(const std::string &original) {
   }
 }
 
-bool Interpreter::isParens(const std::string &statement) {
+bool Interpreter::isParens(const std::string &statement) const {
   return (statement.length() >= 2 && statement[0] == '(' &&
           statement[statement.size() - 1] == ')');
 }
 
-std::string Interpreter::removeparens(const std::string &original) {
+std::string Interpreter::removeparens(const std::string &original) const {
   if (isParens(original)) {
     return original.substr(1, original.length() - 2);
   } else {
@@ -327,7 +327,7 @@ std::string Interpreter::removeparens(const std::string &original) {
   }
 }
 
-bool Interpreter::isNumber(const std::string &value) {
+bool Interpreter::isNumber(const std::string &value) const {
   if (memory.numexists(value)) {
     return true;
   }
@@ -346,14 +346,14 @@ bool Interpreter::isNumber(const std::string &value) {
   }
 }
 
-bool Interpreter::isBoolean(const std::string &value) {
+bool Interpreter::isBoolean(const std::string &value) const {
   if (memory.boolexists(value)) {
     return true;
   }
   return (value == "true" || value == "false" || value == "0" || value == "1");
 }
 
-std::string Interpreter::normalizenumber(num x) {
+std::string Interpreter::normalizenumber(num x) const {
   if (fmod(x, 1) < .000001) {
     return std::to_string(((int)x));
   } else {
