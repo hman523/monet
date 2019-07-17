@@ -15,49 +15,51 @@ typedef double num;
 class Memory {
 public:
   Memory();
-  std::string get(std::string var) const;
-  std::string getstring(std::string var) const;
-  bool getboolean(std::string var) const;
-  num getnum(std::string var) const;
+  std::string get(const std::string &var) const;
+  std::string getstring(const std::string &var) const;
+  bool getboolean(const std::string &var) const;
+  num getnum(const std::string &var) const;
 
-  std::vector<std::string> getfn(std::string var) const;
+  std::vector<std::string> getfn(const std::string &var) const;
 
-  bool functioninuse(std::string val) const;
-  bool isBuiltInFn(std::string val) const;
-  bool isFunction(std::string val) const;
-  bool isSubroutine(std::string val) const;
-  bool isMem(std::string val) const;
+  bool functioninuse(const std::string &val) const;
+  bool isBuiltInFn(const std::string &val) const;
+  bool isFunction(const std::string &val) const;
+  bool isSubroutine(const std::string &val) const;
+  bool isMem(const std::string &val) const;
 
-  void createfunction(std::string name, std::vector<std::string> code);
-  void createsub(std::string name, std::vector<std::string> code);
-  void createmem(std::string name, std::vector<std::string> code);
+  void createfunction(const std::string &name,
+                      const std::vector<std::string> &code);
+  void createsub(const std::string &name, const std::vector<std::string> &code);
+  void createmem(const std::string &name, const std::vector<std::string> &code);
 
-  void createboolean(std::string name, bool value);
-  void createnum(std::string name, num number);
-  void createstring(std::string name, std::string str);
+  void createboolean(const std::string &name, bool value);
+  void createnum(const std::string &name, num number);
+  void createstring(const std::string &name, const std::string &str);
 
-  bool boolexists(std::string var) const;
-  bool strexists(std::string var) const;
-  bool numexists(std::string var) const;
-  bool varexists(std::string var) const;
+  bool boolexists(const std::string &var) const;
+  bool strexists(const std::string &var) const;
+  bool numexists(const std::string &var) const;
+  bool varexists(const std::string &var) const;
 
   void enterfn();
-  void enterfn(std::vector<std::string> parameters,
-               std::vector<std::string> fndefinition);
+  void enterfn(const std::vector<std::string> &parameters,
+               const std::vector<std::string> &fndefinition);
   void leavefn();
 
-  std::string *checkmem(std::string name, std::vector<std::string> call);
-  void insertmem(std::string name, std::vector<std::string> call,
-                 std::string result);
+  std::string *checkmem(const std::string &name,
+                        const std::vector<std::string> &call);
+  void insertmem(const std::string &name, const std::vector<std::string> &call,
+                 const std::string &result);
 
-  std::string getBinding(std::string var) const;
+  std::string getBinding(const std::string &var) const;
 
 private:
-  std::string getType(std::string var) const;
+  std::string getType(const std::string &var) const;
 
-  num strtonum(std::string) const;
-  bool strtobool(std::string) const;
-  std::string strtostr(std::string) const;
+  num strtonum(const std::string &str) const;
+  bool strtobool(const std::string &str) const;
+  std::string strtostr(const std::string &str) const;
 
   std::stack<std::map<std::string, bool>> booleans;
   std::stack<std::map<std::string, num>> nums;

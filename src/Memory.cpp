@@ -18,7 +18,7 @@ Memory::Memory() {
   enterfn();
 }
 
-std::string Memory::get(std::string var) const {
+std::string Memory::get(const std::string &var) const {
   if (varexists(var)) {
     if (getType(var) == "boolean") {
       if (getboolean(var)) {
@@ -47,7 +47,7 @@ std::string Memory::get(std::string var) const {
   }
 }
 
-std::vector<std::string> Memory::getfn(std::string var) const {
+std::vector<std::string> Memory::getfn(const std::string &var) const {
   if (!functioninuse(var)) {
     throw std::logic_error("Cannot make call to " + var);
   } else if (!functionbindings.empty()) {
@@ -68,28 +68,28 @@ std::vector<std::string> Memory::getfn(std::string var) const {
   return std::vector<std::string>();
 }
 
-std::string Memory::getstring(std::string var) const {
+std::string Memory::getstring(const std::string &var) const {
   if (!strexists(var)) {
     throw std::logic_error("Variable " + var + " does not exist");
   }
   return strings.top().at(var);
 }
 
-bool Memory::getboolean(std::string var) const {
+bool Memory::getboolean(const std::string &var) const {
   if (!boolexists(var)) {
     throw std::logic_error("Variable " + var + " does not exist");
   }
   return booleans.top().at(var);
 }
 
-num Memory::getnum(std::string var) const {
+num Memory::getnum(const std::string &var) const {
   if (!numexists(var)) {
     throw std::logic_error("Variable " + var + " does not exist");
   }
   return nums.top().at(var);
 }
 
-bool Memory::functioninuse(std::string val) const {
+bool Memory::functioninuse(const std::string &val) const {
   bool inStack = false;
   if (!functionbindings.empty()) {
     inStack = functionbindings.top().count(val) != 0;
@@ -98,23 +98,24 @@ bool Memory::functioninuse(std::string val) const {
          isMem(val) || inStack;
 }
 
-bool Memory::isBuiltInFn(std::string val) const {
+bool Memory::isBuiltInFn(const std::string &val) const {
   return reservedwords.count(val) != 0;
 }
 
-bool Memory::isFunction(std::string val) const {
+bool Memory::isFunction(const std::string &val) const {
   return functionnamespace.count(val) != 0;
 }
 
-bool Memory::isSubroutine(std::string val) const {
+bool Memory::isSubroutine(const std::string &val) const {
   return subroutinenamespace.count(val) != 0;
 }
 
-bool Memory::isMem(std::string val) const {
+bool Memory::isMem(const std::string &val) const {
   return memnamespace.count(val) != 0;
 }
 
-void Memory::createfunction(std::string name, std::vector<std::string> code) {
+void Memory::createfunction(const std::string &name,
+                            const std::vector<std::string> &code) {
   if (functioninuse(name)) {
     throw std::logic_error("Unable to redefine \"" + name + "\"");
   }
@@ -123,7 +124,8 @@ void Memory::createfunction(std::string name, std::vector<std::string> code) {
       std::pair<std::string, std::vector<std::string>>(name, code));
 }
 
-void Memory::createsub(std::string name, std::vector<std::string> code) {
+void Memory::createsub(const std::string &name,
+                       const std::vector<std::string> &code) {
   if (functioninuse(name)) {
     throw std::logic_error("Unable to redefine \"" + name + "\"");
   }
@@ -132,7 +134,8 @@ void Memory::createsub(std::string name, std::vector<std::string> code) {
       std::pair<std::string, std::vector<std::string>>(name, code));
 }
 
-void Memory::createmem(std::string name, std::vector<std::string> code) {
+void Memory::createmem(const std::string &name,
+                       const std::vector<std::string> &code) {
   if (functioninuse(name)) {
     throw std::logic_error("Unable to redefine \"" + name + "\"");
   }
@@ -140,7 +143,7 @@ void Memory::createmem(std::string name, std::vector<std::string> code) {
   mems.insert(std::pair<std::string, std::vector<std::string>>(name, code));
 }
 
-void Memory::createboolean(std::string name, bool value) {
+void Memory::createboolean(const std::string &name, bool value) {
   if (!varexists(name)) {
     booleans.top().insert(std::pair<std::string, bool>(name, value));
     variabletypes.top().insert(
@@ -153,7 +156,7 @@ void Memory::createboolean(std::string name, bool value) {
   }
 }
 
-void Memory::createnum(std::string name, num number) {
+void Memory::createnum(const std::string &name, num number) {
   if (!varexists(name)) {
     nums.top().insert(std::pair<std::string, num>(name, number));
     variabletypes.top().insert(
@@ -166,7 +169,7 @@ void Memory::createnum(std::string name, num number) {
   }
 }
 
-void Memory::createstring(std::string name, std::string str) {
+void Memory::createstring(const std::string &name, const std::string &str) {
   if (!varexists(name)) {
     strings.top().insert(std::pair<std::string, std::string>(name, str));
     variabletypes.top().insert(
@@ -179,19 +182,19 @@ void Memory::createstring(std::string name, std::string str) {
   }
 }
 
-bool Memory::boolexists(std::string var) const {
+bool Memory::boolexists(const std::string &var) const {
   return (booleans.top().count(var) != 0);
 }
 
-bool Memory::strexists(std::string var) const {
+bool Memory::strexists(const std::string &var) const {
   return (strings.top().count(var) != 0);
 }
 
-bool Memory::numexists(std::string var) const {
+bool Memory::numexists(const std::string &var) const {
   return (nums.top().count(var) != 0);
 }
 
-bool Memory::varexists(std::string var) const {
+bool Memory::varexists(const std::string &var) const {
   return (variabletypes.top().count(var) != 0);
 }
 
@@ -202,8 +205,8 @@ void Memory::enterfn() {
   strings.push(std::map<std::string, std::string>());
 }
 
-void Memory::enterfn(std::vector<std::string> vals,
-                     std::vector<std::string> fndefinition) {
+void Memory::enterfn(const std::vector<std::string> &vals,
+                     const std::vector<std::string> &fndefinition) {
 
   std::map<std::string, std::string> nexttypes =
       std::map<std::string, std::string>();
@@ -249,11 +252,11 @@ void Memory::leavefn() {
   functionbindings.pop();
 }
 
-std::string Memory::getType(std::string var) const {
+std::string Memory::getType(const std::string &var) const {
   return variabletypes.top().at(var);
 }
 
-num Memory::strtonum(std::string number) const {
+num Memory::strtonum(const std::string &number) const {
   if (numexists(number)) {
     return getnum(number);
   }
@@ -263,7 +266,7 @@ num Memory::strtonum(std::string number) const {
   return val;
 }
 
-bool Memory::strtobool(std::string val) const {
+bool Memory::strtobool(const std::string &val) const {
   bool isVariable = boolexists(val);
   auto isBoolean = [&](std::string value) -> bool {
     if (boolexists(value)) {
@@ -282,7 +285,7 @@ bool Memory::strtobool(std::string val) const {
   return (val == "true" || val == "1");
 }
 
-std::string Memory::strtostr(std::string var) const {
+std::string Memory::strtostr(const std::string &var) const {
   if (strexists(var)) {
     return getstring(var);
   } else {
@@ -290,7 +293,8 @@ std::string Memory::strtostr(std::string var) const {
   }
 }
 
-std::string *Memory::checkmem(std::string name, std::vector<std::string> call) {
+std::string *Memory::checkmem(const std::string &name,
+                              const std::vector<std::string> &call) {
   if (memvalues[name].count(call) == 0) {
     return nullptr;
   } else {
@@ -298,11 +302,12 @@ std::string *Memory::checkmem(std::string name, std::vector<std::string> call) {
   }
 }
 
-void Memory::insertmem(std::string name, std::vector<std::string> call,
-                       std::string result) {
+void Memory::insertmem(const std::string &name,
+                       const std::vector<std::string> &call,
+                       const std::string &result) {
   memvalues[name][call] = result;
 }
 
-std::string Memory::getBinding(std::string var) const {
+std::string Memory::getBinding(const std::string &var) const {
   return functionbindings.top().at(var);
 }
