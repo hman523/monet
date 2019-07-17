@@ -650,6 +650,9 @@ std::string Interpreter::callmem(const std::vector<std::string> &vals) {
  * @param vals
  */
 void Interpreter::load(const std::vector<std::string> &vals) {
+  if (vals.size() != 2) {
+    throw std::logic_error("Must have two parameters for load");
+  }
   const std::string filename =
       (isString(vals[1]) ? removequotes(vals[1]) : strtostr(vals[1]));
   std::vector<std::string> loadedcode = loadcodefromfile(filename);
