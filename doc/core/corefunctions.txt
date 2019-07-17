@@ -68,3 +68,82 @@ Parameters: at least two, up to infinite
 Return: true if one is true
 Side effects: none
 
+Method: nand
+Parameters: at least two, up to infinite
+Return: true if all are true
+Side effects: none
+
+Method: nor
+Parameters: at least two, up to infinite
+Return: true if one is true
+Side effects: none
+
+Method: xor
+Parameters: two
+Return: the xor of the values
+Side effects: none
+
+Method: xnor
+Parameters: two
+Return: not xor of the values
+Side effects: none
+
+Method: if
+Parameters: a boolean, two other values
+Return: second parameter if the boolean is true, third if false
+Side effects: none
+
+Method: eq
+Parameters: two values
+Return: true if the values are equal
+Side effects: none
+
+Method: ne
+Parameters: two values
+Return: false if the values are equal
+Side effects: none
+
+Method: gt
+Parameters: two values
+Return: true if the first is greater than the second (or first alphabetically)
+Side effects: none
+
+Method: lt
+Parameters: two values
+Return: true if the first is less than the second (or second alphabetically)
+Side effects: none
+
+Method: ge
+Parameters: two values
+Return: true if the first is greater than or equal to the second
+Side effects: none
+
+Method: le
+Parameters: two values
+Return: true if the first is less than or equal to the second
+Side effects: none
+
+Method: <=>
+Parameters: two values
+Return: 1 if gt, 0 if eq, -1 if less than
+Side effects: none
+
+Method: define
+Parameters: a type, a name, and optionally (a type, a name) as many times as wanted
+Return: whatever is returned from the function using the return keyword
+Side effects: dependent
+
+Method: subroutine
+Parameters: a name
+Return: null
+Side effects: dependent
+
+Method: defmem
+Parameters: a type, a name, and optionally (a type, a name) as many times as wanted
+Return: whatever is returned from the function using the return keyword
+Side effects: save return to memory, dependent on function
+
+Method: load
+Parameters: the filename to load
+Return: null
+Side effects: dependent
