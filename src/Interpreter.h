@@ -21,6 +21,7 @@ public:
 private:
   // helper functions
   void interpret();
+  std::vector<std::string> loadcodefromfile(const std::string &filename);
   std::string eval(const std::string &value);
   std::vector<std::string> split(const std::string &str, char delim = ' ');
   bool isString(const std::string &val);
@@ -57,6 +58,7 @@ private:
   std::string callsubroutine(const std::string &name);
   void defmem(const std::vector<std::string> &vals);
   std::string callmem(const std::vector<std::string> &vals);
+  void load(const std::vector<std::string> &vals);
 
   // Math functions
   num add(const std::vector<std::string> &vals);

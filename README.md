@@ -93,7 +93,7 @@ While not horrible, we can do better. By changing just one word,
 Built in commands so far:
 `print`, `println`, `string`, `boolean`, `num`, `read`, `quit`, 
 `add`, `sub`, `mul`, `div`, `not`, `and`, `or`, `nand`, `nor`, `xor`, `xnor`,
-`if`, `eq`, `ne`, `gt`, `lt`, `ge`, `le`, `define`, `subroutine`, `defmem`
+`if`, `eq`, `ne`, `gt`, `lt`, `ge`, `le`, `define`, `subroutine`, `defmem`, `load`
 
 Commands coming soon: `list, cons, head, tail, map, reduce`
 

@@ -16,10 +16,31 @@
  * @param filename - the file you want to interpret
  */
 Interpreter::Interpreter(std::string filename) {
-  std::string functiondeclarationname = "define";
-  std::string functionendname = "end";
-  std::string subroutinedeclarationname = "subroutine";
-  std::string functionmemdeclarationname = "defmem";
+  code = loadcodefromfile(filename);
+  interpret();
+}
+
+/**
+ * interpret function- essentially iterates over the code and runs eval on each
+ * line
+ */
+void Interpreter::interpret() {
+  std::for_each(code.begin(), code.end(),
+                [&](std::string line) -> void { eval(line); });
+}
+
+/**
+ * load code from file
+ * @param filename the file you want to load from
+ * @return a vector of strings where each line is the code;
+ */
+std::vector<std::string>
+Interpreter::loadcodefromfile(const std::string &filename) {
+  std::vector<std::string> loadedcode;
+  const std::string functiondeclarationname = "define";
+  const std::string functionendname = "end";
+  const std::string subroutinedeclarationname = "subroutine";
+  const std::string functionmemdeclarationname = "defmem";
   std::ifstream infile;
   infile.open(filename);
   std::string line;
@@ -37,7 +58,7 @@ Interpreter::Interpreter(std::string filename) {
     }
     if (line.substr(0, functionendname.length()) == functionendname) {
       inFunction = false;
-      code.push_back(fn);
+      loadedcode.push_back(fn);
       fn = "";
       continue;
     }
@@ -46,19 +67,10 @@ Interpreter::Interpreter(std::string filename) {
       // Use end of transmission character in between each line
       fn += '\17';
     } else {
-      code.push_back(line);
+      loadedcode.push_back(line);
     }
   }
-  interpret();
-}
-
-/**
- * interpret function- essentially iterates over the code and runs eval on each
- * line
- */
-void Interpreter::interpret() {
-  std::for_each(code.begin(), code.end(),
-                [&](std::string line) -> void { eval(line); });
+  return loadedcode;
 }
 
 /**
@@ -81,6 +93,9 @@ std::string Interpreter::eval(const std::string &value) {
     return "";
   } else if (words[0] == "defmem") {
     defmem(split(value, '\17'));
+    return "";
+  } else if (words[0] == "load") {
+    load(words);
     return "";
   } else if (words[0] == "quit") {
     quit(words);
@@ -628,6 +643,18 @@ std::string Interpreter::callmem(const std::vector<std::string> &vals) {
   memory.leavefn();
   memory.insertmem(functionname, params, returnval);
   return returnval;
+}
+
+/**
+ * load the file given as parameter vals[1]
+ * @param vals
+ */
+void Interpreter::load(const std::vector<std::string> &vals) {
+  const std::string filename =
+      (isString(vals[1]) ? removequotes(vals[1]) : strtostr(vals[1]));
+  std::vector<std::string> loadedcode = loadcodefromfile(filename);
+  std::for_each(loadedcode.begin(), loadedcode.end(),
+                [&](std::string line) -> void { eval(line); });
 }
 
 num Interpreter::add(const std::vector<std::string> &vals) {

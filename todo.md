@@ -13,7 +13,7 @@
 - [x] define functions
 - [x] define subroutines
 - [x] define memoized functions
-- [ ] load function
+- [x] load function
 - [ ] declaring lists
 - [ ] returning lists
 - [ ] passing lists as parameters
