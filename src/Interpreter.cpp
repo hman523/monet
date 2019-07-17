@@ -361,7 +361,9 @@ std::string Interpreter::normalizenumber(num x) const {
   }
 }
 
-std::string Interpreter::normalizebool(bool x) { return x ? "true" : "false"; }
+std::string Interpreter::normalizebool(bool x) const {
+  return x ? "true" : "false";
+}
 
 std::vector<bool>
 Interpreter::parameterstobool(const std::vector<std::string> &vals) {

@@ -36,7 +36,7 @@ private:
   bool isNumber(const std::string &value) const;
   bool isBoolean(const std::string &value) const;
   std::string normalizenumber(num x) const;
-  std::string normalizebool(bool x);
+  std::string normalizebool(bool x) const;
   std::vector<bool> parameterstobool(const std::vector<std::string> &vals);
   std::vector<num> parameterstonums(const std::vector<std::string> &vals);
   std::vector<std::string> evalParameters(const std::vector<std::string> &vals);
