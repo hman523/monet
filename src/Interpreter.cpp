@@ -67,6 +67,10 @@ Interpreter::loadcodefromfile(const std::string &filename) {
       // Use end of transmission character in between each line
       fn += '\17';
     } else {
+      if (line == "") {
+        // Do nothing on empty lines
+        continue;
+      }
       loadedcode.push_back(line);
     }
   }
