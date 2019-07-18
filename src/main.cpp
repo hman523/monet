@@ -19,7 +19,8 @@ int main(int argc, char *argv[]) {
     Interpreter i(argv[1]);
   } catch (std::logic_error e) {
     std::cerr << e.what() << std::endl;
+    return EXIT_FAILURE;
   }
 
-  return 0;
+  return EXIT_SUCCESS;
 }
