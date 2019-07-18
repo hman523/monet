@@ -9,12 +9,12 @@
 #include <sstream>
 
 Memory::Memory() {
-  reservedwords.insert({"print",  "println", "quit",       "boolean", "num",
-                        "string", "read",    "add",        "sub",     "mul",
-                        "div",    "and",     "or",         "nand",    "nor",
-                        "xor",    "xnor",    "if",         "eq",      "ne",
-                        "gt",     "lt",      "ge",         "le",      "define",
-                        "return", "end",     "subroutine", "defmem"});
+  reservedwords.insert(
+      {"print",  "println", "quit", "boolean", "num",    "string", "read",
+       "add",    "sub",     "mul",  "div",     "and",    "or",     "nand",
+       "nor",    "xor",     "xnor", "if",      "eq",     "ne",     "gt",
+       "lt",     "ge",      "le",   "define",  "return", "end",    "subroutine",
+       "defmem", "load",    "list", "cons",    "head",   "tail"});
   enterfn();
 }
 
@@ -26,22 +26,23 @@ std::string Memory::get(const std::string &var) const {
       } else {
         return "false";
       }
-    }
-    if (getType(var) == "num") {
+    } else if (getType(var) == "num") {
       if (fmod(getnum(var), 1) < .000001) {
         return std::to_string(((int)getnum(var)));
       } else {
         return std::to_string(getnum(var));
       }
-    }
-    if (getType(var) == "string") {
+    } else if (getType(var) == "string") {
       return getstring(var);
+    } else if (getType(var) == "list") {
+      return getlist(var);
     } else {
       std::cerr
           << "If you are seeing this message something is very, very wrong"
           << std::endl;
       return "";
     }
+
   } else {
     throw std::logic_error("Variable " + var + " not found");
   }
@@ -87,6 +88,13 @@ num Memory::getnum(const std::string &var) const {
     throw std::logic_error("Variable " + var + " does not exist");
   }
   return nums.top().at(var);
+}
+
+std::string Memory::getlist(const std::string &var) const {
+  if (!listexists(var)) {
+    throw std::logic_error("Variable " + var + " does not exist");
+  }
+  return lists.top().at(var);
 }
 
 bool Memory::functioninuse(const std::string &val) const {
@@ -182,6 +190,19 @@ void Memory::createstring(const std::string &name, const std::string &str) {
   }
 }
 
+void Memory::createlist(const std::string &name, const std::string &list) {
+  if (!varexists(name)) {
+    lists.top().insert(std::pair<std::string, std::string>(name, list));
+    variabletypes.top().insert(
+        std::pair<std::string, std::string>(name, "list"));
+  } else if (getType(name) == "list") {
+    throw std::logic_error("Reinitialization of variable " + name);
+  } else {
+    throw std::logic_error("Variable " + name + " already initialized as a " +
+                           getType(name));
+  }
+}
+
 bool Memory::boolexists(const std::string &var) const {
   return (booleans.top().count(var) != 0);
 }
@@ -192,6 +213,10 @@ bool Memory::strexists(const std::string &var) const {
 
 bool Memory::numexists(const std::string &var) const {
   return (nums.top().count(var) != 0);
+}
+
+bool Memory::listexists(const std::string &var) const {
+  return (lists.top().count(var) != 0);
 }
 
 bool Memory::varexists(const std::string &var) const {
