@@ -33,8 +33,9 @@ private:
   bool strtobool(const std::string &val) const;
   std::string strtostr(const std::string &str) const;
   std::string strtolist(const std::string &val) const;
-  std::string removequotes(const std::string &original) const;
+  std::string normalize(const std::string &val) const;
 
+  std::string removequotes(const std::string &original) const;
   bool isParens(const std::string &statement) const;
   std::string removeparens(const std::string &original) const;
   std::string removelist(const std::string &original) const;

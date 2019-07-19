@@ -64,10 +64,9 @@ public:
 
   // for high order functions
   std::string getBinding(const std::string &var) const;
-
-private:
   std::string getType(const std::string &var) const;
 
+private:
   num strtonum(const std::string &str) const;
   bool strtobool(const std::string &str) const;
   std::string strtostr(const std::string &str) const;

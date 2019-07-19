@@ -337,6 +337,30 @@ std::string Interpreter::strtolist(const std::string &val) const {
   return memory.listexists(val) ? memory.getlist(val) : val;
 }
 
+std::string Interpreter::normalize(const std::string &val) const {
+  if (memory.varexists(val)) {
+    std::string type = memory.getType(val);
+    if (type == "num") {
+      return normalizenumber(strtonum(val));
+    } else if (type == "boolean") {
+      return normalizebool(strtobool(val));
+    } else if (type == "string") {
+      return strtostr(val);
+    } else if (type == "list") {
+      return strtolist(val);
+    } else {
+      throw std::logic_error("Fatal implementation error");
+    }
+  } else {
+    if (isNumber(val)) {
+      return normalizenumber(strtonum(val));
+    } else if (isBoolean(val)) {
+      return normalizebool(strtobool(val));
+    }
+  }
+  return val;
+}
+
 std::string Interpreter::removequotes(const std::string &original) const {
   if (isString(original)) {
     return original.substr(1, original.length() - 2);
@@ -918,8 +942,10 @@ std::string Interpreter::cons(const std::vector<std::string> &vals) {
   if (vals.size() != 3) {
     throw std::logic_error("Wrong number of parameters for cons");
   }
-  std::string h = isParens(vals[1]) ? eval(removeparens(vals[1])) : vals[1];
-  std::string t = isParens(vals[2]) ? eval(removeparens(vals[2])) : vals[2];
+  std::string h =
+      isParens(vals[1]) ? eval(removeparens(vals[1])) : normalize(vals[1]);
+  std::string t =
+      isParens(vals[2]) ? eval(removeparens(vals[2])) : strtolist(vals[2]);
   return getcons(h, t);
 }
 
