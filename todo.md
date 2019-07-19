@@ -14,10 +14,10 @@
 - [x] define subroutines
 - [x] define memoized functions
 - [x] load function
-- [ ] declaring lists
+- [x] declaring lists
 - [ ] returning lists
-- [ ] passing lists as parameters
-- [ ] head and tail function
+- [x] passing lists as parameters
+- [x] head and tail function
 - [ ] cons operator
 - [ ] include function
 

@@ -122,8 +122,7 @@ println "x is " x
 ```
 Output: `x is 9`
 
-## Lists (note not released yet)
-Lists are recursive containers that will be able to hold any datatype, including another list. 
-These lists will be used for iteration and will be closely associated with the map and reduce functions. 
+## Lists
+Lists are recursive containers that will be able to hold any datatype, including other lists. 
+These lists are used for iteration and will be closely associated with the map and reduce functions. 
 A list is said to be null if it is empty. A list can contain a mix of any datatype. 
-A future feature should allow for functions to be held in a list.
