@@ -278,10 +278,13 @@ void Memory::enterfn(const std::vector<std::string> &vals,
 }
 
 void Memory::leavefn() {
+  // So much popping you would think someone is making popcorn
+  // I understand if you stop reading the code after that comment
   variabletypes.pop();
   booleans.pop();
   strings.pop();
   nums.pop();
+  lists.pop();
   functionbindings.pop();
 }
 

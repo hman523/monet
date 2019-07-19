@@ -936,6 +936,6 @@ bool Interpreter::isNull(std::vector<std::string> &vals) {
   if (isParens(vals[1])) {
     return "" == removelist(eval(removeparens(vals[1])));
   } else {
-    return "" == removelist(vals[1]);
+    return "" == removelist(strtolist(vals[1]));
   }
 }
