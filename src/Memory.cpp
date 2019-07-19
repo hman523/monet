@@ -228,6 +228,7 @@ void Memory::enterfn() {
   booleans.push(std::map<std::string, bool>());
   nums.push(std::map<std::string, num>());
   strings.push(std::map<std::string, std::string>());
+  lists.push(std::map<std::string, std::string>());
 }
 
 void Memory::enterfn(const std::vector<std::string> &vals,
@@ -237,6 +238,8 @@ void Memory::enterfn(const std::vector<std::string> &vals,
       std::map<std::string, std::string>();
   std::map<std::string, bool> nextbool = std::map<std::string, bool>();
   std::map<std::string, std::string> nextstring =
+      std::map<std::string, std::string>();
+  std::map<std::string, std::string> nextlist =
       std::map<std::string, std::string>();
   std::map<std::string, num> nextnum = std::map<std::string, num>();
   std::map<std::string, std::string> nextfns =
@@ -253,6 +256,10 @@ void Memory::enterfn(const std::vector<std::string> &vals,
       nextstring.insert(
           std::pair<std::string, std::string>(name, strtostr(value)));
       nexttypes.insert(std::pair<std::string, std::string>(name, "string"));
+    } else if (type == "list") {
+      nextlist.insert(
+          std::pair<std::string, std::string>(name, strtolist(value)));
+      nexttypes.insert(std::pair<std::string, std::string>(name, "list"));
     } else if (type == "num") {
       nextnum.insert(std::pair<std::string, num>(name, strtonum(value)));
       nexttypes.insert(std::pair<std::string, std::string>(name, "num"));
@@ -266,6 +273,7 @@ void Memory::enterfn(const std::vector<std::string> &vals,
   booleans.push(nextbool);
   nums.push(nextnum);
   strings.push(nextstring);
+  lists.push(nextlist);
   functionbindings.push(nextfns);
 }
 
@@ -316,6 +324,10 @@ std::string Memory::strtostr(const std::string &var) const {
   } else {
     return var;
   }
+}
+
+std::string Memory::strtolist(const std::string &val) const {
+  return listexists(val) ? getlist(val) : val;
 }
 
 std::string *Memory::checkmem(const std::string &name,

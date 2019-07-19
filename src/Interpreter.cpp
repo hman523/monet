@@ -113,6 +113,8 @@ std::string Interpreter::eval(const std::string &value) {
     declarenum(words);
   } else if (words[0] == "boolean") {
     declareboolean(words);
+  } else if (words[0] == "list") {
+    declarelist(words);
   } else if (words[0] == "read") {
     return read(words);
   } else if (words[0] == "if") {
@@ -155,6 +157,14 @@ std::string Interpreter::eval(const std::string &value) {
     return normalizebool(comparison(words) <= 0);
   } else if (words[0] == "<=>") {
     return std::to_string(comparison(words));
+  } else if (words[0] == "head") {
+    return head(words);
+  } else if (words[0] == "tail") {
+    return tail(words);
+  } else if (words[0] == "cons") {
+    return cons(words);
+  } else if (words[0] == "null") {
+    return normalizebool(isNull(words));
   } else if (memory.functioninuse(words[0])) {
     if (memory.isFunction(words[0])) {
       return call(words);
@@ -209,6 +219,7 @@ std::vector<std::string> Interpreter::split(const std::string &str,
   std::string temp = "";
   bool instr = false;
   int inparens = 0;
+  int inlist = 0;
   for (uint32_t i = 0; i < str.length(); ++i) {
     if (str[i] == '(' && !instr) {
       ++inparens;
@@ -216,13 +227,20 @@ std::vector<std::string> Interpreter::split(const std::string &str,
     if (str[i] == ')' && !instr) {
       --inparens;
     }
+    if (str[i] == '[' && !instr) {
+      ++inlist;
+    }
+    if (str[i] == ']' && !instr) {
+      --inlist;
+    }
     if (str[i] == '"') {
       instr = !instr;
     }
-    if (str[i] == delim && temp != "" && !instr && inparens == 0) {
+    if (str[i] == delim && temp != "" && !instr && inparens == 0 &&
+        inlist == 0) {
       returnval.push_back(temp);
       temp = "";
-    } else if (inparens != 0) {
+    } else if (inparens != 0 || inlist != 0) {
       temp += str[i];
     } else if (instr) {
       temp += str[i];
@@ -248,6 +266,11 @@ std::vector<std::string> Interpreter::split(const std::string &str,
  */
 bool Interpreter::isString(const std::string &val) const {
   return (val.length() >= 2 && val[0] == '"' && val[val.size() - 1] == '"');
+}
+
+bool Interpreter::isList(const std::string &val) const {
+  return (val.length() >= 2 && val[0] == '[' && val[val.size() - 1] == ']');
+  ;
 }
 
 /**
@@ -310,6 +333,10 @@ std::string Interpreter::strtostr(const std::string &var) const {
   }
 }
 
+std::string Interpreter::strtolist(const std::string &val) const {
+  return memory.listexists(val) ? memory.getlist(val) : val;
+}
+
 std::string Interpreter::removequotes(const std::string &original) const {
   if (isString(original)) {
     return original.substr(1, original.length() - 2);
@@ -325,6 +352,14 @@ bool Interpreter::isParens(const std::string &statement) const {
 
 std::string Interpreter::removeparens(const std::string &original) const {
   if (isParens(original)) {
+    return original.substr(1, original.length() - 2);
+  } else {
+    return original;
+  }
+}
+
+std::string Interpreter::removelist(const std::string &original) const {
+  if (isList(original)) {
     return original.substr(1, original.length() - 2);
   } else {
     return original;
@@ -511,6 +546,18 @@ void Interpreter::declarenum(const std::vector<std::string> &vals) {
     memory.createnum(vals[1], strtonum(eval(removeparens(vals[2]))));
   } else {
     memory.createnum(vals[1], strtonum(vals[2]));
+  }
+}
+
+void Interpreter::declarelist(const std::vector<std::string> &vals) {
+  if (vals.size() != 3) {
+    throw std::logic_error(
+        "Wrong number of parameters for list initialization");
+  }
+  if (isParens(vals[2])) {
+    memory.createlist(vals[1], strtolist(eval(removeparens(vals[2]))));
+  } else {
+    memory.createlist(vals[1], strtolist(vals[2]));
   }
 }
 
@@ -815,4 +862,80 @@ int Interpreter::comparison(const std::vector<std::string> &vals) {
   }
   throw std::logic_error("Comparison not permitted between different types");
   return 0;
+}
+
+std::string Interpreter::head(const std::vector<std::string> &vals) {
+  if (vals.size() != 2) {
+    throw std::logic_error("Wrong number of parameters for head");
+  }
+  if (isParens(vals[1])) {
+    return getHead(eval(removeparens(vals[1])));
+  } else {
+    return getHead(vals[1]);
+  }
+}
+
+std::string Interpreter::getHead(const std::string &val) const {
+  std::string rawlist = removelist(strtolist(val));
+  if (rawlist == "") {
+    return "";
+  } else {
+    size_t index = rawlist.find(' ');
+    if (index == std::string::npos) {
+      return rawlist;
+    } else {
+      return rawlist.substr(0, index);
+    }
+  }
+}
+
+std::string Interpreter::tail(const std::vector<std::string> &vals) {
+  if (vals.size() != 2) {
+    throw std::logic_error("Wrong number of parameters for tail");
+  }
+  if (isParens(vals[1])) {
+    return getTail(eval(removeparens(vals[1])));
+  } else {
+    return getTail(vals[1]);
+  }
+}
+
+std::string Interpreter::getTail(const std::string &val) const {
+  std::string rawlist = removelist(strtolist(val));
+  if (rawlist == "") {
+    throw std::logic_error("Tail called on empty list");
+  } else {
+    size_t index = rawlist.find(' ');
+    if (index == std::string::npos) {
+      return "";
+    } else {
+      return "[" + rawlist.substr(index + 1) + "]";
+    }
+  }
+}
+
+std::string Interpreter::cons(const std::vector<std::string> &vals) {
+  if (vals.size() != 3) {
+    throw std::logic_error("Wrong number of parameters for cons");
+  }
+  std::string h = isParens(vals[1]) ? eval(removeparens(vals[1])) : vals[1];
+  std::string t = isParens(vals[2]) ? eval(removeparens(vals[2])) : vals[2];
+  return getcons(h, t);
+}
+
+std::string Interpreter::getcons(const std::string &val,
+                                 const std::string &list) const {
+  return std::string("[") + val + std::string(" ") + removelist(list) +
+         std::string("]");
+}
+
+bool Interpreter::isNull(std::vector<std::string> &vals) {
+  if (vals.size() != 2) {
+    throw std::logic_error("Wrong number of parameters for null");
+  }
+  if (isParens(vals[1])) {
+    return "" == removelist(eval(removeparens(vals[1])));
+  } else {
+    return "" == removelist(vals[1]);
+  }
 }

@@ -26,15 +26,21 @@ private:
   std::vector<std::string> split(const std::string &str,
                                  char delim = ' ') const;
   bool isString(const std::string &val) const;
+  bool isList(const std::string &val) const;
+
   int strtoint(const std::string &num) const;
   num strtonum(const std::string &num) const;
   bool strtobool(const std::string &val) const;
   std::string strtostr(const std::string &str) const;
+  std::string strtolist(const std::string &val) const;
   std::string removequotes(const std::string &original) const;
+
   bool isParens(const std::string &statement) const;
   std::string removeparens(const std::string &original) const;
+  std::string removelist(const std::string &original) const;
   bool isNumber(const std::string &value) const;
   bool isBoolean(const std::string &value) const;
+
   std::string normalizenumber(num x) const;
   std::string normalizebool(bool x) const;
   std::vector<bool> parameterstobool(const std::vector<std::string> &vals);
@@ -49,6 +55,7 @@ private:
   void declarestring(const std::vector<std::string> &vals);
   void declareboolean(const std::vector<std::string> &vals);
   void declarenum(const std::vector<std::string> &vals);
+  void declarelist(const std::vector<std::string> &vals);
   std::string read(const std::vector<std::string> &vals);
   std::string ifstatement(const std::vector<std::string> &vals);
 
@@ -78,6 +85,15 @@ private:
 
   // Equality functions
   int comparison(const std::vector<std::string> &vals);
+
+  // List functions
+  std::string head(const std::vector<std::string> &vals);
+  std::string getHead(const std::string &val) const;
+  std::string tail(const std::vector<std::string> &vals);
+  std::string getTail(const std::string &val) const;
+  std::string cons(const std::vector<std::string> &vals);
+  std::string getcons(const std::string &val, const std::string &list) const;
+  bool isNull(std::vector<std::string> &vals);
 
   // memory
   std::vector<std::string> code;

@@ -71,6 +71,7 @@ private:
   num strtonum(const std::string &str) const;
   bool strtobool(const std::string &str) const;
   std::string strtostr(const std::string &str) const;
+  std::string strtolist(const std::string &str) const;
 
   std::stack<std::map<std::string, bool>> booleans;
   std::stack<std::map<std::string, num>> nums;
