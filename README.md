@@ -93,9 +93,10 @@ While not horrible, we can do better. By changing just one word,
 Built in commands so far:
 `print`, `println`, `string`, `boolean`, `num`, `read`, `quit`, 
 `add`, `sub`, `mul`, `div`, `not`, `and`, `or`, `nand`, `nor`, `xor`, `xnor`,
-`if`, `eq`, `ne`, `gt`, `lt`, `ge`, `le`, `<=>`, `define`, `subroutine`, `defmem`, `load`
+`if`, `eq`, `ne`, `gt`, `lt`, `ge`, `le`, `<=>`, `define`, `subroutine`, `defmem`, `load`, 
+`list`, `head`, `tail`, `cons`, `null`
 
-Commands coming soon: `list, cons, head, tail, map, reduce`
+Commands coming soon: `map, reduce`
 
 High order functions are supported. To use one, use fn as the type.
 For example, 
