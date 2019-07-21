@@ -5,6 +5,7 @@
 #ifndef MONET_INTERPRETER_H
 #define MONET_INTERPRETER_H
 
+#include "Exception.h"
 #include "Memory.h"
 #include <iostream>
 #include <map>

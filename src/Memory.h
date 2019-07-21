@@ -5,6 +5,7 @@
 #ifndef MONET_MEMORY_H
 #define MONET_MEMORY_H
 
+#include "Exception.h"
 #include <map>
 #include <set>
 #include <stack>

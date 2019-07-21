@@ -194,7 +194,7 @@ std::string Interpreter::eval(const std::string &value) {
       }
     }
   } else {
-    throw std::logic_error("Function \"" + words[0] + "\" does not exist");
+    throw Exception("Function \"" + words[0] + "\" does not exist");
   }
   return "";
 }
@@ -263,7 +263,7 @@ std::vector<std::string> Interpreter::split(const std::string &str,
 std::pair<std::string, std::string>
 Interpreter::listsplit(const std::string &list) const {
   if (!isList(list)) {
-    throw std::logic_error("Unable to parse a non list as a list");
+    throw Exception("Unable to parse a non list as a list");
   }
   std::string rawlist = removelist(strtolist(list));
   std::string head, tail;
@@ -389,7 +389,7 @@ std::string Interpreter::normalize(const std::string &val) const {
     } else if (type == "list") {
       return strtolist(val);
     } else {
-      throw std::logic_error("Fatal implementation error");
+      throw Exception("Fatal implementation error");
     }
   } else {
     if (isNumber(val)) {
@@ -577,8 +577,7 @@ void Interpreter::quit(const std::vector<std::string> &words) {
 
 void Interpreter::declarestring(const std::vector<std::string> &vals) {
   if (vals.size() != 3) {
-    throw std::logic_error(
-        "Wrong number of parameters for string initialization");
+    throw Exception("Wrong number of parameters for string initialization");
   }
   if (isParens(vals[2])) {
     memory.createstring(vals[1], eval(vals[2]));
@@ -589,8 +588,7 @@ void Interpreter::declarestring(const std::vector<std::string> &vals) {
 
 void Interpreter::declareboolean(const std::vector<std::string> &vals) {
   if (vals.size() != 3) {
-    throw std::logic_error(
-        "Wrong number of parameters for boolean initialization");
+    throw Exception("Wrong number of parameters for boolean initialization");
   }
   bool a;
   if (isParens(vals[2])) {
@@ -604,7 +602,7 @@ void Interpreter::declareboolean(const std::vector<std::string> &vals) {
 
 void Interpreter::declarenum(const std::vector<std::string> &vals) {
   if (vals.size() != 3) {
-    throw std::logic_error("Wrong number of parameters for num initialization");
+    throw Exception("Wrong number of parameters for num initialization");
   }
   if (isParens(vals[2])) {
     memory.createnum(vals[1], strtonum(eval(vals[2])));
@@ -615,8 +613,7 @@ void Interpreter::declarenum(const std::vector<std::string> &vals) {
 
 void Interpreter::declarelist(const std::vector<std::string> &vals) {
   if (vals.size() != 3) {
-    throw std::logic_error(
-        "Wrong number of parameters for list initialization");
+    throw Exception("Wrong number of parameters for list initialization");
   }
   if (isParens(vals[2])) {
     memory.createlist(vals[1], strtolist(eval(vals[2])));
@@ -627,7 +624,7 @@ void Interpreter::declarelist(const std::vector<std::string> &vals) {
 
 std::string Interpreter::read(const std::vector<std::string> &vals) {
   if (vals.size() > 2) {
-    throw std::logic_error("Wrong number of parameters for reading");
+    throw Exception("Wrong number of parameters for reading");
   }
   std::string input;
   std::cin >> input;
@@ -639,15 +636,14 @@ std::string Interpreter::read(const std::vector<std::string> &vals) {
 
 std::string Interpreter::ifstatement(const std::vector<std::string> &vals) {
   if (vals.size() != 4) {
-    throw std::logic_error("Wrong number of inputs for if statement");
+    throw Exception("Wrong number of inputs for if statement");
   }
   bool expr;
   if (isParens(vals[1])) {
     expr = strtobool(eval(vals[1]));
   } else {
     if (!isBoolean(vals[1])) {
-      throw std::logic_error(
-          "First value must be a boolean value in if statement");
+      throw Exception("First value must be a boolean value in if statement");
     }
     expr = strtobool(vals[1]);
   }
@@ -664,8 +660,8 @@ std::string Interpreter::ifstatement(const std::vector<std::string> &vals) {
 void Interpreter::define(const std::vector<std::string> &vals) {
   std::vector<std::string> definition = split(vals[0]);
   if (definition.size() < 3 || definition.size() % 2 == 0) {
-    throw std::logic_error("Cannot define function \"" + definition[2] +
-                           "\" due to wrong number of parameters");
+    throw Exception("Cannot define function \"" + definition[2] +
+                    "\" due to wrong number of parameters");
   }
   memory.createfunction(definition[2], vals);
 }
@@ -677,8 +673,8 @@ std::string Interpreter::call(const std::vector<std::string> &vals) {
   std::vector<std::string> definition = split(fncode[0]);
   double numberOfParameters = (definition.size() - 3) / 2.0;
   if (vals.size() - 1 != (numberOfParameters)) {
-    throw std::logic_error("Wrong number of parameters for call to function " +
-                           vals[0]);
+    throw Exception("Wrong number of parameters for call to function " +
+                    vals[0]);
   }
   auto params = evalParameters(vals);
   memory.enterfn(params, definition);
@@ -704,8 +700,8 @@ std::string Interpreter::call(const std::vector<std::string> &vals) {
 void Interpreter::subroutine(const std::vector<std::string> &vals) {
   std::vector<std::string> definition = split(vals[0]);
   if (definition.size() != 2) {
-    throw std::logic_error("Cannot define subroutine \"" + definition[1] +
-                           "\" due to parameters trying to be defined");
+    throw Exception("Cannot define subroutine \"" + definition[1] +
+                    "\" due to parameters trying to be defined");
   }
   memory.createsub(definition[1], vals);
 }
@@ -720,8 +716,8 @@ std::string Interpreter::callsubroutine(const std::string &name) {
 void Interpreter::defmem(const std::vector<std::string> &vals) {
   std::vector<std::string> definition = split(vals[0]);
   if (definition.size() < 3 || definition.size() % 2 == 0) {
-    throw std::logic_error("Cannot define function \"" + definition[2] +
-                           "\" due to wrong number of parameters");
+    throw Exception("Cannot define function \"" + definition[2] +
+                    "\" due to wrong number of parameters");
   }
   memory.createmem(definition[2], vals);
 }
@@ -733,8 +729,8 @@ std::string Interpreter::callmem(const std::vector<std::string> &vals) {
   std::vector<std::string> definition = split(fncode[0]);
   double numberOfParameters = (definition.size() - 3) / 2.0;
   if (vals.size() - 1 != (numberOfParameters)) {
-    throw std::logic_error("Wrong number of parameters for call to function " +
-                           vals[0]);
+    throw Exception("Wrong number of parameters for call to function " +
+                    vals[0]);
   }
   auto params = evalParameters(vals);
   std::string *check = memory.checkmem(functionname, params);
@@ -768,7 +764,7 @@ std::string Interpreter::callmem(const std::vector<std::string> &vals) {
  */
 void Interpreter::load(const std::vector<std::string> &vals) {
   if (vals.size() != 2) {
-    throw std::logic_error("Must have two parameters for load");
+    throw Exception("Must have two parameters for load");
   }
   const std::string filename =
       (isString(vals[1]) ? removequotes(vals[1]) : strtostr(vals[1]));
@@ -779,7 +775,7 @@ void Interpreter::load(const std::vector<std::string> &vals) {
 
 num Interpreter::add(const std::vector<std::string> &vals) {
   if (vals.size() < 2) {
-    throw std::logic_error("Too few inputs for add");
+    throw Exception("Too few inputs for add");
   }
   std::vector<num> parameters = parameterstonums(vals);
   return std::accumulate(parameters.begin(), parameters.end(), 0);
@@ -787,7 +783,7 @@ num Interpreter::add(const std::vector<std::string> &vals) {
 
 num Interpreter::sub(const std::vector<std::string> &vals) {
   if (vals.size() < 2) {
-    throw std::logic_error("Too few inputs for sub");
+    throw Exception("Too few inputs for sub");
   }
   std::vector<num> parameters = parameterstonums(vals);
   return parameters[0] + std::accumulate(parameters.begin() + 1,
@@ -796,7 +792,7 @@ num Interpreter::sub(const std::vector<std::string> &vals) {
 
 num Interpreter::mul(const std::vector<std::string> &vals) {
   if (vals.size() < 2) {
-    throw std::logic_error("Too few inputs for mul");
+    throw Exception("Too few inputs for mul");
   }
   std::vector<num> parameters = parameterstonums(vals);
   return std::accumulate(parameters.begin(), parameters.end(), 1,
@@ -805,7 +801,7 @@ num Interpreter::mul(const std::vector<std::string> &vals) {
 
 num Interpreter::div(const std::vector<std::string> &vals) {
   if (vals.size() < 2) {
-    throw std::logic_error("Too few inputs for div");
+    throw Exception("Too few inputs for div");
   }
   std::vector<num> parameters = parameterstonums(vals);
   num curr = parameters[0];
@@ -818,7 +814,7 @@ num Interpreter::div(const std::vector<std::string> &vals) {
 bool Interpreter::andfunc(const std::vector<std::string> &vals) {
   std::vector<bool> params = parameterstobool(vals);
   if (params.size() < 2) {
-    throw std::logic_error("and function has too few parameters");
+    throw Exception("and function has too few parameters");
   }
   for (uint32_t i = 0; i < params.size(); ++i) {
     if (!params[i]) {
@@ -831,7 +827,7 @@ bool Interpreter::andfunc(const std::vector<std::string> &vals) {
 bool Interpreter::orfunc(const std::vector<std::string> &vals) {
   std::vector<bool> params = parameterstobool(vals);
   if (params.size() < 2) {
-    throw std::logic_error("or function has too few parameters");
+    throw Exception("or function has too few parameters");
   }
   for (uint32_t i = 0; i < params.size(); ++i) {
     if (params[i]) {
@@ -843,21 +839,21 @@ bool Interpreter::orfunc(const std::vector<std::string> &vals) {
 
 bool Interpreter::notfunc(const std::vector<std::string> &vals) {
   if (vals.size() != 2) {
-    throw std::logic_error("Not function can only take one parameter");
+    throw Exception("Not function can only take one parameter");
   }
   return !(strtobool(vals[1]));
 }
 
 bool Interpreter::nandfunc(const std::vector<std::string> &vals) {
   if (vals.size() < 3) {
-    throw std::logic_error("nand function has too few parameters");
+    throw Exception("nand function has too few parameters");
   }
   return !andfunc(vals);
 }
 
 bool Interpreter::norfunc(const std::vector<std::string> &vals) {
   if (vals.size() < 3) {
-    throw std::logic_error("nor function has too few parameters");
+    throw Exception("nor function has too few parameters");
   }
   return !orfunc(vals);
 }
@@ -865,14 +861,14 @@ bool Interpreter::norfunc(const std::vector<std::string> &vals) {
 bool Interpreter::xorfunc(const std::vector<std::string> &vals) {
   std::vector<bool> params = parameterstobool(vals);
   if (params.size() != 2) {
-    throw std::logic_error("xor function must have two parameters");
+    throw Exception("xor function must have two parameters");
   }
   return (params[0] != params[1]);
 }
 
 bool Interpreter::xnorfunc(const std::vector<std::string> &vals) {
   if (vals.size() != 3) {
-    throw std::logic_error("xnor function must have two parameters");
+    throw Exception("xnor function must have two parameters");
   }
   return !xorfunc(vals);
 }
@@ -880,7 +876,7 @@ bool Interpreter::xnorfunc(const std::vector<std::string> &vals) {
 int Interpreter::comparison(const std::vector<std::string> &vals) {
   // return 0 if eq, 1 if greater than, -1 if less than
   if (vals.size() != 3) {
-    throw std::logic_error("Comparision can only be between two values");
+    throw Exception("Comparision can only be between two values");
   }
   std::string vals1 = isParens(vals[1]) ? eval(vals[1]) : vals[1];
   std::string vals2 = isParens(vals[2]) ? eval(vals[2]) : vals[2];
@@ -924,13 +920,13 @@ int Interpreter::comparison(const std::vector<std::string> &vals) {
       }
     }
   }
-  throw std::logic_error("Comparison not permitted between different types");
+  throw Exception("Comparison not permitted between different types");
   return 0;
 }
 
 std::string Interpreter::head(const std::vector<std::string> &vals) {
   if (vals.size() != 2) {
-    throw std::logic_error("Wrong number of parameters for head");
+    throw Exception("Wrong number of parameters for head");
   }
   std::string headval =
       isParens(vals[1]) ? getHead(eval(vals[1])) : getHead(vals[1]);
@@ -939,7 +935,7 @@ std::string Interpreter::head(const std::vector<std::string> &vals) {
 
 std::string Interpreter::getHead(const std::string &val) const {
   if (!isList(val) && !memory.listexists(val)) {
-    throw std::logic_error("Head called on a non list");
+    throw Exception("Head called on a non list");
   } else {
     return listsplit(strtolist(val)).first;
   }
@@ -947,7 +943,7 @@ std::string Interpreter::getHead(const std::string &val) const {
 
 std::string Interpreter::tail(const std::vector<std::string> &vals) {
   if (vals.size() != 2) {
-    throw std::logic_error("Wrong number of parameters for tail");
+    throw Exception("Wrong number of parameters for tail");
   }
   if (isParens(vals[1])) {
     return getTail(eval(vals[1]));
@@ -958,11 +954,11 @@ std::string Interpreter::tail(const std::vector<std::string> &vals) {
 
 std::string Interpreter::getTail(const std::string &val) const {
   if (!isList(val) && !memory.listexists(val)) {
-    throw std::logic_error("Tail called on a non list");
+    throw Exception("Tail called on a non list");
   } else {
     std::string tail = listsplit(strtolist(val)).second;
     if (tail == " ") {
-      throw std::logic_error("Tail called on null list");
+      throw Exception("Tail called on null list");
     } else {
       return tail;
     }
@@ -971,7 +967,7 @@ std::string Interpreter::getTail(const std::string &val) const {
 
 std::string Interpreter::cons(const std::vector<std::string> &vals) {
   if (vals.size() != 3) {
-    throw std::logic_error("Wrong number of parameters for cons");
+    throw Exception("Wrong number of parameters for cons");
   }
   std::string h = isParens(vals[1]) ? eval(vals[1]) : normalize(vals[1]);
   std::string t = isParens(vals[2]) ? eval(vals[2]) : strtolist(vals[2]);
@@ -988,7 +984,7 @@ std::string Interpreter::getcons(const std::string &val,
 
 bool Interpreter::isNull(std::vector<std::string> &vals) {
   if (vals.size() != 2) {
-    throw std::logic_error("Wrong number of parameters for null");
+    throw Exception("Wrong number of parameters for null");
   }
   if (isParens(vals[1])) {
     return "" == removelist(eval(vals[1]));

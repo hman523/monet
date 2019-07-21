@@ -44,13 +44,13 @@ std::string Memory::get(const std::string &var) const {
     }
 
   } else {
-    throw std::logic_error("Variable " + var + " not found");
+    throw Exception("Variable " + var + " not found");
   }
 }
 
 std::vector<std::string> Memory::getfn(const std::string &var) const {
   if (!functioninuse(var)) {
-    throw std::logic_error("Cannot make call to " + var);
+    throw Exception("Cannot make call to " + var);
   } else if (!functionbindings.empty()) {
     if (functionbindings.top().count(var) != 0) {
       return getfn(functionbindings.top().at(var));
@@ -63,7 +63,7 @@ std::vector<std::string> Memory::getfn(const std::string &var) const {
   } else if (isMem(var)) {
     return mems.at(var);
   } else {
-    throw std::logic_error("Fatal implementation error in the interpreter");
+    throw Exception("Fatal implementation error in the interpreter");
   }
   // The code will never reach this point, this is just to shush the compiler
   return std::vector<std::string>();
@@ -71,28 +71,28 @@ std::vector<std::string> Memory::getfn(const std::string &var) const {
 
 std::string Memory::getstring(const std::string &var) const {
   if (!strexists(var)) {
-    throw std::logic_error("Variable " + var + " does not exist");
+    throw Exception("Variable " + var + " does not exist");
   }
   return strings.top().at(var);
 }
 
 bool Memory::getboolean(const std::string &var) const {
   if (!boolexists(var)) {
-    throw std::logic_error("Variable " + var + " does not exist");
+    throw Exception("Variable " + var + " does not exist");
   }
   return booleans.top().at(var);
 }
 
 num Memory::getnum(const std::string &var) const {
   if (!numexists(var)) {
-    throw std::logic_error("Variable " + var + " does not exist");
+    throw Exception("Variable " + var + " does not exist");
   }
   return nums.top().at(var);
 }
 
 std::string Memory::getlist(const std::string &var) const {
   if (!listexists(var)) {
-    throw std::logic_error("Variable " + var + " does not exist");
+    throw Exception("Variable " + var + " does not exist");
   }
   return lists.top().at(var);
 }
@@ -125,7 +125,7 @@ bool Memory::isMem(const std::string &val) const {
 void Memory::createfunction(const std::string &name,
                             const std::vector<std::string> &code) {
   if (functioninuse(name)) {
-    throw std::logic_error("Unable to redefine \"" + name + "\"");
+    throw Exception("Unable to redefine \"" + name + "\"");
   }
   functionnamespace.insert(name);
   functions.insert(
@@ -135,7 +135,7 @@ void Memory::createfunction(const std::string &name,
 void Memory::createsub(const std::string &name,
                        const std::vector<std::string> &code) {
   if (functioninuse(name)) {
-    throw std::logic_error("Unable to redefine \"" + name + "\"");
+    throw Exception("Unable to redefine \"" + name + "\"");
   }
   subroutinenamespace.insert(name);
   subroutines.insert(
@@ -145,7 +145,7 @@ void Memory::createsub(const std::string &name,
 void Memory::createmem(const std::string &name,
                        const std::vector<std::string> &code) {
   if (functioninuse(name)) {
-    throw std::logic_error("Unable to redefine \"" + name + "\"");
+    throw Exception("Unable to redefine \"" + name + "\"");
   }
   memnamespace.insert(name);
   mems.insert(std::pair<std::string, std::vector<std::string>>(name, code));
@@ -157,10 +157,10 @@ void Memory::createboolean(const std::string &name, bool value) {
     variabletypes.top().insert(
         std::pair<std::string, std::string>(name, "boolean"));
   } else if (getType(name) == "boolean") {
-    throw std::logic_error("Reinitialization of variable " + name);
+    throw Exception("Reinitialization of variable " + name);
   } else {
-    throw std::logic_error("Variable " + name + " already initialized as a " +
-                           getType(name));
+    throw Exception("Variable " + name + " already initialized as a " +
+                    getType(name));
   }
 }
 
@@ -170,10 +170,10 @@ void Memory::createnum(const std::string &name, num number) {
     variabletypes.top().insert(
         std::pair<std::string, std::string>(name, "num"));
   } else if (getType(name) == "num") {
-    throw std::logic_error("Reinitialization of variable " + name);
+    throw Exception("Reinitialization of variable " + name);
   } else {
-    throw std::logic_error("Variable " + name + " already initialized as a " +
-                           getType(name));
+    throw Exception("Variable " + name + " already initialized as a " +
+                    getType(name));
   }
 }
 
@@ -183,10 +183,10 @@ void Memory::createstring(const std::string &name, const std::string &str) {
     variabletypes.top().insert(
         std::pair<std::string, std::string>(name, "string"));
   } else if (getType(name) == "string") {
-    throw std::logic_error("Reinitialization of variable " + name);
+    throw Exception("Reinitialization of variable " + name);
   } else {
-    throw std::logic_error("Variable " + name + " already initialized as a " +
-                           getType(name));
+    throw Exception("Variable " + name + " already initialized as a " +
+                    getType(name));
   }
 }
 
@@ -196,10 +196,10 @@ void Memory::createlist(const std::string &name, const std::string &list) {
     variabletypes.top().insert(
         std::pair<std::string, std::string>(name, "list"));
   } else if (getType(name) == "list") {
-    throw std::logic_error("Reinitialization of variable " + name);
+    throw Exception("Reinitialization of variable " + name);
   } else {
-    throw std::logic_error("Variable " + name + " already initialized as a " +
-                           getType(name));
+    throw Exception("Variable " + name + " already initialized as a " +
+                    getType(name));
   }
 }
 
