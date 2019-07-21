@@ -260,6 +260,11 @@ std::vector<std::string> Interpreter::split(const std::string &str,
   return returnval;
 }
 
+/**
+ * list split function
+ * @param list the list you want to split
+ * @return a pair where first is the head, second is the tail
+ */
 std::pair<std::string, std::string>
 Interpreter::listsplit(const std::string &list) const {
   if (!isList(list)) {
@@ -308,6 +313,11 @@ bool Interpreter::isString(const std::string &val) const {
   return (val.length() >= 2 && val[0] == '"' && val[val.size() - 1] == '"');
 }
 
+/**
+ * isList function
+ * @param val the value you are testing to be a list
+ * @return if the thing passed is a list
+ */
 bool Interpreter::isList(const std::string &val) const {
   return (val.length() >= 2 && val[0] == '[' && val[val.size() - 1] == ']');
   ;
@@ -373,6 +383,11 @@ std::string Interpreter::strtostr(const std::string &var) const {
   }
 }
 
+/**
+ * strtostr
+ * @param string you want to convert
+ * @return a list that was the string, checks variables
+ */
 std::string Interpreter::strtolist(const std::string &val) const {
   return memory.listexists(val) ? memory.getlist(val) : val;
 }
