@@ -88,6 +88,8 @@ std::string Interpreter::eval(const std::string &value) {
   } else if (words[0].length() > 1 && words[0].substr(0, 2) == "//") {
     // do nothing, this is a comment
     return "";
+  } else if (isParens(words[0])) {
+    return eval(removeparens(words[0]));
   } else if (words[0] == "define") {
     define(split(value, '\17'));
     return "";
@@ -271,12 +273,17 @@ Interpreter::listsplit(const std::string &list) const {
   } else {
     size_t index = std::string::npos;
     int nestcount = 0;
+    int parencount = 0;
     for (uint32_t i = 0; i < rawlist.length(); ++i) {
       if (rawlist.at(i) == '[') {
         ++nestcount;
       } else if (rawlist.at(i) == ']') {
         --nestcount;
-      } else if (rawlist.at(i) == ' ' && nestcount == 0) {
+      } else if (rawlist.at(i) == '(') {
+        ++parencount;
+      } else if (rawlist.at(i) == ')') {
+        --parencount;
+      } else if (rawlist.at(i) == ' ' && nestcount == 0 && parencount == 0) {
         index = i;
         break;
       }
@@ -925,11 +932,9 @@ std::string Interpreter::head(const std::vector<std::string> &vals) {
   if (vals.size() != 2) {
     throw std::logic_error("Wrong number of parameters for head");
   }
-  if (isParens(vals[1])) {
-    return getHead(eval(removeparens(vals[1])));
-  } else {
-    return getHead(vals[1]);
-  }
+  std::string headval = isParens(vals[1]) ? getHead(eval(removeparens(vals[1])))
+                                          : getHead(vals[1]);
+  return (isParens(headval)) ? eval(headval) : headval;
 }
 
 std::string Interpreter::getHead(const std::string &val) const {
