@@ -978,8 +978,10 @@ std::string Interpreter::cons(const std::vector<std::string> &vals) {
 
 std::string Interpreter::getcons(const std::string &val,
                                  const std::string &list) const {
-  return std::string("[") + val + std::string(" ") + removelist(list) +
-         std::string("]");
+
+  return (list != "[]") ? std::string("[") + val + std::string(" ") +
+                              removelist(list) + std::string("]")
+                        : std::string("[") + val + std::string("]");
 }
 
 bool Interpreter::isNull(std::vector<std::string> &vals) {
