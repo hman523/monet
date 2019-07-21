@@ -147,3 +147,28 @@ Method: load
 Parameters: the filename to load
 Return: null
 Side effects: dependent
+
+Method: list
+Parameters: a variable name, a list
+Return: null
+Side effects: saves a list to memory
+
+Method: head
+Parameters: a list
+Return: the first element of the list
+Side effects: none
+
+Method: tail
+Parameters: a list
+Return: everything but the first element
+Side effects: throws exception on null list
+
+Method: null
+Parameters: a list
+Return: true if empty list, else false
+Side effects: none
+
+Method: cons
+Parameters: a value and a list
+Return: a list with the head being the value and the tail being the list
+Side effects: none
