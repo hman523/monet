@@ -25,6 +25,7 @@ private:
   std::string eval(const std::string &value);
   std::vector<std::string> split(const std::string &str,
                                  char delim = ' ') const;
+  std::pair<std::string, std::string> listsplit(const std::string &list) const;
   bool isString(const std::string &val) const;
   bool isList(const std::string &val) const;
 

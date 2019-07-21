@@ -259,6 +259,40 @@ std::vector<std::string> Interpreter::split(const std::string &str,
   return returnval;
 }
 
+std::pair<std::string, std::string>
+Interpreter::listsplit(const std::string &list) const {
+  if (!isList(list)) {
+    throw std::logic_error("Unable to parse a non list as a list");
+  }
+  std::string rawlist = removelist(strtolist(list));
+  std::string head, tail;
+  if (rawlist == "") {
+    head = "";
+    tail = " ";
+  } else {
+    size_t index = std::string::npos;
+    int nestcount = 0;
+    for (uint32_t i = 0; i < rawlist.length(); ++i) {
+      if (rawlist.at(i) == '[') {
+        ++nestcount;
+      } else if (rawlist.at(i) == ']') {
+        --nestcount;
+      } else if (rawlist.at(i) == ' ' && nestcount == 0) {
+        index = i;
+        break;
+      }
+    }
+    if (index == std::string::npos) {
+      head = rawlist;
+      tail = "[]";
+    } else {
+      head = rawlist.substr(0, index);
+      tail = "[" + rawlist.substr(index + 1) + "]";
+    }
+  }
+  return std::pair<std::string, std::string>(head, tail);
+}
+
 /**
  * isString function
  * @param val you want to check
@@ -900,16 +934,10 @@ std::string Interpreter::head(const std::vector<std::string> &vals) {
 }
 
 std::string Interpreter::getHead(const std::string &val) const {
-  std::string rawlist = removelist(strtolist(val));
-  if (rawlist == "") {
-    return "";
+  if (!isList(val) && !memory.listexists(val)) {
+    throw std::logic_error("Head called on a non list");
   } else {
-    size_t index = rawlist.find(' ');
-    if (index == std::string::npos) {
-      return rawlist;
-    } else {
-      return rawlist.substr(0, index);
-    }
+    return listsplit(strtolist(val)).first;
   }
 }
 
@@ -925,15 +953,14 @@ std::string Interpreter::tail(const std::vector<std::string> &vals) {
 }
 
 std::string Interpreter::getTail(const std::string &val) const {
-  std::string rawlist = removelist(strtolist(val));
-  if (rawlist == "") {
-    throw std::logic_error("Tail called on empty list");
+  if (!isList(val) && !memory.listexists(val)) {
+    throw std::logic_error("Tail called on a non list");
   } else {
-    size_t index = rawlist.find(' ');
-    if (index == std::string::npos) {
-      return "";
+    std::string tail = listsplit(strtolist(val)).second;
+    if (tail == " ") {
+      throw std::logic_error("Tail called on null list");
     } else {
-      return "[" + rawlist.substr(index + 1) + "]";
+      return tail;
     }
   }
 }
