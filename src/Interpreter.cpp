@@ -474,7 +474,7 @@ Interpreter::parameterstobool(const std::vector<std::string> &vals) {
   std::transform(vals.begin() + 1, vals.end(), std::back_inserter(parameters),
                  [&](std::string in) -> bool {
                    if (isParens(in)) {
-                     return strtobool(eval(removeparens(in)));
+                     return strtobool(eval(in));
                    } else {
                      if (!isBoolean(in)) {
                        return memory.getboolean(in);
@@ -492,7 +492,7 @@ Interpreter::parameterstonums(const std::vector<std::string> &vals) {
   std::transform(vals.begin() + 1, vals.end(), std::back_inserter(parameters),
                  [&](std::string in) -> num {
                    if (isParens(in)) {
-                     return strtonum(eval(removeparens(in)));
+                     return strtonum(eval(in));
                    } else {
                      if (!isNumber(in)) {
                        return memory.getnum(in);
@@ -510,7 +510,7 @@ Interpreter::evalParameters(const std::vector<std::string> &vals) {
   std::transform(vals.begin() + 1, vals.end(), std::back_inserter(parameters),
                  [&](std::string in) -> std::string {
                    if (isParens(in)) {
-                     return eval(removeparens(in));
+                     return eval(in);
                    } else {
                      if (memory.varexists(in)) {
                        return memory.get(in);
@@ -532,7 +532,7 @@ void Interpreter::print(const std::vector<std::string> &words) {
       } else if (isString(words[i])) {
         std::cout << removequotes(words[i]) << std::flush;
       } else if (isParens(words[i])) {
-        std::cout << eval(removeparens(words[i])) << std::flush;
+        std::cout << eval(words[i]) << std::flush;
       } else if (words[i] == "~") {
         std::cout << std::endl;
       } else {
@@ -552,7 +552,7 @@ void Interpreter::println(const std::vector<std::string> &words) {
       } else if (isString(words[i])) {
         std::cout << removequotes(words[i]) << std::flush;
       } else if (isParens(words[i])) {
-        std::cout << eval(removeparens(words[i])) << std::flush;
+        std::cout << eval(words[i]) << std::flush;
       } else if (words[i] == "~") {
         std::cout << std::endl;
       } else {
@@ -581,7 +581,7 @@ void Interpreter::declarestring(const std::vector<std::string> &vals) {
         "Wrong number of parameters for string initialization");
   }
   if (isParens(vals[2])) {
-    memory.createstring(vals[1], eval(removeparens(vals[2])));
+    memory.createstring(vals[1], eval(vals[2]));
   } else {
     memory.createstring(vals[1], removequotes(vals[2]));
   }
@@ -594,7 +594,7 @@ void Interpreter::declareboolean(const std::vector<std::string> &vals) {
   }
   bool a;
   if (isParens(vals[2])) {
-    std::string temp = eval(removeparens(vals[2]));
+    std::string temp = eval(vals[2]);
     a = (temp == "true" || temp == "t" || temp == "1") ? true : false;
   } else {
     a = (vals[2] == "true" || vals[2] == "t" || vals[2] == "1") ? true : false;
@@ -607,7 +607,7 @@ void Interpreter::declarenum(const std::vector<std::string> &vals) {
     throw std::logic_error("Wrong number of parameters for num initialization");
   }
   if (isParens(vals[2])) {
-    memory.createnum(vals[1], strtonum(eval(removeparens(vals[2]))));
+    memory.createnum(vals[1], strtonum(eval(vals[2])));
   } else {
     memory.createnum(vals[1], strtonum(vals[2]));
   }
@@ -619,7 +619,7 @@ void Interpreter::declarelist(const std::vector<std::string> &vals) {
         "Wrong number of parameters for list initialization");
   }
   if (isParens(vals[2])) {
-    memory.createlist(vals[1], strtolist(eval(removeparens(vals[2]))));
+    memory.createlist(vals[1], strtolist(eval(vals[2])));
   } else {
     memory.createlist(vals[1], strtolist(vals[2]));
   }
@@ -643,7 +643,7 @@ std::string Interpreter::ifstatement(const std::vector<std::string> &vals) {
   }
   bool expr;
   if (isParens(vals[1])) {
-    expr = strtobool(eval(removeparens(vals[1])));
+    expr = strtobool(eval(vals[1]));
   } else {
     if (!isBoolean(vals[1])) {
       throw std::logic_error(
@@ -653,7 +653,7 @@ std::string Interpreter::ifstatement(const std::vector<std::string> &vals) {
   }
   uint8_t index = expr ? 2 : 3;
   if (isParens(vals[index])) {
-    return eval(removeparens(vals[index]));
+    return eval(vals[index]);
   } else if (memory.varexists(vals[index])) {
     return memory.get(vals[index]);
   } else {
@@ -688,7 +688,7 @@ std::string Interpreter::call(const std::vector<std::string> &vals) {
     if ((*curr).substr(0, returnname.length()) == "return") {
       std::vector<std::string> words = split(*curr);
       if (isParens(words[1])) {
-        returnval = eval(removeparens(words[1]));
+        returnval = eval(words[1]);
       } else {
         returnval = words[1];
       }
@@ -748,7 +748,7 @@ std::string Interpreter::callmem(const std::vector<std::string> &vals) {
     if ((*curr).substr(0, returnname.length()) == returnname) {
       std::vector<std::string> words = split(*curr);
       if (isParens(words[1])) {
-        returnval = eval(removeparens(words[1]));
+        returnval = eval(words[1]);
       } else {
         returnval = words[1];
       }
@@ -882,8 +882,8 @@ int Interpreter::comparison(const std::vector<std::string> &vals) {
   if (vals.size() != 3) {
     throw std::logic_error("Comparision can only be between two values");
   }
-  std::string vals1 = isParens(vals[1]) ? eval(removeparens(vals[1])) : vals[1];
-  std::string vals2 = isParens(vals[2]) ? eval(removeparens(vals[2])) : vals[2];
+  std::string vals1 = isParens(vals[1]) ? eval(vals[1]) : vals[1];
+  std::string vals2 = isParens(vals[2]) ? eval(vals[2]) : vals[2];
 
   if (isBoolean(vals1) && isBoolean(vals2)) {
     bool a, b;
@@ -932,8 +932,8 @@ std::string Interpreter::head(const std::vector<std::string> &vals) {
   if (vals.size() != 2) {
     throw std::logic_error("Wrong number of parameters for head");
   }
-  std::string headval = isParens(vals[1]) ? getHead(eval(removeparens(vals[1])))
-                                          : getHead(vals[1]);
+  std::string headval =
+      isParens(vals[1]) ? getHead(eval(vals[1])) : getHead(vals[1]);
   return (isParens(headval)) ? eval(headval) : headval;
 }
 
@@ -950,7 +950,7 @@ std::string Interpreter::tail(const std::vector<std::string> &vals) {
     throw std::logic_error("Wrong number of parameters for tail");
   }
   if (isParens(vals[1])) {
-    return getTail(eval(removeparens(vals[1])));
+    return getTail(eval(vals[1]));
   } else {
     return getTail(vals[1]);
   }
@@ -973,10 +973,8 @@ std::string Interpreter::cons(const std::vector<std::string> &vals) {
   if (vals.size() != 3) {
     throw std::logic_error("Wrong number of parameters for cons");
   }
-  std::string h =
-      isParens(vals[1]) ? eval(removeparens(vals[1])) : normalize(vals[1]);
-  std::string t =
-      isParens(vals[2]) ? eval(removeparens(vals[2])) : strtolist(vals[2]);
+  std::string h = isParens(vals[1]) ? eval(vals[1]) : normalize(vals[1]);
+  std::string t = isParens(vals[2]) ? eval(vals[2]) : strtolist(vals[2]);
   return getcons(h, t);
 }
 
@@ -993,7 +991,7 @@ bool Interpreter::isNull(std::vector<std::string> &vals) {
     throw std::logic_error("Wrong number of parameters for null");
   }
   if (isParens(vals[1])) {
-    return "" == removelist(eval(removeparens(vals[1])));
+    return "" == removelist(eval(vals[1]));
   } else {
     return "" == removelist(strtolist(vals[1]));
   }
