@@ -1,3 +1,11 @@
+/**
+ * Stephen Hunter Barbella
+ * GitHub: hman523
+ * Email: shbarbella@gmail.com
+ * Licence: MIT
+ * File: Main.cpp
+ */
+
 #include "Interpreter.h"
 #include <iostream>
 

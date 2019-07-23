@@ -1,6 +1,10 @@
-//
-// Created by hunter on 6/29/19.
-//
+/**
+ * Stephen Hunter Barbella
+ * GitHub: hman523
+ * Email: shbarbella@gmail.com
+ * Licence: MIT
+ * File: Memory.h
+ */
 
 #ifndef MONET_MEMORY_H
 #define MONET_MEMORY_H

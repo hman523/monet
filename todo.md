@@ -15,10 +15,10 @@
 - [x] define memoized functions
 - [x] load function
 - [x] declaring lists
-- [ ] returning lists
+- [x] returning lists
 - [x] passing lists as parameters
 - [x] head and tail function
-- [ ] cons operator
+- [x] cons operator
 - [ ] include function
 
 ## Libraries

@@ -1,6 +1,10 @@
-//
-// Created by hunter on 6/29/19.
-//
+/**
+ * Stephen Hunter Barbella
+ * GitHub: hman523
+ * Email: shbarbella@gmail.com
+ * Licence: MIT
+ * File: Memory.cpp
+ */
 
 #include "Memory.h"
 #include "Interpreter.h"
@@ -14,7 +18,7 @@ Memory::Memory() {
        "add",    "sub",     "mul",  "div",     "and",    "or",     "nand",
        "nor",    "xor",     "xnor", "if",      "eq",     "ne",     "gt",
        "lt",     "ge",      "le",   "define",  "return", "end",    "subroutine",
-       "defmem", "load",    "list", "cons",    "head",   "tail"});
+       "defmem", "load",    "list", "cons",    "head",   "tail",   "null"});
   enterfn();
 }
 

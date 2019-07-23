@@ -1,6 +1,10 @@
-//
-// Created by hunter on 7/20/19.
-//
+/**
+ * Stephen Hunter Barbella
+ * GitHub: hman523
+ * Email: shbarbella@gmail.com
+ * Licence: MIT
+ * File: Exception.h
+ */
 
 #ifndef MONET_EXCEPTION_H
 #define MONET_EXCEPTION_H

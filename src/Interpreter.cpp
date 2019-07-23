@@ -1,6 +1,10 @@
-//
-// Created by hunter on 6/29/19.
-//
+/**
+ * Stephen Hunter Barbella
+ * GitHub: hman523
+ * Email: shbarbella@gmail.com
+ * Licence: MIT
+ * File: Interpreter.cpp
+ */
 
 #include "Interpreter.h"
 #include <algorithm>
@@ -821,7 +825,11 @@ num Interpreter::div(const std::vector<std::string> &vals) {
   std::vector<num> parameters = parameterstonums(vals);
   num curr = parameters[0];
   for (uint32_t i = 1; i < parameters.size(); ++i) {
-    curr /= parameters[i];
+    if (parameters[i] != 0) {
+      curr /= parameters[i];
+    } else {
+      throw Exception("Divide by zero error in div function");
+    }
   }
   return curr;
 }
