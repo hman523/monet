@@ -20,12 +20,13 @@ typedef double num;
 
 class Interpreter {
 public:
-  Interpreter() = delete;
+  Interpreter();
   Interpreter(std::string filename);
 
 private:
   // helper functions
   void interpret();
+  void repl();
   std::vector<std::string> loadcodefromfile(const std::string &filename);
   std::string eval(const std::string &value);
   std::vector<std::string> split(const std::string &str,

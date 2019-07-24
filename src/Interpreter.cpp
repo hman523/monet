@@ -14,6 +14,15 @@
 #include <numeric>
 #include <sstream>
 
+const char ENDOFFUN = '\17';
+const std::string REPLPROMPT = "> ";
+
+/**
+ * Default constructor
+ * Used when using the REPL
+ */
+Interpreter::Interpreter() { repl(); }
+
 /**
  * Constructor
  * @param filename - the file you want to interpret
@@ -30,6 +39,42 @@ Interpreter::Interpreter(std::string filename) {
 void Interpreter::interpret() {
   std::for_each(code.begin(), code.end(),
                 [&](std::string line) -> void { eval(line); });
+}
+
+void Interpreter::repl() {
+  const std::string functiondeclarationname = "define";
+  const std::string functionendname = "end";
+  const std::string subroutinedeclarationname = "subroutine";
+  const std::string functionmemdeclarationname = "defmem";
+  std::string function;
+  bool inFunction = false;
+  while (true) {
+    std::cout << REPLPROMPT << std::flush;
+    std::string input;
+    std::getline(std::cin, input);
+    if (input == "") {
+      continue;
+    }
+    if (input.substr(0, functiondeclarationname.length()) ==
+            functiondeclarationname ||
+        input.substr(0, subroutinedeclarationname.length()) ==
+            subroutinedeclarationname ||
+        input.substr(0, functionmemdeclarationname.length()) ==
+            functionmemdeclarationname) {
+      inFunction = true;
+    }
+    if (input.substr(0, functionendname.length()) == functionendname) {
+      inFunction = false;
+      std::cout << eval(function) << std::endl;
+      function = "";
+      continue;
+    }
+    if (!inFunction) {
+      std::cout << eval(input) << std::endl;
+    } else {
+      function += input + ENDOFFUN;
+    }
+  }
 }
 
 /**
@@ -68,7 +113,7 @@ Interpreter::loadcodefromfile(const std::string &filename) {
     if (inFunction) {
       fn += line;
       // Use end of transmission character in between each line
-      fn += '\17';
+      fn += ENDOFFUN;
     } else {
       if (line == "") {
         // Do nothing on empty lines
@@ -95,13 +140,13 @@ std::string Interpreter::eval(const std::string &value) {
   } else if (isParens(words[0])) {
     return eval(removeparens(words[0]));
   } else if (words[0] == "define") {
-    define(split(value, '\17'));
+    define(split(value, ENDOFFUN));
     return "";
   } else if (words[0] == "subroutine") {
-    subroutine(split(value, '\17'));
+    subroutine(split(value, ENDOFFUN));
     return "";
   } else if (words[0] == "defmem") {
-    defmem(split(value, '\17'));
+    defmem(split(value, ENDOFFUN));
     return "";
   } else if (words[0] == "load") {
     load(words);
@@ -170,6 +215,8 @@ std::string Interpreter::eval(const std::string &value) {
     return cons(words);
   } else if (words[0] == "null") {
     return normalizebool(isNull(words));
+  } else if (words[0] == "~") {
+    return "\n";
   } else if (memory.functioninuse(words[0])) {
     if (memory.isFunction(words[0])) {
       return call(words);
@@ -545,17 +592,12 @@ void Interpreter::print(const std::vector<std::string> &words) {
   if (words.size() < 2) {
     std::cout << std::endl;
   } else {
-    for (uint32_t i = 1; i < words.size(); ++i) {
-      if (isNumber(words[i])) {
-        std::cout << words[i] << std::endl;
-      } else if (isString(words[i])) {
-        std::cout << removequotes(words[i]) << std::flush;
-      } else if (isParens(words[i])) {
-        std::cout << eval(words[i]) << std::flush;
-      } else if (words[i] == "~") {
+    std::vector<std::string> params = evalParameters(words);
+    for (uint32_t j = 0; j < params.size(); ++j) {
+      if (params[j] == "~") {
         std::cout << std::endl;
       } else {
-        std::cout << memory.get(words[i]) << std::flush;
+        std::cout << params[j] << std::flush;
       }
     }
   }
@@ -563,19 +605,14 @@ void Interpreter::print(const std::vector<std::string> &words) {
 
 void Interpreter::println(const std::vector<std::string> &words) {
   if (words.size() < 2) {
-    // do nothing
+    std::cout << std::endl;
   } else {
-    for (uint32_t i = 1; i < words.size(); ++i) {
-      if (isNumber(words[i])) {
-        std::cout << words[i] << std::endl;
-      } else if (isString(words[i])) {
-        std::cout << removequotes(words[i]) << std::flush;
-      } else if (isParens(words[i])) {
-        std::cout << eval(words[i]) << std::flush;
-      } else if (words[i] == "~") {
+    std::vector<std::string> params = evalParameters(words);
+    for (uint32_t j = 0; j < params.size(); ++j) {
+      if (params[j] == "~") {
         std::cout << std::endl;
       } else {
-        std::cout << memory.get(words[i]) << std::flush;
+        std::cout << params[j] << std::flush;
       }
     }
   }
@@ -783,7 +820,7 @@ std::string Interpreter::callmem(const std::vector<std::string> &vals) {
  */
 void Interpreter::load(const std::vector<std::string> &vals) {
   if (vals.size() != 2) {
-    throw Exception("Must have two parameters for load");
+    throw Exception("Must have one parameter for load");
   }
   const std::string filename =
       (isString(vals[1]) ? removequotes(vals[1]) : strtostr(vals[1]));

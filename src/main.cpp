@@ -19,12 +19,18 @@
  */
 int main(int argc, char *argv[]) {
   std::cout << "Welcome to the Monet Interpreter" << std::endl;
-  if (argc != 2) {
-    std::cerr << "Need a file to interpret" << std::endl;
+  if (argc > 2) {
+    std::cerr << "Need a file to interpret or no command line parameter to "
+                 "enter the REPL"
+              << std::endl;
     exit(1);
   }
   try {
-    Interpreter i(argv[1]);
+    if (argc == 1) {
+      Interpreter i;
+    } else if (argc == 2) {
+      Interpreter i(argv[1]);
+    }
   } catch (Exception &e) {
     std::cerr << e.what() << std::endl;
     return EXIT_FAILURE;
