@@ -103,6 +103,11 @@ private:
   std::string getcons(const std::string &val, const std::string &list) const;
   bool isNull(std::vector<std::string> &vals);
 
+  // Library functions
+  std::string import(const std::vector<std::string> &val);
+  void includelib(const std::string &libraryname);
+  friend class File;
+
   // memory
   std::vector<std::string> code;
   Memory memory;
