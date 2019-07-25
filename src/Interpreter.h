@@ -20,8 +20,8 @@ typedef double num;
 
 class Interpreter {
 public:
-  static Interpreter * Instance();
-  static Interpreter * Instance(std::string filename);
+  Instance
+    Instance(std::string filename);
 
 private:
     Interpreter();
@@ -113,7 +113,6 @@ private:
   // memory
   std::vector<std::string> code;
   Memory memory;
-  static Interpreter* ptr;
 };
 
 #endif // MONET_INTERPRETER_H
