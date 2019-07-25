@@ -17,6 +17,25 @@
 const char ENDOFFUN = '\17';
 const std::string REPLPROMPT = "> ";
 
+Interpreter *Interpreter::Instance() {
+  if(ptr == nullptr){
+    ptr = new Interpreter();
+    return ptr;
+  }else {
+    return ptr;
+  }
+}
+
+Interpreter *Interpreter::Instance(std::string filename) {
+  if(ptr == nullptr){
+    ptr = new Interpreter(filename);
+    return ptr;
+  }else {
+    return ptr;
+  }
+}
+
+
 /**
  * Default constructor
  * Used when using the REPL
@@ -1068,5 +1087,5 @@ std::string Interpreter::import(const std::vector<std::string> &vals) {
 }
 
 void Interpreter::includelib(const std::string &libraryname) {
-  memory.addLibrary(libraryname, this);
+  memory.addLibrary(libraryname);
 }

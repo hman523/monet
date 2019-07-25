@@ -361,12 +361,12 @@ std::string Memory::getBinding(const std::string &var) const {
   return functionbindings.top().at(var);
 }
 
-void Memory::addLibrary(const std::string &libraryname, Interpreter *i) {
+void Memory::addLibrary(const std::string &libraryname) {
   if(libraries.count(libraryname) == 0){
     throw Exception("Cannot include library " + libraryname + " because it does not exist");
   }
   if(libraryname == "file"){
-    File *file = new File(i);
+    File *file = new File();
     libraryInstances.insert(std::pair<std::string, File *>("file", file));
     reservedwords.insert(file->getFunctions().begin(), file->getFunctions().end());
   }

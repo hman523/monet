@@ -20,11 +20,13 @@ typedef double num;
 
 class Interpreter {
 public:
-  Interpreter();
-  Interpreter(std::string filename);
+  static Interpreter * Instance();
+  static Interpreter * Instance(std::string filename);
 
 private:
-  // helper functions
+    Interpreter();
+    Interpreter(std::string filename);
+    // helper functions
   void interpret();
   void repl();
   std::vector<std::string> loadcodefromfile(const std::string &filename);
@@ -111,6 +113,7 @@ private:
   // memory
   std::vector<std::string> code;
   Memory memory;
+  static Interpreter* ptr;
 };
 
 #endif // MONET_INTERPRETER_H

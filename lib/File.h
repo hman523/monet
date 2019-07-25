@@ -13,7 +13,7 @@
 
 class File : public Library{
 public:
-    File(Interpreter * i);
+    File();
     std::set<std::string> getFunctions();
     std::string eval(const std::string &expression);
 private:

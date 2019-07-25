@@ -74,7 +74,7 @@ public:
   std::string getType(const std::string &var) const;
 
   // For adding libraries
-  void addLibrary(const std::string &libraryname, Interpreter *i);
+  void addLibrary(const std::string &libraryname);
 
 private:
   num strtonum(const std::string &str) const;

@@ -4,7 +4,7 @@
 
 #include "File.h"
 
-File::File(Interpreter *i) : interpreter(i){
+File::File(){
     functions.insert({"cat"});
 }
 
