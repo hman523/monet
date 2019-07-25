@@ -429,6 +429,8 @@ bool Interpreter::strtobool(const std::string &val) const {
 std::string Interpreter::strtostr(const std::string &var) const {
   if (memory.strexists(var)) {
     return memory.getstring(var);
+  } else if (isString(var)) {
+    return removequotes(var);
   } else {
     return var;
   }
@@ -580,6 +582,8 @@ Interpreter::evalParameters(const std::vector<std::string> &vals) {
                    } else {
                      if (memory.varexists(in)) {
                        return memory.get(in);
+                     } else if (isString(in)) {
+                       return removequotes(in);
                      } else {
                        return in;
                      }
