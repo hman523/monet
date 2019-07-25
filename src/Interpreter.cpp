@@ -17,25 +17,6 @@
 const char ENDOFFUN = '\17';
 const std::string REPLPROMPT = "> ";
 
-Interpreter *Interpreter::Instance() {
-  if(ptr == nullptr){
-    ptr = new Interpreter();
-    return ptr;
-  }else {
-    return ptr;
-  }
-}
-
-Interpreter *Interpreter::Instance(std::string filename) {
-  if(ptr == nullptr){
-    ptr = new Interpreter(filename);
-    return ptr;
-  }else {
-    return ptr;
-  }
-}
-
-
 /**
  * Default constructor
  * Used when using the REPL
@@ -190,8 +171,6 @@ std::string Interpreter::eval(const std::string &value) {
     return ifstatement(words);
   } else if (words[0] == "printall") {
     printcode();
-  } else if (words[0] == "import"){
-      return import(words);
   } else if (words[0] == "add") {
     return normalizenumber(add(words));
   } else if (words[0] == "sub") {
@@ -236,6 +215,8 @@ std::string Interpreter::eval(const std::string &value) {
     return cons(words);
   } else if (words[0] == "null") {
     return normalizebool(isNull(words));
+  } else if (words[0] == "~") {
+    return "\n";
   } else if (memory.functioninuse(words[0])) {
     if (memory.isFunction(words[0])) {
       return call(words);
@@ -1070,22 +1051,4 @@ bool Interpreter::isNull(std::vector<std::string> &vals) {
   } else {
     return "" == removelist(strtolist(vals[1]));
   }
-}
-
-
-std::string Interpreter::import(const std::vector<std::string> &vals) {
-    if (vals.size() != 2){
-        throw Exception("Wrong number of parameters for include");
-    }
-    if(isParens(vals[1])){
-        includelib(eval(vals[1]));
-    }
-    else{
-        includelib(strtostr(vals[1]));
-    }
-    return "";
-}
-
-void Interpreter::includelib(const std::string &libraryname) {
-  memory.addLibrary(libraryname);
 }

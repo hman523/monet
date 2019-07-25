@@ -14,8 +14,6 @@
 #include <set>
 #include <stack>
 #include <vector>
-#include "../lib/Library.h"
-#include "Interpreter.h"
 
 typedef double num;
 
@@ -73,9 +71,6 @@ public:
   std::string getBinding(const std::string &var) const;
   std::string getType(const std::string &var) const;
 
-  // For adding libraries
-  void addLibrary(const std::string &libraryname);
-
 private:
   num strtonum(const std::string &str) const;
   bool strtobool(const std::string &str) const;
@@ -93,15 +88,10 @@ private:
   std::map<std::string, std::map<std::vector<std::string>, std::string>>
       memvalues;
 
-  std::map<std::string, Library *> libraryInstances;
-
   std::set<std::string> reservedwords;
   std::set<std::string> functionnamespace;
   std::set<std::string> subroutinenamespace;
   std::set<std::string> memnamespace;
-
-  std::set<std::string> libraries;
-
   std::stack<std::map<std::string, std::string>> variabletypes;
   std::stack<std::map<std::string, std::string>> functionbindings;
 };

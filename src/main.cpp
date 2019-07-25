@@ -27,9 +27,9 @@ int main(int argc, char *argv[]) {
   }
   try {
     if (argc == 1) {
-      Interpreter::Instance();
+      Interpreter i;
     } else if (argc == 2) {
-      Interpreter::Instance(argv[1]);
+      Interpreter i(argv[1]);
     }
   } catch (Exception &e) {
     std::cerr << e.what() << std::endl;

@@ -20,13 +20,11 @@ typedef double num;
 
 class Interpreter {
 public:
-  Instance
-    Instance(std::string filename);
+  Interpreter();
+  Interpreter(std::string filename);
 
 private:
-    Interpreter();
-    Interpreter(std::string filename);
-    // helper functions
+  // helper functions
   void interpret();
   void repl();
   std::vector<std::string> loadcodefromfile(const std::string &filename);
@@ -104,11 +102,6 @@ private:
   std::string cons(const std::vector<std::string> &vals);
   std::string getcons(const std::string &val, const std::string &list) const;
   bool isNull(std::vector<std::string> &vals);
-
-  // Library functions
-  std::string import(const std::vector<std::string> &val);
-  void includelib(const std::string &libraryname);
-  friend class File;
 
   // memory
   std::vector<std::string> code;

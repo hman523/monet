@@ -12,10 +12,6 @@
 #include <iostream>
 #include <sstream>
 
-//Libraries
-#include "../lib/File.h"
-
-
 Memory::Memory() {
   reservedwords.insert(
       {"print",  "println", "quit", "boolean", "num",    "string", "read",
@@ -23,7 +19,6 @@ Memory::Memory() {
        "nor",    "xor",     "xnor", "if",      "eq",     "ne",     "gt",
        "lt",     "ge",      "le",   "define",  "return", "end",    "subroutine",
        "defmem", "load",    "list", "cons",    "head",   "tail",   "null"});
-  libraries.insert({"file"});
   enterfn();
 }
 
@@ -359,15 +354,4 @@ void Memory::insertmem(const std::string &name,
 
 std::string Memory::getBinding(const std::string &var) const {
   return functionbindings.top().at(var);
-}
-
-void Memory::addLibrary(const std::string &libraryname) {
-  if(libraries.count(libraryname) == 0){
-    throw Exception("Cannot include library " + libraryname + " because it does not exist");
-  }
-  if(libraryname == "file"){
-    File *file = new File();
-    libraryInstances.insert(std::pair<std::string, File *>("file", file));
-    reservedwords.insert(file->getFunctions().begin(), file->getFunctions().end());
-  }
 }
