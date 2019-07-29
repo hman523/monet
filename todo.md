@@ -19,16 +19,29 @@
 - [x] passing lists as parameters
 - [x] head and tail function
 - [x] cons operator
+- [ ] replace the num type from double to a custom type
 - [ ] include function
+- [ ] make an easy way to make libraries
 
 ## Libraries
+- [ ] file system
+- [ ] time library
 - [ ] math library
+- [ ] string processing
+- [ ] logging library
 - [ ] data structure library
 - [ ] functional library (map, reduce, filter)
-- [ ] os library (use shell commands, get system info)
+- [ ] shell library
+- [ ] os library (get system info)
 - [ ] concurrency library (do together, map together)
 - [ ] networking library 
+- [ ] a REST library
+- [ ] audio library
 - [ ] graphics library
+- [ ] Cuda library
+- [ ] graphing library
+- [ ] email library
+- [ ] Raspberry Pi Specific library (GPIO pins)
 
 ## Testing
 - [ ] make or use a testing framework
@@ -39,3 +52,9 @@
 ## Documentation
 - [ ] create a how to guide
 - [ ] better comment code
+
+## Misc
+- [ ] Proof on Turing Completeness
+- [ ] Write a project in the language as an example
+- [ ] Get the language added to GitHub's language inference program
+- [ ] Create a Vim plugin for syntax highlighting
