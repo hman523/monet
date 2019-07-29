@@ -28,7 +28,7 @@ Interpreter::Interpreter() { repl(); }
  * @param filename - the file you want to interpret
  */
 Interpreter::Interpreter(std::string filename) {
-  code = loadcodefromfile(filename);
+  code = loadCodeFromFile(filename);
   interpret();
 }
 
@@ -79,7 +79,7 @@ void Interpreter::repl() {
  * @return a vector of strings where each line is the code;
  */
 std::vector<std::string>
-Interpreter::loadcodefromfile(const std::string &filename) {
+Interpreter::loadCodeFromFile(const std::string &filename) {
   std::vector<std::string> loadedcode;
   std::ifstream infile;
   infile.open(filename);
@@ -398,7 +398,7 @@ std::vector<std::string> Interpreter::split(const std::string &str,
  * @return a pair where first is the head, second is the tail
  */
 std::pair<std::string, std::string>
-Interpreter::listsplit(const std::string &list) const {
+Interpreter::listSplit(const std::string &list) const {
   if (!isList(list)) {
     throw Exception("Unable to parse a non list as a list");
   }
@@ -460,7 +460,7 @@ bool Interpreter::isList(const std::string &val) const {
  * @param num you want to convert
  * @return an integer evaluated from the number, only used in quit
  */
-int Interpreter::strtoint(const std::string &num) const {
+int Interpreter::strToInt(const std::string &num) const {
   if (memory.numexists(num)) {
     return (int)memory.getnum(num);
   }
@@ -475,14 +475,14 @@ int Interpreter::strtoint(const std::string &num) const {
  * @param num you want to convert
  * @return a num that was the string
  */
-num Interpreter::strtonum(const std::string &number) const {
-  if (memory.numexists(number)) {
-    return memory.getnum(number);
+num Interpreter::strToNum(const std::string &val) const {
+  if (memory.numexists(val)) {
+    return memory.getnum(val);
   }
-  std::stringstream ss(number);
-  num val;
-  ss >> val;
-  return val;
+  std::stringstream ss(val);
+  num value;
+  ss >> value;
+  return value;
 }
 
 /**
@@ -530,7 +530,7 @@ std::string Interpreter::normalize(const std::string &val) const {
   if (memory.varexists(val)) {
     std::string type = memory.getType(val);
     if (type == "num") {
-      return normalizenumber(strtonum(val));
+      return normalizenumber(strToNum(val));
     } else if (type == "boolean") {
       return normalizebool(strtobool(val));
     } else if (type == "string") {
@@ -542,7 +542,7 @@ std::string Interpreter::normalize(const std::string &val) const {
     }
   } else {
     if (isNumber(val)) {
-      return normalizenumber(strtonum(val));
+      return normalizenumber(strToNum(val));
     } else if (isBoolean(val)) {
       return normalizebool(strtobool(val));
     }
@@ -641,12 +641,12 @@ Interpreter::parameterstonums(const std::vector<std::string> &vals) {
   std::transform(vals.begin() + 1, vals.end(), std::back_inserter(parameters),
                  [&](std::string in) -> num {
                    if (isParens(in)) {
-                     return strtonum(eval(in));
+                     return strToNum(eval(in));
                    } else {
                      if (!isNumber(in)) {
                        return memory.getnum(in);
                      } else {
-                       return strtonum(in);
+                       return strToNum(in);
                      }
                    }
                  });
@@ -709,9 +709,9 @@ void Interpreter::quit(const std::vector<std::string> &words) {
     exit(EXIT_SUCCESS);
   } else {
     if (isParens(words[1])) {
-      exit(strtoint(eval(words[1])));
+      exit(strToInt(eval(words[1])));
     } else {
-      exit(strtoint(words[1]));
+      exit(strToInt(words[1]));
     }
   }
 }
@@ -746,9 +746,9 @@ void Interpreter::declarenum(const std::vector<std::string> &vals) {
     throw Exception("Wrong number of parameters for num initialization");
   }
   if (isParens(vals[2])) {
-    memory.createnum(vals[1], strtonum(eval(vals[2])));
+    memory.createnum(vals[1], strToNum(eval(vals[2])));
   } else {
-    memory.createnum(vals[1], strtonum(vals[2]));
+    memory.createnum(vals[1], strToNum(vals[2]));
   }
 }
 
@@ -909,7 +909,7 @@ void Interpreter::load(const std::vector<std::string> &vals) {
   }
   const std::string filename =
       (isString(vals[1]) ? removequotes(vals[1]) : strtostr(vals[1]));
-  std::vector<std::string> loadedcode = loadcodefromfile(filename);
+  std::vector<std::string> loadedcode = loadCodeFromFile(filename);
   std::for_each(loadedcode.begin(), loadedcode.end(),
                 [&](std::string line) -> void { eval(line); });
 }
@@ -1040,8 +1040,8 @@ int Interpreter::comparison(const std::vector<std::string> &vals) {
   }
   if (isNumber(vals1) && isNumber(vals2)) {
     num x, y;
-    x = strtonum(vals1);
-    y = strtonum(vals2);
+    x = strToNum(vals1);
+    y = strToNum(vals2);
     if (x == y) {
       return 0;
     } else if (x > y) {
@@ -1082,7 +1082,7 @@ std::string Interpreter::getHead(const std::string &val) const {
   if (!isList(val) && !memory.listexists(val)) {
     throw Exception("Head called on a non list");
   } else {
-    return listsplit(strtolist(val)).first;
+    return listSplit(strtolist(val)).first;
   }
 }
 
@@ -1101,7 +1101,7 @@ std::string Interpreter::getTail(const std::string &val) const {
   if (!isList(val) && !memory.listexists(val)) {
     throw Exception("Tail called on a non list");
   } else {
-    std::string tail = listsplit(strtolist(val)).second;
+    std::string tail = listSplit(strtolist(val)).second;
     if (tail == " ") {
       throw Exception("Tail called on null list");
     } else {

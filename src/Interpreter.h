@@ -27,18 +27,18 @@ private:
   // helper functions
   void interpret();
   void repl();
-  std::vector<std::string> loadcodefromfile(const std::string &filename);
+  std::vector<std::string> loadCodeFromFile(const std::string &filename);
   std::string eval(const std::string &value);
   std::string evalBuiltIns(const std::string &value,
                            const std::vector<std::string> &words);
   std::vector<std::string> split(const std::string &str,
                                  char delim = ' ') const;
-  std::pair<std::string, std::string> listsplit(const std::string &list) const;
+  std::pair<std::string, std::string> listSplit(const std::string &list) const;
   bool isString(const std::string &val) const;
   bool isList(const std::string &val) const;
 
-  int strtoint(const std::string &num) const;
-  num strtonum(const std::string &num) const;
+  int strToInt(const std::string &val) const;
+  num strToNum(const std::string &val) const;
   bool strtobool(const std::string &val) const;
   std::string strtostr(const std::string &str) const;
   std::string strtolist(const std::string &val) const;
