@@ -42,10 +42,6 @@ void Interpreter::interpret() {
 }
 
 void Interpreter::repl() {
-  const std::string functiondeclarationname = "define";
-  const std::string functionendname = "end";
-  const std::string subroutinedeclarationname = "subroutine";
-  const std::string functionmemdeclarationname = "defmem";
   std::string function;
   bool inFunction = false;
   while (true) {
@@ -55,15 +51,15 @@ void Interpreter::repl() {
     if (input == "") {
       continue;
     }
-    if (input.substr(0, functiondeclarationname.length()) ==
-            functiondeclarationname ||
-        input.substr(0, subroutinedeclarationname.length()) ==
-            subroutinedeclarationname ||
-        input.substr(0, functionmemdeclarationname.length()) ==
-            functionmemdeclarationname) {
+    if (input.substr(0, FUNCTION_DECLARATION_NAME.length()) ==
+            FUNCTION_DECLARATION_NAME ||
+        input.substr(0, SUBROUTINE_DECLARATION_NAME.length()) ==
+            SUBROUTINE_DECLARATION_NAME ||
+        input.substr(0, MEM_DECLARATION_NAME.length()) ==
+            MEM_DECLARATION_NAME) {
       inFunction = true;
     }
-    if (input.substr(0, functionendname.length()) == functionendname) {
+    if (input.substr(0, FUNCTION_END_NAME.length()) == FUNCTION_END_NAME) {
       inFunction = false;
       std::cout << eval(function) << std::endl;
       function = "";
@@ -85,10 +81,6 @@ void Interpreter::repl() {
 std::vector<std::string>
 Interpreter::loadcodefromfile(const std::string &filename) {
   std::vector<std::string> loadedcode;
-  const std::string functiondeclarationname = "define";
-  const std::string functionendname = "end";
-  const std::string subroutinedeclarationname = "subroutine";
-  const std::string functionmemdeclarationname = "defmem";
   std::ifstream infile;
   infile.open(filename);
   std::string line;
@@ -96,15 +88,14 @@ Interpreter::loadcodefromfile(const std::string &filename) {
   bool inFunction = false;
   while (std::getline(infile, line)) {
     // Some logic to make it so function declarations are not split up
-    if (line.substr(0, functiondeclarationname.length()) ==
-            functiondeclarationname ||
-        line.substr(0, subroutinedeclarationname.length()) ==
-            subroutinedeclarationname ||
-        line.substr(0, functionmemdeclarationname.length()) ==
-            functionmemdeclarationname) {
+    if (line.substr(0, FUNCTION_DECLARATION_NAME.length()) ==
+            FUNCTION_DECLARATION_NAME ||
+        line.substr(0, SUBROUTINE_DECLARATION_NAME.length()) ==
+            SUBROUTINE_DECLARATION_NAME ||
+        line.substr(0, MEM_DECLARATION_NAME.length()) == MEM_DECLARATION_NAME) {
       inFunction = true;
     }
-    if (line.substr(0, functionendname.length()) == functionendname) {
+    if (line.substr(0, FUNCTION_END_NAME.length()) == FUNCTION_END_NAME) {
       inFunction = false;
       loadedcode.push_back(fn);
       fn = "";
@@ -149,6 +140,7 @@ std::string Interpreter::eval(const std::string &value) {
     } else if (memory.isMem(words[0])) {
       return callmem(words);
     } else {
+      // happens when we are nested in a function
       std::string fn = memory.getBinding(words[0]);
       if (memory.isBuiltInFn(fn)) {
         words[0] = fn;
@@ -320,7 +312,9 @@ std::string Interpreter::evalBuiltIns(const std::string &value,
   case 'w':
     break;
   case 'x':
-    if (words[0] == "xor") {
+    if (words[0] == "xnor") {
+      return normalizebool(xnorfunc(words));
+    } else if (words[0] == "xor") {
       return normalizebool(xorfunc(words));
     }
     break;
@@ -333,8 +327,8 @@ std::string Interpreter::evalBuiltIns(const std::string &value,
       return std::to_string(comparison(words));
     }
   }
-  throw Exception(
-      "Fatal implementation error in evalBuiltIns. The standard library is flawed.");
+  throw Exception("Fatal implementation error in evalBuiltIns. The standard "
+                  "library is flawed.");
 }
 
 /**

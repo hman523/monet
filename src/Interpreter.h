@@ -108,6 +108,12 @@ private:
   // memory
   std::vector<std::string> code;
   Memory memory;
+
+  // Parsing words
+  const std::string FUNCTION_DECLARATION_NAME = "define";
+  const std::string FUNCTION_END_NAME = "end";
+  const std::string SUBROUTINE_DECLARATION_NAME = "subroutine";
+  const std::string MEM_DECLARATION_NAME = "defmem";
 };
 
 #endif // MONET_INTERPRETER_H
