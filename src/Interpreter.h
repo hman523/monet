@@ -29,6 +29,8 @@ private:
   void repl();
   std::vector<std::string> loadcodefromfile(const std::string &filename);
   std::string eval(const std::string &value);
+  std::string evalBuiltIns(const std::string &value,
+                           const std::vector<std::string> &words);
   std::vector<std::string> split(const std::string &str,
                                  char delim = ' ') const;
   std::pair<std::string, std::string> listsplit(const std::string &list) const;
@@ -101,7 +103,7 @@ private:
   std::string getTail(const std::string &val) const;
   std::string cons(const std::vector<std::string> &vals);
   std::string getcons(const std::string &val, const std::string &list) const;
-  bool isNull(std::vector<std::string> &vals);
+  bool isNull(const std::vector<std::string> &vals);
 
   // memory
   std::vector<std::string> code;

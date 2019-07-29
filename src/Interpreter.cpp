@@ -139,84 +139,8 @@ std::string Interpreter::eval(const std::string &value) {
     return "";
   } else if (isParens(words[0])) {
     return eval(removeparens(words[0]));
-  } else if (words[0] == "define") {
-    define(split(value, ENDOFFUN));
-    return "";
-  } else if (words[0] == "subroutine") {
-    subroutine(split(value, ENDOFFUN));
-    return "";
-  } else if (words[0] == "defmem") {
-    defmem(split(value, ENDOFFUN));
-    return "";
-  } else if (words[0] == "load") {
-    load(words);
-    return "";
-  } else if (words[0] == "quit") {
-    quit(words);
-  } else if (words[0] == "print") {
-    print(words);
-  } else if (words[0] == "println") {
-    println(words);
-  } else if (words[0] == "string") {
-    declarestring(words);
-  } else if (words[0] == "num") {
-    declarenum(words);
-  } else if (words[0] == "boolean") {
-    declareboolean(words);
-  } else if (words[0] == "list") {
-    declarelist(words);
-  } else if (words[0] == "read") {
-    return read(words);
-  } else if (words[0] == "if") {
-    return ifstatement(words);
-  } else if (words[0] == "printall") {
-    printcode();
-  } else if (words[0] == "add") {
-    return normalizenumber(add(words));
-  } else if (words[0] == "sub") {
-    return normalizenumber(sub(words));
-  } else if (words[0] == "mul") {
-    return normalizenumber(mul(words));
-  } else if (words[0] == "div") {
-    return normalizenumber(div(words));
-  } else if (words[0] == "and") {
-    return normalizebool(andfunc(words));
-  } else if (words[0] == "or") {
-    return normalizebool(orfunc(words));
-  } else if (words[0] == "not") {
-    return normalizebool(notfunc(words));
-  } else if (words[0] == "nand") {
-    return normalizebool(nandfunc(words));
-  } else if (words[0] == "nor") {
-    return normalizebool(norfunc(words));
-  } else if (words[0] == "xor") {
-    return normalizebool(xorfunc(words));
-  } else if (words[0] == "xnor") {
-    return normalizebool(xnorfunc(words));
-  } else if (words[0] == "eq") {
-    return normalizebool(comparison(words) == 0);
-  } else if (words[0] == "ne") {
-    return normalizebool(comparison(words) != 0);
-  } else if (words[0] == "gt") {
-    return normalizebool(comparison(words) > 0);
-  } else if (words[0] == "ge") {
-    return normalizebool(comparison(words) >= 0);
-  } else if (words[0] == "lt") {
-    return normalizebool(comparison(words) < 0);
-  } else if (words[0] == "le") {
-    return normalizebool(comparison(words) <= 0);
-  } else if (words[0] == "<=>") {
-    return std::to_string(comparison(words));
-  } else if (words[0] == "head") {
-    return head(words);
-  } else if (words[0] == "tail") {
-    return tail(words);
-  } else if (words[0] == "cons") {
-    return cons(words);
-  } else if (words[0] == "null") {
-    return normalizebool(isNull(words));
-  } else if (words[0] == "~") {
-    return "\n";
+  } else if (memory.isBuiltInFn(words[0])) {
+    return evalBuiltIns(value, words);
   } else if (memory.functioninuse(words[0])) {
     if (memory.isFunction(words[0])) {
       return call(words);
@@ -248,6 +172,169 @@ std::string Interpreter::eval(const std::string &value) {
     throw Exception("Function \"" + words[0] + "\" does not exist");
   }
   return "";
+}
+
+std::string Interpreter::evalBuiltIns(const std::string &value,
+                                      const std::vector<std::string> &words) {
+  const char FIRSTLETTER = value.at(0);
+  switch (FIRSTLETTER) {
+  case 'a':
+    if (words[0] == "add") {
+      return normalizenumber(add(words));
+    } else if (words[0] == "and") {
+      return normalizebool(andfunc(words));
+    }
+    break;
+  case 'b':
+    if (words[0] == "boolean") {
+      declareboolean(words);
+      return "";
+    }
+    break;
+  case 'c':
+    if (words[0] == "cons") {
+      return cons(words);
+    }
+    break;
+  case 'd':
+    if (words[0] == "define") {
+      define(split(value, ENDOFFUN));
+      return "";
+    } else if (words[0] == "defmem") {
+      defmem(split(value, ENDOFFUN));
+      return "";
+    } else if (words[0] == "div") {
+      return normalizenumber(div(words));
+    }
+    break;
+  case 'e':
+    if (words[0] == "eq") {
+      return normalizebool(comparison(words) == 0);
+    }
+    break;
+  case 'f':
+    break;
+  case 'g':
+    if (words[0] == "ge") {
+      return normalizebool(comparison(words) >= 0);
+    } else if (words[0] == "gt") {
+      return normalizebool(comparison(words) > 0);
+    }
+    break;
+  case 'h':
+    if (words[0] == "head") {
+      return head(words);
+    }
+    break;
+  case 'i':
+    if (words[0] == "if") {
+      return ifstatement(words);
+    }
+    break;
+  case 'j':
+    break;
+  case 'k':
+    break;
+  case 'l':
+    if (words[0] == "le") {
+      return normalizebool(comparison(words) <= 0);
+    } else if (words[0] == "list") {
+      declarelist(words);
+      return "";
+    } else if (words[0] == "load") {
+      load(words);
+      return "";
+    } else if (words[0] == "lt") {
+      return normalizebool(comparison(words) < 0);
+    }
+    break;
+  case 'm':
+    if (words[0] == "mul") {
+      return normalizenumber(mul(words));
+    }
+    break;
+  case 'n':
+    if (words[0] == "nand") {
+      return normalizebool(nandfunc(words));
+    } else if (words[0] == "ne") {
+      return normalizebool(comparison(words) != 0);
+    } else if (words[0] == "nor") {
+      return normalizebool(norfunc(words));
+    } else if (words[0] == "not") {
+      return normalizebool(notfunc(words));
+    } else if (words[0] == "null") {
+      return normalizebool(isNull(words));
+    } else if (words[0] == "num") {
+      declarenum(words);
+      return "";
+    }
+    break;
+  case 'o':
+    if (words[0] == "or") {
+      return normalizebool(orfunc(words));
+    }
+    break;
+  case 'p':
+    if (words[0] == "print") {
+      print(words);
+      return "";
+    } else if (words[0] == "println") {
+      println(words);
+      return "";
+    } else if (words[0] == "printall") {
+      printcode();
+      return "";
+    }
+    break;
+  case 'q':
+    if (words[0] == "quit") {
+      quit(words);
+      return "";
+    }
+    break;
+  case 'r':
+    if (words[0] == "read") {
+      return read(words);
+    }
+    break;
+  case 's':
+    if (words[0] == "string") {
+      declarestring(words);
+      return "";
+    } else if (words[0] == "sub") {
+      return normalizenumber(sub(words));
+    } else if (words[0] == "subroutine") {
+      subroutine(split(value, ENDOFFUN));
+      return "";
+    }
+    break;
+  case 't':
+    if (words[0] == "tail") {
+      return tail(words);
+    }
+    break;
+  case 'u':
+    break;
+  case 'v':
+    break;
+  case 'w':
+    break;
+  case 'x':
+    if (words[0] == "xor") {
+      return normalizebool(xorfunc(words));
+    }
+    break;
+  case 'y':
+    break;
+  case 'z':
+    break;
+  default:
+    if (words[0] == "<=>") {
+      return std::to_string(comparison(words));
+    }
+  }
+  throw Exception(
+      "Fatal implementation error in evalBuiltIns. The standard library is flawed.");
 }
 
 /**
@@ -1046,7 +1133,7 @@ std::string Interpreter::getcons(const std::string &val,
                         : std::string("[") + val + std::string("]");
 }
 
-bool Interpreter::isNull(std::vector<std::string> &vals) {
+bool Interpreter::isNull(const std::vector<std::string> &vals) {
   if (vals.size() != 2) {
     throw Exception("Wrong number of parameters for null");
   }
