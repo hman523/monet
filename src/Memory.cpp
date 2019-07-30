@@ -368,10 +368,6 @@ bool Memory::librayImported(const std::string &var) const {
   return libraries.at(var);
 }
 
-void Memory::importLibrary(const std::string &var) {
-  libraries.at(var) = true;
-}
+void Memory::importLibrary(const std::string &var) { libraries.at(var) = true; }
 
-void Memory::loadLibraries() {
-
-}
+void Memory::loadLibraries() {}

@@ -132,6 +132,8 @@ std::string Interpreter::eval(const std::string &value) {
     return eval(removeparens(words[0]));
   } else if (memory.isBuiltInFn(words[0])) {
     return evalBuiltIns(value, words);
+  } else if (isLibraryCall(words[0])) {
+
   } else if (memory.functioninuse(words[0])) {
     if (memory.isFunction(words[0])) {
       return call(words);
@@ -221,8 +223,8 @@ std::string Interpreter::evalBuiltIns(const std::string &value,
   case 'i':
     if (words[0] == "if") {
       return ifstatement(words);
-    } else if(words[0] == "import"){
-        return import(words);
+    } else if (words[0] == "import") {
+      return import(words);
     }
     break;
   case 'j':
@@ -1140,19 +1142,25 @@ bool Interpreter::isNull(const std::vector<std::string> &vals) {
   }
 }
 
+bool Interpreter::isLibraryCall(const std::string &vals) const {
+  std::vector<std::string> libraryDotFunc = split(vals, '.');
+  return (libraryDotFunc.size() == 2 &&
+          memory.libraryExists(libraryDotFunc[0]));
+}
+
 std::string Interpreter::import(const std::vector<std::string> &vals) {
-    if(vals.size() != 2){
-        throw Exception("Wrong number of parameters for include");
-    }
-    std::string lib = isParens(vals[1]) ? eval(vals[1]) : strtostr(vals[1]);
-    if(memory.libraryExists(lib)){
-      throw Exception("Library " + lib + " does not exist");
-    }
-    if(memory.librayImported(lib)){
-      throw Exception("Library " + lib + " already imported");
-    }
-    includeLibrary(lib);
-    return "";
+  if (vals.size() != 2) {
+    throw Exception("Wrong number of parameters for include");
+  }
+  std::string lib = isParens(vals[1]) ? eval(vals[1]) : strtostr(vals[1]);
+  if (memory.libraryExists(lib)) {
+    throw Exception("Library " + lib + " does not exist");
+  }
+  if (memory.librayImported(lib)) {
+    throw Exception("Library " + lib + " already imported");
+  }
+  includeLibrary(lib);
+  return "";
 }
 
 void Interpreter::includeLibrary(const std::string &libraryName) {

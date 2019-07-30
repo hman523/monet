@@ -106,6 +106,7 @@ private:
   bool isNull(const std::vector<std::string> &vals);
 
   // Library Functions
+  bool isLibraryCall(const std::string &vals) const;
   std::string import(const std::vector<std::string> &vals);
   void includeLibrary(const std::string &libraryName);
 

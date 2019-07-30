@@ -100,7 +100,6 @@ private:
   std::set<std::string> subroutinenamespace;
   std::set<std::string> memnamespace;
   std::map<std::string, bool> libraries;
-  //std::map<std::string, Library *> libraaryObjects;
 
   std::stack<std::map<std::string, std::string>> variabletypes;
   std::stack<std::map<std::string, std::string>> functionbindings;
