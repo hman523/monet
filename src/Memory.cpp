@@ -12,7 +12,7 @@
 #include <iostream>
 #include <sstream>
 
-typedef std::pair<std::string, bool> sb;
+typedef std::pair<std::string, bool> strbool;
 
 Memory::Memory() {
   reservedwords.insert(
@@ -21,7 +21,7 @@ Memory::Memory() {
        "nor",    "xor",     "xnor", "if",      "eq",     "ne",     "gt",
        "lt",     "ge",      "le",   "define",  "return", "end",    "subroutine",
        "defmem", "load",    "list", "cons",    "head",   "tail",   "null"});
-  libraries.insert({sb("file", false)});
+  libraries.insert({strbool("file", false)});
   loadLibraries();
   enterfn();
 }
