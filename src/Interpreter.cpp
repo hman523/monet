@@ -221,6 +221,8 @@ std::string Interpreter::evalBuiltIns(const std::string &value,
   case 'i':
     if (words[0] == "if") {
       return ifstatement(words);
+    } else if(words[0] == "import"){
+        return import(words);
     }
     break;
   case 'j':
@@ -1136,4 +1138,23 @@ bool Interpreter::isNull(const std::vector<std::string> &vals) {
   } else {
     return "" == removelist(strtolist(vals[1]));
   }
+}
+
+std::string Interpreter::import(const std::vector<std::string> &vals) {
+    if(vals.size() != 2){
+        throw Exception("Wrong number of parameters for include");
+    }
+    std::string lib = isParens(vals[1]) ? eval(vals[1]) : strtostr(vals[1]);
+    if(memory.libraryExists(lib)){
+      throw Exception("Library " + lib + " does not exist");
+    }
+    if(memory.librayImported(lib)){
+      throw Exception("Library " + lib + " already imported");
+    }
+    includeLibrary(lib);
+    return "";
+}
+
+void Interpreter::includeLibrary(const std::string &libraryName) {
+  memory.importLibrary(libraryName);
 }

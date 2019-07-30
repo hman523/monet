@@ -12,6 +12,8 @@
 #include <iostream>
 #include <sstream>
 
+typedef std::pair<std::string, bool> sb;
+
 Memory::Memory() {
   reservedwords.insert(
       {"print",  "println", "quit", "boolean", "num",    "string", "read",
@@ -19,6 +21,8 @@ Memory::Memory() {
        "nor",    "xor",     "xnor", "if",      "eq",     "ne",     "gt",
        "lt",     "ge",      "le",   "define",  "return", "end",    "subroutine",
        "defmem", "load",    "list", "cons",    "head",   "tail",   "null"});
+  libraries.insert({sb("file", false)});
+  loadLibraries();
   enterfn();
 }
 
@@ -354,4 +358,20 @@ void Memory::insertmem(const std::string &name,
 
 std::string Memory::getBinding(const std::string &var) const {
   return functionbindings.top().at(var);
+}
+
+bool Memory::libraryExists(const std::string &var) const {
+  return libraries.count(var) != 0;
+}
+
+bool Memory::librayImported(const std::string &var) const {
+  return libraries.at(var);
+}
+
+void Memory::importLibrary(const std::string &var) {
+  libraries.at(var) = true;
+}
+
+void Memory::loadLibraries() {
+
 }

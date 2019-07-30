@@ -71,11 +71,18 @@ public:
   std::string getBinding(const std::string &var) const;
   std::string getType(const std::string &var) const;
 
+  // For libraries
+  bool libraryExists(const std::string &var) const;
+  bool librayImported(const std::string &var) const;
+  void importLibrary(const std::string &var);
+
 private:
   num strtonum(const std::string &str) const;
   bool strtobool(const std::string &str) const;
   std::string strtostr(const std::string &str) const;
   std::string strtolist(const std::string &str) const;
+
+  void loadLibraries();
 
   std::stack<std::map<std::string, bool>> booleans;
   std::stack<std::map<std::string, num>> nums;
@@ -92,6 +99,9 @@ private:
   std::set<std::string> functionnamespace;
   std::set<std::string> subroutinenamespace;
   std::set<std::string> memnamespace;
+  std::map<std::string, bool> libraries;
+  //std::map<std::string, Library *> libraaryObjects;
+
   std::stack<std::map<std::string, std::string>> variabletypes;
   std::stack<std::map<std::string, std::string>> functionbindings;
 };

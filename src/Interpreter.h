@@ -105,6 +105,10 @@ private:
   std::string getcons(const std::string &val, const std::string &list) const;
   bool isNull(const std::vector<std::string> &vals);
 
+  // Library Functions
+  std::string import(const std::vector<std::string> &vals);
+  void includeLibrary(const std::string &libraryName);
+
   // memory
   std::vector<std::string> code;
   Memory memory;
