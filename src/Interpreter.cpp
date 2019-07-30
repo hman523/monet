@@ -613,7 +613,9 @@ std::string Interpreter::normalizenumber(num x) const {
   if (fmod(x, 1) < .000001) {
     return std::to_string(((int)x));
   } else {
-    return std::to_string(x);
+    std::stringstream ss;
+    ss << x;
+    return ss.str();
   }
 }
 
@@ -923,7 +925,7 @@ num Interpreter::add(const std::vector<std::string> &vals) {
     throw Exception("Too few inputs for add");
   }
   std::vector<num> parameters = parameterstonums(vals);
-  return std::accumulate(parameters.begin(), parameters.end(), 0);
+  return std::accumulate(parameters.begin(), parameters.end(), num(0));
 }
 
 num Interpreter::sub(const std::vector<std::string> &vals) {
@@ -932,7 +934,7 @@ num Interpreter::sub(const std::vector<std::string> &vals) {
   }
   std::vector<num> parameters = parameterstonums(vals);
   return parameters[0] + std::accumulate(parameters.begin() + 1,
-                                         parameters.end(), 0, std::minus<>{});
+                                         parameters.end(), num(0), std::minus<>{});
 }
 
 num Interpreter::mul(const std::vector<std::string> &vals) {
@@ -940,7 +942,7 @@ num Interpreter::mul(const std::vector<std::string> &vals) {
     throw Exception("Too few inputs for mul");
   }
   std::vector<num> parameters = parameterstonums(vals);
-  return std::accumulate(parameters.begin(), parameters.end(), 1,
+  return std::accumulate(parameters.begin(), parameters.end(), num(1),
                          std::multiplies<>{});
 }
 

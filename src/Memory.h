@@ -14,8 +14,9 @@
 #include <set>
 #include <stack>
 #include <vector>
+#include <boost/multiprecision/mpfr.hpp>
 
-typedef double num;
+typedef  boost::multiprecision::number< boost::multiprecision::mpfr_float_backend<300>>  num;
 
 class Memory {
 public:
@@ -81,7 +82,7 @@ private:
   bool strtobool(const std::string &str) const;
   std::string strtostr(const std::string &str) const;
   std::string strtolist(const std::string &str) const;
-
+  std::string to_string(const num &) const;
   void loadLibraries();
 
   std::stack<std::map<std::string, bool>> booleans;

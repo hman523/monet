@@ -38,7 +38,7 @@ std::string Memory::get(const std::string &var) const {
       if (fmod(getnum(var), 1) < .000001) {
         return std::to_string(((int)getnum(var)));
       } else {
-        return std::to_string(getnum(var));
+        return to_string(getnum(var));
       }
     } else if (getType(var) == "string") {
       return getstring(var);
@@ -339,6 +339,12 @@ std::string Memory::strtostr(const std::string &var) const {
 
 std::string Memory::strtolist(const std::string &val) const {
   return listexists(val) ? getlist(val) : val;
+}
+
+std::string Memory::to_string(const num &value) const {
+  std::stringstream ss;
+  ss << value;
+  return ss.str();
 }
 
 std::string *Memory::checkmem(const std::string &name,
