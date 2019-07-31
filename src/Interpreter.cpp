@@ -17,6 +17,22 @@
 const char ENDOFFUN = '\17';
 const std::string REPLPROMPT = "> ";
 
+Interpreter *Interpreter::ptr = nullptr;
+
+Interpreter *Interpreter::Instance() {
+  if (ptr == nullptr) {
+    ptr = new Interpreter();
+  }
+  return ptr;
+}
+
+Interpreter *Interpreter::Instance(std::string filename) {
+  if (ptr == nullptr) {
+    ptr = new Interpreter(filename);
+  }
+  return ptr;
+}
+
 /**
  * Default constructor
  * Used when using the REPL

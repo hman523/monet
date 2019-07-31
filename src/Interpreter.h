@@ -24,11 +24,16 @@ typedef boost::multiprecision::number<cpp_rational_backend> num;
 
 class Interpreter {
 public:
-  Interpreter();
-  Interpreter(std::string filename);
+  static Interpreter *Instance();
+  static Interpreter *Instance(std::string filename);
 
 private:
+  // Singleton functions
+  static Interpreter *ptr;
+  Interpreter();
+  Interpreter(std::string filename);
   // helper functions
+
   void interpret();
   void repl();
   std::vector<std::string> loadCodeFromFile(const std::string &filename);
