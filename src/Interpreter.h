@@ -11,14 +11,16 @@
 
 #include "Exception.h"
 #include "Memory.h"
+#include <boost/multiprecision/cpp_int.hpp>
 #include <iostream>
 #include <map>
 #include <set>
 #include <vector>
-#include <boost/multiprecision/mpfr.hpp>
 
-typedef  boost::multiprecision::number< boost::multiprecision::mpfr_float_backend<300>>  num;
-
+typedef boost::multiprecision::rational_adaptor<
+    boost::multiprecision::cpp_int_backend<>>
+    cpp_rational_backend;
+typedef boost::multiprecision::number<cpp_rational_backend> num;
 
 class Interpreter {
 public:
@@ -45,7 +47,7 @@ private:
   std::string strtostr(const std::string &str) const;
   std::string strtolist(const std::string &val) const;
   std::string normalize(const std::string &val) const;
-  
+
   std::string removequotes(const std::string &original) const;
   bool isParens(const std::string &statement) const;
   std::string removeparens(const std::string &original) const;

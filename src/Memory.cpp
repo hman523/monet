@@ -35,11 +35,7 @@ std::string Memory::get(const std::string &var) const {
         return "false";
       }
     } else if (getType(var) == "num") {
-      if (fmod(getnum(var), 1) < .000001) {
-        return std::to_string(((int)getnum(var)));
-      } else {
-        return to_string(getnum(var));
-      }
+      return to_string(getnum(var));
     } else if (getType(var) == "string") {
       return getstring(var);
     } else if (getType(var) == "list") {

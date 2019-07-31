@@ -10,13 +10,16 @@
 #define MONET_MEMORY_H
 
 #include "Exception.h"
+#include <boost/multiprecision/cpp_int.hpp>
 #include <map>
 #include <set>
 #include <stack>
 #include <vector>
-#include <boost/multiprecision/mpfr.hpp>
 
-typedef  boost::multiprecision::number< boost::multiprecision::mpfr_float_backend<300>>  num;
+typedef boost::multiprecision::rational_adaptor<
+    boost::multiprecision::cpp_int_backend<>>
+    cpp_rational_backend;
+typedef boost::multiprecision::number<cpp_rational_backend> num;
 
 class Memory {
 public:

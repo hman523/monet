@@ -610,13 +610,9 @@ bool Interpreter::isBoolean(const std::string &value) const {
 }
 
 std::string Interpreter::normalizenumber(num x) const {
-  if (fmod(x, 1) < .000001) {
-    return std::to_string(((int)x));
-  } else {
-    std::stringstream ss;
-    ss << x;
-    return ss.str();
-  }
+  std::stringstream ss;
+  ss << x;
+  return ss.str();
 }
 
 std::string Interpreter::normalizebool(bool x) const {
@@ -934,7 +930,8 @@ num Interpreter::sub(const std::vector<std::string> &vals) {
   }
   std::vector<num> parameters = parameterstonums(vals);
   return parameters[0] + std::accumulate(parameters.begin() + 1,
-                                         parameters.end(), num(0), std::minus<>{});
+                                         parameters.end(), num(0),
+                                         std::minus<>{});
 }
 
 num Interpreter::mul(const std::vector<std::string> &vals) {
