@@ -19,7 +19,7 @@
 - [x] passing lists as parameters
 - [x] head and tail function
 - [x] cons operator
-- [ ] replace the num type from double to a custom type
+- [x] replace the num type from double to a better type
 - [ ] include function
 - [ ] make an easy way to make libraries
 
