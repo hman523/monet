@@ -19,6 +19,12 @@ Commands and functions are case insensitive
 Additionally, nesting is supported using parenthesis. For example:
 `print (add 1 2)`
 
+## Build Instructions
+First, confirm you have boost installed. You also need a C++ compiler. 
+Any compiler should work but I use GCC.  
+To build the program, run CMake on CMakeLists.txt, next run make.
+
+To run, locate the executable and run it with a file or without to enter the REPL.
 
 ## Functions and subroutines
 
