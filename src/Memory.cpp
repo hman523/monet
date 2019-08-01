@@ -108,7 +108,7 @@ bool Memory::functioninuse(const std::string &val) const {
     inStack = functionbindings.top().count(val) != 0;
   }
   return isBuiltInFn(val) || isFunction(val) || isSubroutine(val) ||
-         isMem(val) || inStack;
+         isMem(val) || isLibraryFn(val) || inStack;
 }
 
 bool Memory::isBuiltInFn(const std::string &val) const {
@@ -125,6 +125,10 @@ bool Memory::isSubroutine(const std::string &val) const {
 
 bool Memory::isMem(const std::string &val) const {
   return memnamespace.count(val) != 0;
+}
+
+bool Memory::isLibraryFn(const std::string &val) const {
+  return libraryfunctionnamespace.count(val) != 0;
 }
 
 void Memory::createfunction(const std::string &name,
@@ -373,7 +377,7 @@ bool Memory::librayImported(const std::string &var) const {
 
 void Memory::importLibrary(const std::string &var) {
   std::set<std::string> fns = libraryinstances.at(var)->getFunctions();
-  reservedwords.insert(fns.begin(), fns.end());
+  libraryfunctionnamespace.insert(fns.begin(), fns.end());
   libraries.at(var) = true;
 }
 

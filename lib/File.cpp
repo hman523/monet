@@ -9,7 +9,7 @@
 #include "../src/Interpreter.h"
 
 File::File() {
-    functions.insert({"read"});
+    functions.insert({"file.read"});
 }
 
 std::set<std::string> File::getFunctions() {
@@ -18,7 +18,6 @@ std::set<std::string> File::getFunctions() {
 
 std::string File::eval(const std::string &expression) {
     std::vector<std::string> words = Interpreter::Instance()->split(expression);
-    std::cerr << expression << words[0] << std::endl;
     if(words[0] == "file.read"){
         return readfile(words);
     }

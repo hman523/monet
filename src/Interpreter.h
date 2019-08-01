@@ -26,6 +26,8 @@ class Interpreter {
 public:
   static Interpreter *Instance();
   static Interpreter *Instance(std::string filename);
+  void interpret();
+  void repl();
 
 private:
   // Singleton functions
@@ -34,8 +36,7 @@ private:
   Interpreter(std::string filename);
   // helper functions
 
-  void interpret();
-  void repl();
+
   std::vector<std::string> loadCodeFromFile(const std::string &filename);
   std::string eval(const std::string &value);
   std::string evalBuiltIns(const std::string &value,

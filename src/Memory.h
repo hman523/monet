@@ -42,6 +42,7 @@ public:
   bool isFunction(const std::string &val) const;
   bool isSubroutine(const std::string &val) const;
   bool isMem(const std::string &val) const;
+  bool isLibraryFn(const std::string &val) const;
 
   // creating functions
   void createfunction(const std::string &name,
@@ -108,6 +109,7 @@ private:
   std::set<std::string> functionnamespace;
   std::set<std::string> subroutinenamespace;
   std::set<std::string> memnamespace;
+  std::set<std::string> libraryfunctionnamespace;
   std::map<std::string, bool> libraries;
   std::map<std::string, Library *> libraryinstances;
 

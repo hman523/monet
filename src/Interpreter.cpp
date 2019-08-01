@@ -17,19 +17,18 @@
 const char ENDOFFUN = '\17';
 const std::string REPLPROMPT = "> ";
 
-Interpreter *Interpreter::ptr = 0;
+Interpreter *Interpreter::ptr = nullptr;
 
 Interpreter *Interpreter::Instance() {
-  std::cout << ptr << std::endl;
-  if (ptr == NULL) {
-    Interpreter::ptr = new Interpreter();
+  if (ptr == nullptr) {
+      Interpreter::ptr = new Interpreter();
   }
   return ptr;
 }
 
 Interpreter *Interpreter::Instance(std::string filename) {
   if (ptr == nullptr) {
-    Interpreter::ptr = new Interpreter(filename);
+      Interpreter::ptr = new Interpreter(filename);
   }
   return ptr;
 }
@@ -38,7 +37,7 @@ Interpreter *Interpreter::Instance(std::string filename) {
  * Default constructor
  * Used when using the REPL
  */
-Interpreter::Interpreter() { repl(); }
+Interpreter::Interpreter() {}
 
 /**
  * Constructor
@@ -46,7 +45,6 @@ Interpreter::Interpreter() { repl(); }
  */
 Interpreter::Interpreter(std::string filename) {
   code = loadCodeFromFile(filename);
-  interpret();
 }
 
 /**
@@ -151,7 +149,7 @@ std::string Interpreter::eval(const std::string &value) {
     return evalBuiltIns(value, words);
   } else if (isLibraryCall(words[0])) {
     std::vector<std::string> libdotfunc = split(words[0], '.');
-    memory.libraryExec(value, libdotfunc[0]);
+    return memory.libraryExec(value, libdotfunc[0]);
   } else if (memory.functioninuse(words[0])) {
     if (memory.isFunction(words[0])) {
       return call(words);
