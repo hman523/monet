@@ -16,6 +16,9 @@
 #include <stack>
 #include <vector>
 
+#include "../lib/File.h"
+#include "../lib/Library.h"
+
 typedef boost::multiprecision::rational_adaptor<
     boost::multiprecision::cpp_int_backend<>>
     cpp_rational_backend;
@@ -79,6 +82,8 @@ public:
   bool libraryExists(const std::string &var) const;
   bool librayImported(const std::string &var) const;
   void importLibrary(const std::string &var);
+  std::string libraryExec(const std::string &expression,
+                          const std::string &lib);
 
 private:
   num strtonum(const std::string &str) const;
@@ -104,6 +109,7 @@ private:
   std::set<std::string> subroutinenamespace;
   std::set<std::string> memnamespace;
   std::map<std::string, bool> libraries;
+  std::map<std::string, Library *> libraryinstances;
 
   std::stack<std::map<std::string, std::string>> variabletypes;
   std::stack<std::map<std::string, std::string>> functionbindings;

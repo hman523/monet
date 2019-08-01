@@ -119,6 +119,9 @@ private:
   std::string import(const std::vector<std::string> &vals);
   void includeLibrary(const std::string &libraryName);
 
+  // Friend classes
+  friend class File;
+
   // memory
   std::vector<std::string> code;
   Memory memory;

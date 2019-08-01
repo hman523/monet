@@ -17,18 +17,19 @@
 const char ENDOFFUN = '\17';
 const std::string REPLPROMPT = "> ";
 
-Interpreter *Interpreter::ptr = nullptr;
+Interpreter *Interpreter::ptr = 0;
 
 Interpreter *Interpreter::Instance() {
-  if (ptr == nullptr) {
-    ptr = new Interpreter();
+  std::cout << ptr << std::endl;
+  if (ptr == NULL) {
+    Interpreter::ptr = new Interpreter();
   }
   return ptr;
 }
 
 Interpreter *Interpreter::Instance(std::string filename) {
   if (ptr == nullptr) {
-    ptr = new Interpreter(filename);
+    Interpreter::ptr = new Interpreter(filename);
   }
   return ptr;
 }
@@ -149,7 +150,8 @@ std::string Interpreter::eval(const std::string &value) {
   } else if (memory.isBuiltInFn(words[0])) {
     return evalBuiltIns(value, words);
   } else if (isLibraryCall(words[0])) {
-
+    std::vector<std::string> libdotfunc = split(words[0], '.');
+    memory.libraryExec(value, libdotfunc[0]);
   } else if (memory.functioninuse(words[0])) {
     if (memory.isFunction(words[0])) {
       return call(words);
@@ -1168,7 +1170,7 @@ std::string Interpreter::import(const std::vector<std::string> &vals) {
     throw Exception("Wrong number of parameters for include");
   }
   std::string lib = isParens(vals[1]) ? eval(vals[1]) : strtostr(vals[1]);
-  if (memory.libraryExists(lib)) {
+  if (!memory.libraryExists(lib)) {
     throw Exception("Library " + lib + " does not exist");
   }
   if (memory.librayImported(lib)) {

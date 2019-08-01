@@ -16,11 +16,12 @@ typedef std::pair<std::string, bool> strbool;
 
 Memory::Memory() {
   reservedwords.insert(
-      {"print",  "println", "quit", "boolean", "num",    "string", "read",
-       "add",    "sub",     "mul",  "div",     "and",    "or",     "nand",
-       "nor",    "xor",     "xnor", "if",      "eq",     "ne",     "gt",
-       "lt",     "ge",      "le",   "define",  "return", "end",    "subroutine",
-       "defmem", "load",    "list", "cons",    "head",   "tail",   "null"});
+      {"print",  "println", "quit", "boolean",    "num",    "string",
+       "read",   "add",     "sub",  "mul",        "div",    "and",
+       "or",     "nand",    "nor",  "xor",        "xnor",   "if",
+       "eq",     "ne",      "gt",   "lt",         "ge",     "le",
+       "define", "return",  "end",  "subroutine", "defmem", "load",
+       "list",   "cons",    "head", "tail",       "null",   "import"});
   libraries.insert({strbool("file", false)});
   loadLibraries();
   enterfn();
@@ -363,13 +364,25 @@ std::string Memory::getBinding(const std::string &var) const {
 }
 
 bool Memory::libraryExists(const std::string &var) const {
-  return libraries.count(var) != 0;
+  return libraries.find(var) != libraries.end();
 }
 
 bool Memory::librayImported(const std::string &var) const {
   return libraries.at(var);
 }
 
-void Memory::importLibrary(const std::string &var) { libraries.at(var) = true; }
+void Memory::importLibrary(const std::string &var) {
+  std::set<std::string> fns = libraryinstances.at(var)->getFunctions();
+  reservedwords.insert(fns.begin(), fns.end());
+  libraries.at(var) = true;
+}
 
-void Memory::loadLibraries() {}
+void Memory::loadLibraries() {
+  Library *file = new File();
+  libraryinstances.insert(std::pair<std::string, Library *>("file", file));
+}
+
+std::string Memory::libraryExec(const std::string &expression,
+                                const std::string &lib) {
+  return libraryinstances[lib]->eval(expression);
+}
