@@ -21,14 +21,14 @@ Interpreter *Interpreter::ptr = nullptr;
 
 Interpreter *Interpreter::Instance() {
   if (ptr == nullptr) {
-      Interpreter::ptr = new Interpreter();
+    Interpreter::ptr = new Interpreter();
   }
   return ptr;
 }
 
 Interpreter *Interpreter::Instance(std::string filename) {
   if (ptr == nullptr) {
-      Interpreter::ptr = new Interpreter(filename);
+    Interpreter::ptr = new Interpreter(filename);
   }
   return ptr;
 }

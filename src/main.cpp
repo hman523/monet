@@ -27,11 +27,11 @@ int main(int argc, char *argv[]) {
   }
   try {
     if (argc == 1) {
-      Interpreter* i = Interpreter::Instance();
+      Interpreter *i = Interpreter::Instance();
       i->repl();
     } else if (argc == 2) {
-        Interpreter* i = Interpreter::Instance(argv[1]);
-        i->interpret();
+      Interpreter *i = Interpreter::Instance(argv[1]);
+      i->interpret();
     }
   } catch (Exception &e) {
     std::cerr << e.what() << std::endl;

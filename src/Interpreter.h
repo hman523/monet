@@ -36,7 +36,6 @@ private:
   Interpreter(std::string filename);
   // helper functions
 
-
   std::vector<std::string> loadCodeFromFile(const std::string &filename);
   std::string eval(const std::string &value);
   std::string evalBuiltIns(const std::string &value,
