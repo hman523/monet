@@ -15,13 +15,14 @@ public:
 
 private:
     std::set<std::string> functions;
-    friend std::string eval(const std::string &value);
-    friend std::vector<std::string> split(const std::string &val);
-    friend std::string strtostr(const std::string &str);
-    friend std::string strtolist(const std::string &val);
-    friend std::string normalize(const std::string &val);
 
     std::string readfile(const std::vector<std::string> &vals);
+    std::string writefile(const std::vector<std::string> &vals);
+    std::string getline(const std::vector<std::string> &vals);
+    std::string wordsfile(const std::vector<std::string> &vals);
+    std::string splitfile(const std::vector<std::string> &vals);
+    std::string getlastline(const std::vector<std::string> &vals);
+    std::string appendtofile(const std::vector<std::string> &vals);
 
 };
 

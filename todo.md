@@ -20,8 +20,8 @@
 - [x] head and tail function
 - [x] cons operator
 - [x] replace the num type from double to a better type
-- [ ] import function
-- [ ] make an easy way to make libraries
+- [x] import function
+- [x] make an easy way to make libraries
 
 ## Libraries
 - [ ] file system
