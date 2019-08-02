@@ -23,6 +23,7 @@ private:
     std::string splitfile(const std::vector<std::string> &vals);
     std::string getlastline(const std::vector<std::string> &vals);
     std::string appendtofile(const std::vector<std::string> &vals);
+    std::string fileexists(const std::vector<std::string> &vals);
 
 };
 

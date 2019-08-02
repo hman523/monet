@@ -22,8 +22,19 @@ std::string File::eval(const std::string &expression) {
         return readfile(words);
     }else if(words[0] == "file.write"){
         return writefile(words);
+    }else if(words[0] == "file.exists"){
+        return fileexists(words);
+    }else if(words[0] == "file.getline"){
+        return getline(words);
+    }else if(words[0] == "file.words"){
+        return wordsfile(words);
+    }else if(words[0] == "file.split"){
+        return splitfile(words);
+    }else if(words[0] == "file.getlast"){
+        return getlastline(words);
+    }else if(words[0] == "file.append"){
+        return appendtofile(words);
     }
-
     return "";
 }
 
@@ -77,4 +88,26 @@ std::string File::writefile(const std::vector<std::string> &vals) {
     return "";
 }
 
+std::string File::getline(const std::vector<std::string> &vals) {
+    return std::__cxx11::string();
+}
 
+std::string File::wordsfile(const std::vector<std::string> &vals) {
+    return std::__cxx11::string();
+}
+
+std::string File::splitfile(const std::vector<std::string> &vals) {
+    return std::__cxx11::string();
+}
+
+std::string File::getlastline(const std::vector<std::string> &vals) {
+    return std::__cxx11::string();
+}
+
+std::string File::appendtofile(const std::vector<std::string> &vals) {
+    return std::__cxx11::string();
+}
+
+std::string File::fileexists(const std::vector<std::string> &vals) {
+    return std::__cxx11::string();
+}
