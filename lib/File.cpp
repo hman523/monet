@@ -62,15 +62,19 @@ std::string File::writefile(const std::vector<std::string> &vals) {
         filename = Interpreter::Instance()->strtostr(vals[1]);
     }
     std::string filecontents;
-    if (Interpreter::Instance()->isParens(vals[1])){
-        filecontents = Interpreter::Instance()->eval(vals[1]);
+    if (Interpreter::Instance()->isParens(vals[2])){
+        filecontents = Interpreter::Instance()->eval(vals[2]);
     }
-    else if(Interpreter::Instance()->isString(vals[1])){
-        filecontents = Interpreter::Instance()->removequotes(vals[1]);
+    else if(Interpreter::Instance()->isString(vals[2])){
+        filecontents = Interpreter::Instance()->removequotes(vals[2]);
     }
     else{
-        filecontents = Interpreter::Instance()->strtostr(vals[1]);
+        filecontents = Interpreter::Instance()->strtostr(vals[2]);
     }
-    //Todo: write to file
-    return std::__cxx11::string();
+    std::ofstream out(filename);
+    out << filecontents;
+    out.close();
+    return "";
 }
+
+
