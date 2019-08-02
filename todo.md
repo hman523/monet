@@ -31,9 +31,12 @@
 - [ ] logging library
 - [ ] data structure library
 - [ ] functional library (map, reduce, filter)
+- [ ] Regex library
+- [ ] Random Library
 - [ ] shell library
 - [ ] os library (get system info)
 - [ ] concurrency library (do together, map together)
+- [ ] Euler library (library for solving project Euler problems)
 - [ ] networking library 
 - [ ] a REST library
 - [ ] audio library
