@@ -9,7 +9,7 @@
 #include "../src/Interpreter.h"
 
 File::File() {
-    functions.insert({"file.read", "file.write"});
+    functions.insert({"file.read", "file.write", "file.exists", "file.getline", "file.words", "file.split", "file.getlast", "file.append"});
 }
 
 std::set<std::string> File::getFunctions() {
