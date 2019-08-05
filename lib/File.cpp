@@ -124,7 +124,32 @@ std::string File::getline(const std::vector<std::string> &vals) {
 }
 
 std::string File::wordsfile(const std::vector<std::string> &vals) {
-    return std::__cxx11::string();
+    if (vals.size() != 2){
+        throw Exception("Wrong number of parameters for words");
+    }
+    std::string filename;
+    if (Interpreter::Instance()->isParens(vals[1])){
+        filename = Interpreter::Instance()->eval(vals[1]);
+    }
+    else if(Interpreter::Instance()->isString(vals[1])){
+        filename = Interpreter::Instance()->removequotes(vals[1]);
+    }
+    else{
+        filename = Interpreter::Instance()->strtostr(vals[1]);
+    }
+    std::ifstream file(filename);
+    std::string text((std::istreambuf_iterator<char>(file)), (std::istreambuf_iterator<char>()));
+    file.close();
+    std::vector<std::string> lines = Interpreter::Instance()->split(text, '\n');
+    std::vector<std::string> words;
+    std::for_each(lines.begin(), lines.end(), [&](std::string x)->void {
+        auto w = Interpreter::Instance()->split(x);
+        std::for_each(w.begin(), w.end(), [&](std::string y)->void{words.push_back(y);});
+    });
+    std::string wordslist = "[" + words[0];
+    std::for_each(words.begin()+1, words.end(), [&](std::string x)-> void{wordslist+=(" " + x);});
+    wordslist+="]";
+    return wordslist;
 }
 
 std::string File::splitfile(const std::vector<std::string> &vals) {
