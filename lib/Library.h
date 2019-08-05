@@ -7,10 +7,10 @@
 #include <set>
 #include <string>
 
-class Library{
+class Library {
 public:
-    virtual std::set<std::string> getFunctions() = 0;
-    virtual std::string eval(const std::string &expression) = 0;
+  virtual std::set<std::string> getFunctions() = 0;
+  virtual std::string eval(const std::string &expression) = 0;
 };
 
-#endif //MONET_LIBRARY_H
+#endif // MONET_LIBRARY_H
