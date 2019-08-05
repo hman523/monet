@@ -10,7 +10,7 @@
 
 
 File::File() {
-    functions.insert({"file.read", "file.write", "file.exists", "file.getline", "file.words", "file.split", "file.getlast", "file.append"});
+    functions.insert({"file.read", "file.write", "file.exists", "file.getline", "file.words", "file.split", "file.getlast", "file.append", "file.count"});
 }
 
 std::set<std::string> File::getFunctions() {
@@ -35,7 +35,10 @@ std::string File::eval(const std::string &expression) {
         return getlastline(words);
     }else if(words[0] == "file.append"){
         return appendtofile(words);
+    }else if(words[0] == "files.count"){
+        return linecount(words);
     }
+
     return "";
 }
 
@@ -111,8 +114,6 @@ std::string File::getline(const std::vector<std::string> &vals) {
     else{
         linenum = (uint32_t)Interpreter::Instance()->strToNum(vals[2]);
     }
-
-
     std::ifstream file(filename);
     for(uint32_t x = 0; x < linenum; ++x) {
         file.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
@@ -182,4 +183,8 @@ std::string File::fileexists(const std::vector<std::string> &vals) {
     std::string exists = file.good() ? "true" : "false";
     file.close();
     return exists;
+}
+
+std::string File::linecount(const std::vector<std::string> &vals) {
+    return std::__cxx11::string();
 }

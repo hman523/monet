@@ -24,7 +24,7 @@ private:
     std::string getlastline(const std::vector<std::string> &vals);
     std::string appendtofile(const std::vector<std::string> &vals);
     std::string fileexists(const std::vector<std::string> &vals);
-    std::string lines(const std::vector<std::string> &vals);
+    std::string linecount(const std::vector<std::string> &vals);
 
 
 };
