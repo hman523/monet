@@ -6,8 +6,8 @@
  * File: Memory.cpp
  */
 
-#include "Memory.h"
-#include "Interpreter.h"
+#include "../include/Memory.h"
+#include "../include/Interpreter.h"
 #include <cmath>
 #include <iostream>
 #include <sstream>

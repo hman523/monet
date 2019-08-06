@@ -6,7 +6,7 @@
  * File: Exception.cpp
  */
 
-#include "Exception.h"
+#include "../include/Exception.h"
 
 Exception::Exception(const std::string &ErrorMessage)
     : errormessage(ErrorMessage) {}

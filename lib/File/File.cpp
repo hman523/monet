@@ -3,8 +3,8 @@
 //
 
 #include "File.h"
-#include "../../src/Exception.h"
-#include "../../src/Interpreter.h"
+#include "../../include/Exception.h"
+#include "../../include/Interpreter.h"
 #include <cstring>
 #include <fstream>
 #include <vector>

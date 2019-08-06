@@ -6,7 +6,7 @@
  * File: Main.cpp
  */
 
-#include "Interpreter.h"
+#include "../include/Interpreter.h"
 #include <iostream>
 
 // Welcome to Monet (A Basic Inspired Programming Language)

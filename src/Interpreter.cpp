@@ -6,7 +6,7 @@
  * File: Interpreter.cpp
  */
 
-#include "Interpreter.h"
+#include "../include/Interpreter.h"
 #include <algorithm>
 #include <cmath>
 #include <fstream>
