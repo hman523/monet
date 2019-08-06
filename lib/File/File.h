@@ -17,7 +17,8 @@ public:
 private:
   std::set<std::string> functions;
 
-  std::vector<std::string> split(const std::string &text, const std::string &delims);
+  std::vector<std::string> split(const std::string &text,
+                                 const std::string &delims);
 
   std::string readfile(const std::vector<std::string> &vals);
   std::string writefile(const std::vector<std::string> &vals);
