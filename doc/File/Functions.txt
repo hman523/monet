@@ -1,0 +1,47 @@
+Functions for file library.
+To use, call the method "import "file""
+
+Function: file.read
+Parameters: string of the file name
+Return: the contents of the file
+Side Effects: none
+
+Function: file.write
+Parameters: string of the file name, string of what you are writing to the file
+Return: nothing
+Side Effects: the file is written to what the second parameter is
+
+Function: file.getline
+Parameters: string of the file name, the line you want to view
+Return: the line in that file
+Side Effects: none
+
+Function: file.words
+Parameters: string of the file name
+Return: a list of strings split by white space in the file
+Side Effects: none
+
+Function: file.split
+Parameters: string of the file name, a string or strings of character deliminators
+Return: a list of strings delimited by the deliminators
+Side Effects: none
+
+Function: file.getlast
+Parameters: string of the file name
+Return: the last line of the file
+Side Effects: none
+
+Function: file.exists
+Parameters: string of the file name
+Return: true if the file exists, else false
+Side Effects: none
+
+Function: file.append
+Parameters: string of the file name, the string you want to append
+Return: nothing
+Side Effects: the file will be appended to
+
+Function: file.count
+Parameters: string of the file name
+Return: The number of lines in the file
+Side Effects: none

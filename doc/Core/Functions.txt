@@ -1,174 +1,177 @@
-Method: print
+These are the built in functions
+You don't have to do anything special to use them.
+
+Function: print
 Parameters: any number of values
 Return: null
 Side effects: prints to terminal
 
-Method: println
+Function: println
 Parameters: any number of values
 Return: null
 Side effects: prints to terminal and adds a newline
 
-Method: string
+Function: string
 Parameters: name of variable, value you want to save
 Return: null
 Side effects: stores the value as a string with that value
 
-Method: boolean
+Function: boolean
 Parameters: name of variable, value you want to save
 Return: null
 Side effects: stores the value as a boolean with that value
 
-Method: num
+Function: num
 Parameters: name of variable, value you want to save
 Return: null
 Side effects: stores the value as a num with that value
 
-Method: read
+Function: read
 Parameters: one optional, name of variable you would like to save the value to
 Return: Whatever the user inputs
 Side effects: stores the input as a string if provided an input
 
-Method: quit
+Function: quit
 Parameters: one optional, a numeric value used as the exit code
 Return: Does not reach this
 Side effects: quits the program
 
-Method: add
+Function: add
 Parameters: at least two, up to infinite
 Return: Sum of values
 Side effects: none
 
-Method: sub
+Function: sub
 Parameters: at least two, up to infinite
 Return: difference of values
 Side effects: none
 
-Method: mul
+Function: mul
 Parameters: at least two, up to infinite
 Return: product of values
 Side effects: none
 
-Method: div
+Function: div
 Parameters: at least two, up to infinite
 Return: quotient of values
 Side effects: none
 
-Method: not
+Function: not
 Parameters: one
 Return: the boolean opposite of the value
 Side effects: none
 
-Method: and
+Function: and
 Parameters: at least two, up to infinite
 Return: true if all are true
 Side effects: none
 
-Method: or
+Function: or
 Parameters: at least two, up to infinite
 Return: true if one is true
 Side effects: none
 
-Method: nand
+Function: nand
 Parameters: at least two, up to infinite
 Return: true if all are true
 Side effects: none
 
-Method: nor
+Function: nor
 Parameters: at least two, up to infinite
 Return: true if one is true
 Side effects: none
 
-Method: xor
+Function: xor
 Parameters: two
 Return: the xor of the values
 Side effects: none
 
-Method: xnor
+Function: xnor
 Parameters: two
 Return: not xor of the values
 Side effects: none
 
-Method: if
+Function: if
 Parameters: a boolean, two other values
 Return: second parameter if the boolean is true, third if false
 Side effects: none
 
-Method: eq
+Function: eq
 Parameters: two values
 Return: true if the values are equal
 Side effects: none
 
-Method: ne
+Function: ne
 Parameters: two values
 Return: false if the values are equal
 Side effects: none
 
-Method: gt
+Function: gt
 Parameters: two values
 Return: true if the first is greater than the second (or first alphabetically)
 Side effects: none
 
-Method: lt
+Function: lt
 Parameters: two values
 Return: true if the first is less than the second (or second alphabetically)
 Side effects: none
 
-Method: ge
+Function: ge
 Parameters: two values
 Return: true if the first is greater than or equal to the second
 Side effects: none
 
-Method: le
+Function: le
 Parameters: two values
 Return: true if the first is less than or equal to the second
 Side effects: none
 
-Method: <=>
+Function: <=>
 Parameters: two values
 Return: 1 if gt, 0 if eq, -1 if less than
 Side effects: none
 
-Method: define
+Function: define
 Parameters: a type, a name, and optionally (a type, a name) as many times as wanted
 Return: whatever is returned from the function using the return keyword
 Side effects: dependent
 
-Method: subroutine
+Function: subroutine
 Parameters: a name
 Return: null
 Side effects: dependent
 
-Method: defmem
+Function: defmem
 Parameters: a type, a name, and optionally (a type, a name) as many times as wanted
 Return: whatever is returned from the function using the return keyword
 Side effects: save return to memory, dependent on function
 
-Method: load
+Function: load
 Parameters: the filename to load
 Return: null
 Side effects: dependent
 
-Method: list
+Function: list
 Parameters: a variable name, a list
 Return: null
 Side effects: saves a list to memory
 
-Method: head
+Function: head
 Parameters: a list
 Return: the first element of the list
 Side effects: none
 
-Method: tail
+Function: tail
 Parameters: a list
 Return: everything but the first element
 Side effects: throws exception on null list
 
-Method: null
+Function: null
 Parameters: a list
 Return: true if empty list, else false
 Side effects: none
 
-Method: cons
+Function: cons
 Parameters: a value and a list
 Return: a list with the head being the value and the tail being the list
 Side effects: none
