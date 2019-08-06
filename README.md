@@ -96,13 +96,13 @@ While not horrible, we can do better. By changing just one word,
  When running this solution, (fib 30) is able to run in .006 seconds! 
  While this optimization is nice, it comes at the cost of a memory overhead.
 
-Built in commands so far:
+Built in commands:
 `print`, `println`, `string`, `boolean`, `num`, `read`, `quit`, 
 `add`, `sub`, `mul`, `div`, `not`, `and`, `or`, `nand`, `nor`, `xor`, `xnor`,
 `if`, `eq`, `ne`, `gt`, `lt`, `ge`, `le`, `<=>`, `define`, `subroutine`, `defmem`, `load`, 
 `list`, `head`, `tail`, `cons`, `null`
 
-Commands coming soon: `map, reduce`
+For a more comprehensive list of standard library functions, view the doc folder.
 
 High order functions are supported. To use one, use fn as the type.
 For example, 
@@ -130,6 +130,8 @@ println "x is " x
 Output: `x is 9`
 
 ## Lists
-Lists are recursive containers that will be able to hold any datatype, including other lists. 
-These lists are used for iteration and will be closely associated with the map and reduce functions. 
+Lists are recursive containers that are able to hold any datatype, including other lists. 
+These lists are used for iteration. 
 A list is said to be null if it is empty. A list can contain a mix of any datatype. 
+A list can be declared by using the `list` keyword. To get the first element, use the `head` function.
+To get the rest of the list, use the `tail` function.
