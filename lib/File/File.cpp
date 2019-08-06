@@ -11,7 +11,7 @@
 
 File::File() {
   functions.insert({"file.read", "file.write", "file.exists", "file.getline",
-                    "file.words", "file.split", "file.getlast", "file.append",
+                    "file.words", "file.split", "file.last", "file.append",
                     "file.count"});
 }
 
@@ -31,7 +31,7 @@ std::string File::eval(const std::string &expression) {
     return wordsfile(words);
   } else if (words[0] == "file.split") {
     return splitfile(words);
-  } else if (words[0] == "file.getlast") {
+  } else if (words[0] == "file.last") {
     return getlastline(words);
   } else if (words[0] == "file.append") {
     return appendtofile(words);
@@ -181,11 +181,37 @@ std::string File::splitfile(const std::vector<std::string> &vals) {
 }
 
 std::string File::getlastline(const std::vector<std::string> &vals) {
-  return std::__cxx11::string();
+  if (vals.size() != 2) {
+    throw Exception("Wrong number of parameters for file.last");
+  }
+
 }
 
 std::string File::appendtofile(const std::vector<std::string> &vals) {
-  return std::__cxx11::string();
+  if (vals.size() != 3) {
+    throw Exception("Wrong number of parameters for file.append");
+  }
+  std::string filename;
+  if (Interpreter::Instance()->isParens(vals[1])) {
+    filename = Interpreter::Instance()->eval(vals[1]);
+  } else if (Interpreter::Instance()->isString(vals[1])) {
+    filename = Interpreter::Instance()->removequotes(vals[1]);
+  } else {
+    filename = Interpreter::Instance()->strtostr(vals[1]);
+  }
+  std::ofstream out;
+  out.open(filename, std::ios::app);
+  std::string filecontents;
+  if (Interpreter::Instance()->isParens(vals[2])) {
+    filecontents = Interpreter::Instance()->eval(vals[2]);
+  } else if (Interpreter::Instance()->isString(vals[2])) {
+    filecontents = Interpreter::Instance()->removequotes(vals[2]);
+  } else {
+    filecontents = Interpreter::Instance()->strtostr(vals[2]);
+  }
+  out << "\n" << filecontents;
+  out.close();
+  return "";
 }
 
 std::string File::fileexists(const std::vector<std::string> &vals) {

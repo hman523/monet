@@ -26,7 +26,7 @@ Parameters: string of the file name, a string or strings of character deliminato
 Return: a list of strings delimited by the deliminators
 Side Effects: none
 
-Function: file.getlast
+Function: file.last
 Parameters: string of the file name
 Return: the last line of the file
 Side Effects: none
