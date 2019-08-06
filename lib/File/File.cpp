@@ -184,7 +184,25 @@ std::string File::getlastline(const std::vector<std::string> &vals) {
   if (vals.size() != 2) {
     throw Exception("Wrong number of parameters for file.last");
   }
-
+  std::string filename;
+  if (Interpreter::Instance()->isParens(vals[1])) {
+    filename = Interpreter::Instance()->eval(vals[1]);
+  } else if (Interpreter::Instance()->isString(vals[1])) {
+    filename = Interpreter::Instance()->removequotes(vals[1]);
+  } else {
+    filename = Interpreter::Instance()->strtostr(vals[1]);
+  }
+  std::string contents;
+  std::ifstream file(filename, std::ios::ate);
+  int x = EOF;
+  char curr;
+  do {
+    file.seekg(x, std::ios::end);
+    file.get(curr);
+    contents = curr + contents;
+    --x;
+  } while (curr != '\n' && curr != '\r');
+  return contents.substr(1);
 }
 
 std::string File::appendtofile(const std::vector<std::string> &vals) {
