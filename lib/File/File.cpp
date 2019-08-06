@@ -35,16 +35,15 @@ std::string File::eval(const std::string &expression) {
     return getlastline(words);
   } else if (words[0] == "file.append") {
     return appendtofile(words);
-  } else if (words[0] == "files.count") {
+  } else if (words[0] == "file.count") {
     return linecount(words);
   }
-
-  return "";
+  throw Exception("Fatal implementation error in File::eval in File.cpp");
 }
 
 std::string File::readfile(const std::vector<std::string> &vals) {
   if (vals.size() != 2) {
-    throw Exception("Wrong number of parameters for readfile");
+    throw Exception("Wrong number of parameters for file.read");
   }
   std::string filename;
   if (Interpreter::Instance()->isParens(vals[1])) {
@@ -63,7 +62,7 @@ std::string File::readfile(const std::vector<std::string> &vals) {
 
 std::string File::writefile(const std::vector<std::string> &vals) {
   if (vals.size() != 3) {
-    throw Exception("Wrong number of parameters for readfile");
+    throw Exception("Wrong number of parameters for file.write");
   }
   std::string filename;
   if (Interpreter::Instance()->isParens(vals[1])) {
@@ -89,7 +88,7 @@ std::string File::writefile(const std::vector<std::string> &vals) {
 
 std::string File::getline(const std::vector<std::string> &vals) {
   if (vals.size() != 3) {
-    throw Exception("Wrong number of parameters for getline");
+    throw Exception("Wrong number of parameters for file.getline");
   }
   std::string filename;
   if (Interpreter::Instance()->isParens(vals[1])) {
@@ -118,7 +117,7 @@ std::string File::getline(const std::vector<std::string> &vals) {
 
 std::string File::wordsfile(const std::vector<std::string> &vals) {
   if (vals.size() != 2) {
-    throw Exception("Wrong number of parameters for words");
+    throw Exception("Wrong number of parameters for file.words");
   }
   std::string filename;
   if (Interpreter::Instance()->isParens(vals[1])) {
@@ -148,7 +147,7 @@ std::string File::wordsfile(const std::vector<std::string> &vals) {
 
 std::string File::splitfile(const std::vector<std::string> &vals) {
   if (vals.size() < 3) {
-    throw Exception("Wrong number of parameters for split");
+    throw Exception("Wrong number of parameters for file.split");
   }
   std::string filename;
   if (Interpreter::Instance()->isParens(vals[1])) {
@@ -191,7 +190,7 @@ std::string File::appendtofile(const std::vector<std::string> &vals) {
 
 std::string File::fileexists(const std::vector<std::string> &vals) {
   if (vals.size() != 2) {
-    throw Exception("Wrong number of parameters for readfile");
+    throw Exception("Wrong number of parameters for file.readfile");
   }
   std::string filename;
   if (Interpreter::Instance()->isParens(vals[1])) {
@@ -208,7 +207,25 @@ std::string File::fileexists(const std::vector<std::string> &vals) {
 }
 
 std::string File::linecount(const std::vector<std::string> &vals) {
-  return std::__cxx11::string();
+  if (vals.size() != 2) {
+    throw Exception("Wrong number of parameters for file.count");
+  }
+  uint32_t lines = 0;
+  std::string filename;
+  if (Interpreter::Instance()->isParens(vals[1])) {
+    filename = Interpreter::Instance()->eval(vals[1]);
+  } else if (Interpreter::Instance()->isString(vals[1])) {
+    filename = Interpreter::Instance()->removequotes(vals[1]);
+  } else {
+    filename = Interpreter::Instance()->strtostr(vals[1]);
+  }
+  std::string temp;
+  std::ifstream file(filename);
+  while (std::getline(file, temp)) {
+    ++lines;
+  }
+
+  return std::to_string(lines);
 }
 
 std::vector<std::string> File::split(const std::string &text,
