@@ -373,7 +373,6 @@ std::vector<std::string> Interpreter::split(const std::string &str,
   bool instr = false;
   int inparens = 0;
   int inlist = 0;
-  bool delimWasLast = false;
   for (uint32_t i = 0; i < str.length(); ++i) {
     if (str[i] == '(' && !instr) {
       ++inparens;
@@ -389,9 +388,6 @@ std::vector<std::string> Interpreter::split(const std::string &str,
     }
     if (str[i] == '"') {
       instr = !instr;
-    }
-    if (str[i] == delim && delimWasLast) {
-      continue;
     }
     if (str[i] == delim && temp != "" && !instr && inparens == 0 &&
         inlist == 0) {
@@ -410,8 +406,7 @@ std::vector<std::string> Interpreter::split(const std::string &str,
   }
   returnval.erase(std::remove_if(returnval.begin(), returnval.end(),
                                  [delim](std::string x) -> bool {
-                                   return (x == "" || x == " " ||
-                                           x.at(0) == delim);
+                                   return (x == "" || x.at(0) == delim);
                                  }),
                   returnval.end());
   return returnval;
