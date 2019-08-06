@@ -6,6 +6,7 @@
 #define MONET_FILE_H
 
 #include "Library.h"
+#include <vector>
 
 class File : public Library {
 public:
