@@ -5,7 +5,7 @@
 #ifndef MONET_FILE_H
 #define MONET_FILE_H
 
-#include "Library.h"
+#include "../Library.h"
 #include <vector>
 
 class File : public Library {
@@ -16,6 +16,8 @@ public:
 
 private:
   std::set<std::string> functions;
+
+  std::vector<std::string> split(const std::string &text, const std::string &delims);
 
   std::string readfile(const std::vector<std::string> &vals);
   std::string writefile(const std::vector<std::string> &vals);

@@ -3,10 +3,11 @@
 //
 
 #include "File.h"
-#include "../src/Exception.h"
-#include "../src/Interpreter.h"
+#include "../../src/Exception.h"
+#include "../../src/Interpreter.h"
 #include <fstream>
 #include <vector>
+#include <cstring>
 
 File::File() {
   functions.insert({"file.read", "file.write", "file.exists", "file.getline",
@@ -131,22 +132,51 @@ std::string File::wordsfile(const std::vector<std::string> &vals) {
   std::string text((std::istreambuf_iterator<char>(file)),
                    (std::istreambuf_iterator<char>()));
   file.close();
-  std::vector<std::string> lines = Interpreter::Instance()->split(text, '\n');
-  std::vector<std::string> words;
-  std::for_each(lines.begin(), lines.end(), [&](std::string x) -> void {
-    auto w = Interpreter::Instance()->split(x);
-    std::for_each(w.begin(), w.end(),
-                  [&](std::string y) -> void { words.push_back(y); });
-  });
+  std::string delims = " \n\t";
+  std::vector<std::string> words = split(text, delims);
+  if(words.size() == 0){
+    //Case for empty file or file of just white space
+    return "[]";
+  }
   std::string wordslist = "[" + words[0];
   std::for_each(words.begin() + 1, words.end(),
-                [&](std::string x) -> void { wordslist += (" " + x); });
+                [&](std::string x) -> void { wordslist += (" \"" + x + "\""); });
   wordslist += "]";
   return wordslist;
 }
 
 std::string File::splitfile(const std::vector<std::string> &vals) {
-  return std::__cxx11::string();
+  if (vals.size() < 3) {
+    throw Exception("Wrong number of parameters for split");
+  }
+  std::string filename;
+  if (Interpreter::Instance()->isParens(vals[1])) {
+    filename = Interpreter::Instance()->eval(vals[1]);
+  } else if (Interpreter::Instance()->isString(vals[1])) {
+    filename = Interpreter::Instance()->removequotes(vals[1]);
+  } else {
+    filename = Interpreter::Instance()->strtostr(vals[1]);
+  }
+  std::ifstream file(filename);
+  std::string text((std::istreambuf_iterator<char>(file)),
+                   (std::istreambuf_iterator<char>()));
+  file.close();
+  std::string delims;
+  for (uint32_t j = 2; j < vals.size(); ++j) {
+    if (Interpreter::Instance()->isParens(vals[j])) {
+      delims+=Interpreter::Instance()->eval(vals[j]);
+    } else if (Interpreter::Instance()->isString(vals[j])) {
+      delims+=Interpreter::Instance()->removequotes(vals[j]);
+    } else {
+      delims+=Interpreter::Instance()->strtostr(vals[j]);
+    }
+  }
+  std::vector<std::string> words = split(text, delims);
+  std::string wordslist = "[" + words[0];
+  std::for_each(words.begin() + 1, words.end(),
+                [&](std::string x) -> void { wordslist += (" \"" + x + "\""); });
+  wordslist += "]";
+  return wordslist;
 }
 
 std::string File::getlastline(const std::vector<std::string> &vals) {
@@ -177,4 +207,29 @@ std::string File::fileexists(const std::vector<std::string> &vals) {
 
 std::string File::linecount(const std::vector<std::string> &vals) {
   return std::__cxx11::string();
+}
+
+
+std::vector<std::string> File::split(const std::string &text, const std::string &delims) {
+  std::vector<std::string> words;
+  std::string tempstring = "";
+  for (uint32_t j = 0; j < text.length(); ++j) {
+    bool foundDelim = false;
+    for (uint32_t k = 0; k < delims.length(); ++k) {
+      if(text.at(j) == delims.at(k)){
+        foundDelim = true;
+        break;
+      }
+    }
+    if(foundDelim){
+      if(tempstring != ""){
+        words.push_back(tempstring);
+        tempstring = "";
+      }
+    }
+    else{
+      tempstring+=text.at(j);
+    }
+  }
+  return words;
 }
