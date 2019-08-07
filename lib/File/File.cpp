@@ -41,18 +41,21 @@ std::string File::eval(const std::string &expression) {
   throw Exception("Fatal implementation error in File::eval in File.cpp");
 }
 
+std::string File::evalstring(const std::string &val) {
+  if (Interpreter::Instance()->isParens(val)) {
+    return Interpreter::Instance()->eval(val);
+  } else if (Interpreter::Instance()->isString(val)) {
+    return Interpreter::Instance()->removequotes(val);
+  } else {
+    return Interpreter::Instance()->strtostr(val);
+  }
+}
+
 std::string File::readfile(const std::vector<std::string> &vals) {
   if (vals.size() != 2) {
     throw Exception("Wrong number of parameters for file.read");
   }
-  std::string filename;
-  if (Interpreter::Instance()->isParens(vals[1])) {
-    filename = Interpreter::Instance()->eval(vals[1]);
-  } else if (Interpreter::Instance()->isString(vals[1])) {
-    filename = Interpreter::Instance()->removequotes(vals[1]);
-  } else {
-    filename = Interpreter::Instance()->strtostr(vals[1]);
-  }
+  std::string filename = evalstring(vals[1]);
   std::ifstream file(filename);
   std::string text((std::istreambuf_iterator<char>(file)),
                    (std::istreambuf_iterator<char>()));
@@ -64,22 +67,8 @@ std::string File::writefile(const std::vector<std::string> &vals) {
   if (vals.size() != 3) {
     throw Exception("Wrong number of parameters for file.write");
   }
-  std::string filename;
-  if (Interpreter::Instance()->isParens(vals[1])) {
-    filename = Interpreter::Instance()->eval(vals[1]);
-  } else if (Interpreter::Instance()->isString(vals[1])) {
-    filename = Interpreter::Instance()->removequotes(vals[1]);
-  } else {
-    filename = Interpreter::Instance()->strtostr(vals[1]);
-  }
-  std::string filecontents;
-  if (Interpreter::Instance()->isParens(vals[2])) {
-    filecontents = Interpreter::Instance()->eval(vals[2]);
-  } else if (Interpreter::Instance()->isString(vals[2])) {
-    filecontents = Interpreter::Instance()->removequotes(vals[2]);
-  } else {
-    filecontents = Interpreter::Instance()->strtostr(vals[2]);
-  }
+  std::string filename = evalstring(vals[1]);
+  std::string filecontents = evalstring(vals[2]);
   std::ofstream out(filename);
   out << filecontents;
   out.close();
@@ -90,14 +79,7 @@ std::string File::getline(const std::vector<std::string> &vals) {
   if (vals.size() != 3) {
     throw Exception("Wrong number of parameters for file.getline");
   }
-  std::string filename;
-  if (Interpreter::Instance()->isParens(vals[1])) {
-    filename = Interpreter::Instance()->eval(vals[1]);
-  } else if (Interpreter::Instance()->isString(vals[1])) {
-    filename = Interpreter::Instance()->removequotes(vals[1]);
-  } else {
-    filename = Interpreter::Instance()->strtostr(vals[1]);
-  }
+  std::string filename = evalstring(vals[1]);
   uint32_t linenum;
   if (Interpreter::Instance()->isParens(vals[2])) {
     linenum = (uint32_t)Interpreter::Instance()->strToNum(
@@ -119,14 +101,7 @@ std::string File::wordsfile(const std::vector<std::string> &vals) {
   if (vals.size() != 2) {
     throw Exception("Wrong number of parameters for file.words");
   }
-  std::string filename;
-  if (Interpreter::Instance()->isParens(vals[1])) {
-    filename = Interpreter::Instance()->eval(vals[1]);
-  } else if (Interpreter::Instance()->isString(vals[1])) {
-    filename = Interpreter::Instance()->removequotes(vals[1]);
-  } else {
-    filename = Interpreter::Instance()->strtostr(vals[1]);
-  }
+  std::string filename = evalstring(vals[1]);
   std::ifstream file(filename);
   std::string text((std::istreambuf_iterator<char>(file)),
                    (std::istreambuf_iterator<char>()));
@@ -149,27 +124,14 @@ std::string File::splitfile(const std::vector<std::string> &vals) {
   if (vals.size() < 3) {
     throw Exception("Wrong number of parameters for file.split");
   }
-  std::string filename;
-  if (Interpreter::Instance()->isParens(vals[1])) {
-    filename = Interpreter::Instance()->eval(vals[1]);
-  } else if (Interpreter::Instance()->isString(vals[1])) {
-    filename = Interpreter::Instance()->removequotes(vals[1]);
-  } else {
-    filename = Interpreter::Instance()->strtostr(vals[1]);
-  }
+  std::string filename = evalstring(vals[1]);
   std::ifstream file(filename);
   std::string text((std::istreambuf_iterator<char>(file)),
                    (std::istreambuf_iterator<char>()));
   file.close();
   std::string delims;
   for (uint32_t j = 2; j < vals.size(); ++j) {
-    if (Interpreter::Instance()->isParens(vals[j])) {
-      delims += Interpreter::Instance()->eval(vals[j]);
-    } else if (Interpreter::Instance()->isString(vals[j])) {
-      delims += Interpreter::Instance()->removequotes(vals[j]);
-    } else {
-      delims += Interpreter::Instance()->strtostr(vals[j]);
-    }
+    delims += evalstring(vals[j]);
   }
   std::vector<std::string> words = split(text, delims);
   std::string wordslist = "[" + words[0];
@@ -184,14 +146,7 @@ std::string File::getlastline(const std::vector<std::string> &vals) {
   if (vals.size() != 2) {
     throw Exception("Wrong number of parameters for file.last");
   }
-  std::string filename;
-  if (Interpreter::Instance()->isParens(vals[1])) {
-    filename = Interpreter::Instance()->eval(vals[1]);
-  } else if (Interpreter::Instance()->isString(vals[1])) {
-    filename = Interpreter::Instance()->removequotes(vals[1]);
-  } else {
-    filename = Interpreter::Instance()->strtostr(vals[1]);
-  }
+  std::string filename = evalstring(vals[1]);
   std::string contents;
   std::ifstream file(filename, std::ios::ate);
   int x = EOF;
@@ -209,14 +164,7 @@ std::string File::appendtofile(const std::vector<std::string> &vals) {
   if (vals.size() != 3) {
     throw Exception("Wrong number of parameters for file.append");
   }
-  std::string filename;
-  if (Interpreter::Instance()->isParens(vals[1])) {
-    filename = Interpreter::Instance()->eval(vals[1]);
-  } else if (Interpreter::Instance()->isString(vals[1])) {
-    filename = Interpreter::Instance()->removequotes(vals[1]);
-  } else {
-    filename = Interpreter::Instance()->strtostr(vals[1]);
-  }
+  std::string filename = evalstring(vals[1]);
   std::ofstream out;
   out.open(filename, std::ios::app);
   std::string filecontents;
@@ -236,14 +184,7 @@ std::string File::fileexists(const std::vector<std::string> &vals) {
   if (vals.size() != 2) {
     throw Exception("Wrong number of parameters for file.readfile");
   }
-  std::string filename;
-  if (Interpreter::Instance()->isParens(vals[1])) {
-    filename = Interpreter::Instance()->eval(vals[1]);
-  } else if (Interpreter::Instance()->isString(vals[1])) {
-    filename = Interpreter::Instance()->removequotes(vals[1]);
-  } else {
-    filename = Interpreter::Instance()->strtostr(vals[1]);
-  }
+  std::string filename = evalstring(vals[1]);
   std::ifstream file(filename);
   std::string exists = file.good() ? "true" : "false";
   file.close();
@@ -255,14 +196,7 @@ std::string File::linecount(const std::vector<std::string> &vals) {
     throw Exception("Wrong number of parameters for file.count");
   }
   uint32_t lines = 0;
-  std::string filename;
-  if (Interpreter::Instance()->isParens(vals[1])) {
-    filename = Interpreter::Instance()->eval(vals[1]);
-  } else if (Interpreter::Instance()->isString(vals[1])) {
-    filename = Interpreter::Instance()->removequotes(vals[1]);
-  } else {
-    filename = Interpreter::Instance()->strtostr(vals[1]);
-  }
+  std::string filename = evalstring(vals[1]);
   std::string temp;
   std::ifstream file(filename);
   while (std::getline(file, temp)) {
