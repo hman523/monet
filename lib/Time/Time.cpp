@@ -1,6 +1,10 @@
-//
-// Created by hunter on 8/6/19.
-//
+/**
+ * Stephen Hunter Barbella
+ * GitHub: hman523
+ * Email: shbarbella@gmail.com
+ * Licence: MIT
+ * File: Time.cpp
+ */
 
 #include "Time.h"
 #include "../../include/Exception.h"

@@ -1,6 +1,10 @@
-//
-// Created by hunter on 7/31/19.
-//
+/**
+ * Stephen Hunter Barbella
+ * GitHub: hman523
+ * Email: shbarbella@gmail.com
+ * Licence: MIT
+ * File: Library.h
+ */
 
 #ifndef MONET_LIBRARY_H
 #define MONET_LIBRARY_H

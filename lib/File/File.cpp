@@ -1,6 +1,10 @@
-//
-// Created by hunter on 7/31/19.
-//
+/**
+ * Stephen Hunter Barbella
+ * GitHub: hman523
+ * Email: shbarbella@gmail.com
+ * Licence: MIT
+ * File: File.cpp
+ */
 
 #include "File.h"
 #include "../../include/Exception.h"
