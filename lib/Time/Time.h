@@ -23,6 +23,7 @@ private:
 
   std::string time(const std::vector<std::string> &vals);
   std::string date(const std::vector<std::string> &vals);
+  std::string localdate(const std::vector<std::string> &vals);
   std::string local(const std::vector<std::string> &vals);
   std::string list(const std::vector<std::string> &vals);
   std::string stringtime(const std::vector<std::string> &vals);

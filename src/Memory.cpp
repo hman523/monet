@@ -24,7 +24,7 @@ Memory::Memory() {
        "eq",     "ne",      "gt",   "lt",         "ge",     "le",
        "define", "return",  "end",  "subroutine", "defmem", "load",
        "list",   "cons",    "head", "tail",       "null",   "import"});
-  libraries.insert({strbool("file", false)});
+  libraries.insert({strbool("file", false), strbool("time", false)});
   loadLibraries();
   enterfn();
 }
