@@ -8,6 +8,8 @@
 
 #include "../include/Memory.h"
 #include "../include/Interpreter.h"
+#include "../lib/File/File.h"
+#include "../lib/Time/Time.h"
 #include <cmath>
 #include <iostream>
 #include <sstream>
@@ -384,6 +386,8 @@ void Memory::importLibrary(const std::string &var) {
 void Memory::loadLibraries() {
   Library *file = new File();
   libraryinstances.insert(std::pair<std::string, Library *>("file", file));
+  Library *time = new Time();
+  libraryinstances.insert(std::pair<std::string, Library *>("time", time));
 }
 
 std::string Memory::libraryExec(const std::string &expression,

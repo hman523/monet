@@ -16,7 +16,6 @@
 #include <stack>
 #include <vector>
 
-#include "../lib/File/File.h"
 #include "../lib/Library.h"
 
 typedef boost::multiprecision::rational_adaptor<

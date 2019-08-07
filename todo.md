@@ -24,7 +24,7 @@
 - [x] make an easy way to make libraries
 
 ## Libraries
-- [ ] file system
+- [x] file system
 - [ ] time library
 - [ ] math library
 - [ ] string processing
