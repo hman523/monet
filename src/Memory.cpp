@@ -9,6 +9,7 @@
 #include "../include/Memory.h"
 #include "../include/Interpreter.h"
 #include "../lib/File/File.h"
+#include "../lib/Math/Math.h"
 #include "../lib/Time/Time.h"
 #include <cmath>
 #include <iostream>
@@ -24,7 +25,8 @@ Memory::Memory() {
        "eq",     "ne",      "gt",   "lt",         "ge",     "le",
        "define", "return",  "end",  "subroutine", "defmem", "load",
        "list",   "cons",    "head", "tail",       "null",   "import"});
-  libraries.insert({strbool("file", false), strbool("time", false)});
+  libraries.insert(
+      {strbool("file", false), strbool("time", false), strbool("math", false)});
   loadLibraries();
   enterfn();
 }
@@ -392,6 +394,8 @@ void Memory::loadLibraries() {
   libraryinstances.insert(std::pair<std::string, Library *>("file", file));
   Library *time = new Time();
   libraryinstances.insert(std::pair<std::string, Library *>("time", time));
+  Library *math = new Math();
+  libraryinstances.insert(std::pair<std::string, Library *>("math", math));
 }
 
 std::string Memory::libraryExec(const std::string &expression,

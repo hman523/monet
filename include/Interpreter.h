@@ -122,6 +122,7 @@ private:
   // Friend classes
   friend class File;
   friend class Time;
+  friend class Math;
 
   // memory
   std::vector<std::string> code;

@@ -25,7 +25,7 @@
 
 ## Libraries
 - [x] file system
-- [ ] time library
+- [x] time library
 - [ ] math library
 - [ ] string processing
 - [ ] logging library
