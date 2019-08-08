@@ -26,7 +26,9 @@ private:
   std::string localdate(const std::vector<std::string> &vals);
   std::string local(const std::vector<std::string> &vals);
   std::string list(const std::vector<std::string> &vals);
+  std::string locallist(const std::vector<std::string> &vals);
   std::string stringtime(const std::vector<std::string> &vals);
+  std::string localstringtime(const std::vector<std::string> &vals);
 };
 
 #endif // MONET_TIME_H
