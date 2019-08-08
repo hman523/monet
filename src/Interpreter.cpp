@@ -149,7 +149,13 @@ std::string Interpreter::eval(const std::string &value) {
     return evalBuiltIns(value, words);
   } else if (isLibraryCall(words[0])) {
     std::vector<std::string> libdotfunc = split(words[0], '.');
-    return memory.libraryExec(value, libdotfunc[0]);
+    if (memory.libraryFunctionImported(words[0])) {
+      return memory.libraryExec(value, libdotfunc[0]);
+    } else {
+      throw Exception(
+          "Library call " + words[0] +
+          " is invalid. Is the library imported and does that function exist?");
+    }
   } else if (memory.functioninuse(words[0])) {
     if (memory.isFunction(words[0])) {
       return call(words);

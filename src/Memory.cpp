@@ -377,6 +377,10 @@ bool Memory::librayImported(const std::string &var) const {
   return libraries.at(var);
 }
 
+bool Memory::libraryFunctionImported(const std::string &var) const {
+  return libraryfunctionnamespace.count(var) != 0;
+}
+
 void Memory::importLibrary(const std::string &var) {
   std::set<std::string> fns = libraryinstances.at(var)->getFunctions();
   libraryfunctionnamespace.insert(fns.begin(), fns.end());

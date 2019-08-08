@@ -81,6 +81,7 @@ public:
   // For libraries
   bool libraryExists(const std::string &var) const;
   bool librayImported(const std::string &var) const;
+  bool libraryFunctionImported(const std::string &var) const;
   void importLibrary(const std::string &var);
   std::string libraryExec(const std::string &expression,
                           const std::string &lib);
