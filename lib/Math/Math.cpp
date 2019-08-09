@@ -53,7 +53,6 @@ std::string Math::exp(const std::vector<std::string> &vals) {
   std::vector<num> parameters;
   std::transform(vals.begin() + 1, vals.end(), std::back_inserter(parameters),
                  [&](std::string x) -> num { return toNum(x); });
-
   return "TODO MAKE EXP FUNCTION WORK";
 }
 
@@ -75,4 +74,5 @@ std::string Math::sqrt(const std::vector<std::string> &vals) {
   if (!isNum(vals[1])) {
     throw Exception("Second parameter of " + vals[0] + " must be a num");
   }
+  return "TODO make the sqrt function work";
 }
