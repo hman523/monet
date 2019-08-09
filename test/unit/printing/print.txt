@@ -1,4 +1,3 @@
-Welcome to the Monet Interpreter
 
 
 Hello World

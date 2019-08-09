@@ -48,6 +48,7 @@ private:
 
   int strToInt(const std::string &val) const;
   num strToNum(const std::string &val) const;
+  num decimalToFrac(const std::string &val) const;
   bool strtobool(const std::string &val) const;
   std::string strtostr(const std::string &str) const;
   std::string strtolist(const std::string &val) const;

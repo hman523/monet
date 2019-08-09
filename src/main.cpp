@@ -18,7 +18,6 @@
  * @return 0 on success, else on failure
  */
 int main(int argc, char *argv[]) {
-  std::cout << "Welcome to the Monet Interpreter" << std::endl;
   if (argc > 2) {
     std::cerr << "Need a file to interpret or no command line parameter to "
                  "enter the REPL"
@@ -27,6 +26,7 @@ int main(int argc, char *argv[]) {
   }
   try {
     if (argc == 1) {
+      std::cout << "Welcome to the Monet Interpreter" << std::endl;
       Interpreter *i = Interpreter::Instance();
       i->repl();
     } else if (argc == 2) {

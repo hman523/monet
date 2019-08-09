@@ -31,6 +31,8 @@ private:
   std::string numToStr(const num &val) const;
 
   std::string exp(const std::vector<std::string> &vals);
+  std::string sqr(const std::vector<std::string> &vals);
+  std::string sqrt(const std::vector<std::string> &vals);
 };
 
 #endif // MONET_MATH_H

@@ -496,6 +496,17 @@ int Interpreter::strToInt(const std::string &num) const {
   return val;
 }
 
+num Interpreter::decimalToFrac(const std::string &val) const {
+  std::vector<std::string> wholepart = split(val, '.');
+  if (wholepart.size() != 2) {
+    throw Exception(
+        "Number improperly formatted. More than one decimal place detected");
+  }
+  num divisor = std::pow(10, wholepart[1].length());
+  num part(wholepart[1]);
+  return num(wholepart[0]) + (part / divisor);
+}
+
 /**
  * strtonum
  * @param num you want to convert
@@ -504,6 +515,9 @@ int Interpreter::strToInt(const std::string &num) const {
 num Interpreter::strToNum(const std::string &val) const {
   if (memory.numexists(val)) {
     return memory.getnum(val);
+  }
+  if (val.find('.') != std::string::npos) {
+    return decimalToFrac(val);
   }
   std::stringstream ss(val);
   num value;
@@ -539,7 +553,7 @@ std::string Interpreter::strtostr(const std::string &var) const {
   } else if (isString(var)) {
     return removequotes(var);
   } else {
-    return var;
+    throw Exception("String " + var + " does not exist");
   }
 }
 
@@ -613,8 +627,14 @@ bool Interpreter::isNumber(const std::string &value) const {
     return false;
   }
   if (value[0] == '-' || isdigit(value[0])) {
+    bool hasSeenDec = false;
     for (uint32_t x = 0; x < value.length(); x++) {
-      if (!isdigit(value[x])) {
+      if (value[x] == '.') {
+        if (hasSeenDec) {
+          return false;
+        }
+        hasSeenDec = true;
+      } else if (!isdigit(value[x])) {
         return false;
       }
     }
