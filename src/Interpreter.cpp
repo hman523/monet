@@ -626,10 +626,13 @@ bool Interpreter::isNumber(const std::string &value) const {
   if (value.length() == 0) {
     return false;
   }
+  if (value == "-") {
+    return false;
+  }
   if (value[0] == '-' || isdigit(value[0])) {
     bool hasSeenDec = false;
     bool hasSeenDash = false;
-    for (uint32_t x = 0; x < value.length(); x++) {
+    for (uint32_t x = 1; x < value.length(); x++) {
       if (value[x] == '.') {
         if (hasSeenDec) {
           return false;

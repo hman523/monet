@@ -42,7 +42,7 @@ std::string Math::numToStr(const num &val) const {
 }
 
 std::string Math::exp(const std::vector<std::string> &vals) {
-  if (vals.size() < 3) {
+  if (vals.size() != 3) {
     throw Exception("Wrong number of parameters for " + vals[0]);
   }
   bool allNums = std::all_of(vals.begin() + 1, vals.end(),
@@ -50,10 +50,15 @@ std::string Math::exp(const std::vector<std::string> &vals) {
   if (!allNums) {
     throw Exception("Parameters not of type num in " + vals[0]);
   }
-  std::vector<num> parameters;
-  std::transform(vals.begin() + 1, vals.end(), std::back_inserter(parameters),
-                 [&](std::string x) -> num { return toNum(x); });
-  return "TODO MAKE EXP FUNCTION WORK";
+  num value = toNum(vals[1]);
+  int power = Interpreter::Instance()->strToInt(vals[2]);
+  if (power < 0) {
+    throw Exception(
+        "Exponentiation to a negative power is not currently supported");
+  }
+  bmp::cpp_int numerator = bmp::pow(bmp::numerator(value), power);
+  bmp::cpp_int denominator = bmp::pow(bmp::denominator(value), power);
+  return numToStr(num(numerator) / num(denominator));
 }
 
 std::string Math::sqr(const std::vector<std::string> &vals) {
