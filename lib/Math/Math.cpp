@@ -61,10 +61,12 @@ std::string Math::sqr(const std::vector<std::string> &vals) {
     throw Exception("Wrong number of parameters for " + vals[0]);
   }
   if (!isNum(vals[1])) {
-    throw Exception("Second parameter of " + vals[0] + " must be a num");
+    throw Exception("Parameter of " + vals[0] + " must be a num");
   }
   num value = toNum(vals[1]);
-  return numToStr(num(bmp::pow(bmp::cpp_int(value), 2)));
+  bmp::cpp_int numerator = bmp::pow(bmp::numerator(value), 2);
+  bmp::cpp_int denominator = bmp::pow(bmp::denominator(value), 2);
+  return numToStr(num(numerator) / num(denominator));
 }
 
 std::string Math::sqrt(const std::vector<std::string> &vals) {
@@ -72,7 +74,10 @@ std::string Math::sqrt(const std::vector<std::string> &vals) {
     throw Exception("Wrong number of parameters for " + vals[0]);
   }
   if (!isNum(vals[1])) {
-    throw Exception("Second parameter of " + vals[0] + " must be a num");
+    throw Exception("Parameter of " + vals[0] + " must be a num");
   }
-  return "TODO make the sqrt function work";
+  num value = toNum(vals[1]);
+  bmp::cpp_int numerator = bmp::sqrt(bmp::numerator(value));
+  bmp::cpp_int denominator = bmp::sqrt(bmp::denominator(value));
+  return numToStr(num(numerator) / num(denominator));
 }
