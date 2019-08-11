@@ -1,0 +1,42 @@
+Functions for file library.
+To use, call the method "import "time""
+
+Function: time.time
+Parameters: none
+Return: the current unix time (seconds since January 1st 1970 UTC)
+Side Effects: none
+
+Function: time.date
+Parameters: none
+Return: the current date (in UTC)
+Side Effects: none
+
+Function: time.list
+Parameters: none
+Return: the current utc time as a list in the form [year, month, day, hour, minute, second]
+Side Effects: none
+
+Function: time.string
+Parameters: none
+Return: the current UTC time formatted nicely
+Side Effects: none
+
+Function: time.local
+Parameters: none
+Return: the current local time
+Side Effects: none
+
+Function: time.localdate
+Parameters: none
+Return: the current date in the current timezone
+Side Effects: none
+
+Function: time.locallist
+Parameters: none
+Return: the current local time as a list in the form [year, month, day, hour, minute, second]
+Side Effects: none
+
+Function: time.localstring
+Parameters: none
+Return: the current local time formatted nicely
+Side Effects: none

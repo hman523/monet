@@ -1,0 +1,23 @@
+Functions for file library.
+To use, call the method "import "math""
+
+The math library works by leveraging the power of Boost's multiprecision library.
+Approximations are made on functions that return irrational numbers to make them rational.
+
+Function: math.sqr
+Parameters: One number parameter
+Return: the number squared
+Side Effects: none
+Approximation: No
+
+Function: math.sqrt
+Parameters: One number parameter
+Return: the square root of the number
+Side Effects: none
+Approximation: Yes
+
+Function: math.exp
+Parameters: Two number parameters, the second must be an integer
+Return: the first parameter to the power of the second
+Side Effects: none
+Approximation: Not now, if this function in the future allows for rational exponents there will be some for those
