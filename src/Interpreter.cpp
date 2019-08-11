@@ -377,34 +377,54 @@ std::vector<std::string> Interpreter::split(const std::string &str,
   std::vector<std::string> returnval;
   std::string temp = "";
   bool instr = false;
+  bool escaped = false;
   int inparens = 0;
   int inlist = 0;
   for (uint32_t i = 0; i < str.length(); ++i) {
-    if (str[i] == '(' && !instr) {
+    char curr = str[i];
+    if (curr == '(' && !instr) {
       ++inparens;
     }
-    if (str[i] == ')' && !instr) {
+    if (curr == ')' && !instr) {
       --inparens;
     }
-    if (str[i] == '[' && !instr) {
+    if (curr == '[' && !instr) {
       ++inlist;
     }
-    if (str[i] == ']' && !instr) {
+    if (curr == ']' && !instr) {
       --inlist;
     }
-    if (str[i] == '"') {
+    if (curr == '"' && !escaped) {
       instr = !instr;
     }
-    if (str[i] == delim && temp != "" && !instr && inparens == 0 &&
-        inlist == 0) {
+    if (instr && escaped) {
+      switch (curr) {
+      case 'n':
+        curr = '\n';
+        break;
+      case 't':
+        curr = '\t';
+        break;
+      }
+    }
+
+    // Check for the escape sequence
+    if (curr == '\\' && !escaped) {
+      escaped = true;
+      continue;
+    } else {
+      escaped = false;
+    }
+
+    if (curr == delim && temp != "" && !instr && inparens == 0 && inlist == 0) {
       returnval.push_back(temp);
       temp = "";
     } else if (inparens != 0 || inlist != 0) {
-      temp += str[i];
+      temp += curr;
     } else if (instr) {
-      temp += str[i];
+      temp += curr;
     } else {
-      temp += tolower(str[i]);
+      temp += tolower(curr);
     }
   }
   if (temp != "") {
