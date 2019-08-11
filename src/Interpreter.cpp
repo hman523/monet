@@ -405,6 +405,21 @@ std::vector<std::string> Interpreter::split(const std::string &str,
       case 't':
         curr = '\t';
         break;
+      case 'a':
+        curr = '\a';
+        break;
+      case 'b':
+        curr = '\b';
+        break;
+      case 'v':
+        curr = '\v';
+        break;
+      case 'r':
+        curr = '\r';
+        break;
+      case 'f':
+        curr = '\f';
+        break;
       }
     }
 
