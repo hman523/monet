@@ -53,12 +53,16 @@ std::string Math::exp(const std::vector<std::string> &vals) {
   num value = toNum(vals[1]);
   int power = Interpreter::Instance()->strToInt(vals[2]);
   if (power < 0) {
-    throw Exception(
-        "Exponentiation to a negative power is not currently supported");
+    // For negatives, just swap the numerator and the denominator
+    power *= -1;
+    bmp::cpp_int numerator = bmp::pow(bmp::numerator(value), power);
+    bmp::cpp_int denominator = bmp::pow(bmp::denominator(value), power);
+    return numToStr(num(denominator) / num(numerator));
+  } else {
+    bmp::cpp_int numerator = bmp::pow(bmp::numerator(value), power);
+    bmp::cpp_int denominator = bmp::pow(bmp::denominator(value), power);
+    return numToStr(num(numerator) / num(denominator));
   }
-  bmp::cpp_int numerator = bmp::pow(bmp::numerator(value), power);
-  bmp::cpp_int denominator = bmp::pow(bmp::denominator(value), power);
-  return numToStr(num(numerator) / num(denominator));
 }
 
 std::string Math::sqr(const std::vector<std::string> &vals) {
