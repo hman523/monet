@@ -10,6 +10,7 @@
 #define MONET_FUNCTIONAL_H
 
 #include "../Library.h"
+#include <vector>
 
 class Functional : public Library {
 public:
@@ -19,6 +20,11 @@ public:
 
 private:
   std::set<std::string> functions;
+  bool isFunction(const std::string &fn);
+  bool isList(const std::string &lst);
+  std::string head(const std::string &lst);
+  std::string tail(const std::string &lst);
+  std::string strToList(const std::string &lst);
 
   std::string map(const std::vector<std::string> &expression);
   std::string apply(const std::vector<std::string> &expression);
