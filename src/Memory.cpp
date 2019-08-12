@@ -9,6 +9,7 @@
 #include "../include/Memory.h"
 #include "../include/Interpreter.h"
 #include "../lib/File/File.h"
+#include "../lib/Functional/Functional.h"
 #include "../lib/Math/Math.h"
 #include "../lib/Time/Time.h"
 #include <cmath>
@@ -17,16 +18,16 @@
 
 typedef std::pair<std::string, bool> strbool;
 
-Memory::Memory() {
-  reservedwords.insert(
-      {"print",  "println", "quit", "boolean",    "num",    "string",
-       "read",   "add",     "sub",  "mul",        "div",    "and",
-       "or",     "nand",    "nor",  "xor",        "xnor",   "if",
-       "eq",     "ne",      "gt",   "lt",         "ge",     "le",
-       "define", "return",  "end",  "subroutine", "defmem", "load",
-       "list",   "cons",    "head", "tail",       "null",   "import"});
-  libraries.insert(
-      {strbool("file", false), strbool("time", false), strbool("math", false)});
+Memory::Memory()
+    : reservedwords(
+          {"print",  "println", "quit", "boolean",    "num",    "string",
+           "read",   "add",     "sub",  "mul",        "div",    "and",
+           "or",     "nand",    "nor",  "xor",        "xnor",   "if",
+           "eq",     "ne",      "gt",   "lt",         "ge",     "le",
+           "define", "return",  "end",  "subroutine", "defmem", "load",
+           "list",   "cons",    "head", "tail",       "null",   "import"}) {
+  libraries.insert({strbool("file", false), strbool("time", false),
+                    strbool("math", false), strbool("f", false)});
   loadLibraries();
   enterfn();
 }
@@ -396,6 +397,8 @@ void Memory::loadLibraries() {
   libraryinstances.insert(std::pair<std::string, Library *>("time", time));
   Library *math = new Math();
   libraryinstances.insert(std::pair<std::string, Library *>("math", math));
+  Library *functional = new Functional();
+  libraryinstances.insert(std::pair<std::string, Library *>("f", functional));
 }
 
 std::string Memory::libraryExec(const std::string &expression,
