@@ -28,7 +28,7 @@ std::string Functional::eval(const std::string &expression) {
 }
 
 bool Functional::isFunction(const std::string &fn) {
-  return Interpreter::Instance()->memory.isFunction(fn);
+  return Interpreter::Instance()->memory.functioninuse(fn);
 }
 
 bool Functional::isList(const std::string &lst) {
@@ -81,4 +81,22 @@ std::string Functional::reduce(const std::vector<std::string> &vals) {
   if (vals.size() != 4) {
     throw Exception("Wrong number of parameters for " + vals[0]);
   }
+  if (!isFunction(vals[1])) {
+    throw Exception("First parameter in " + vals[0] + " is not a function");
+  }
+  if (!isList(vals[2])) {
+    throw Exception("Second parameter in " + vals[0] + " is not a list");
+  }
+  // Once type checking is better check that initial value is correct
+  std::string lst = strToList(vals[2]);
+  std::string returnval = vals[3];
+  std::string listhead = head(lst);
+  std::string listtail = tail(lst);
+  while (listhead != "") {
+    returnval = Interpreter::Instance()->eval(vals[1] + " " + returnval + " " +
+                                              listhead);
+    listhead = head(listtail);
+    listtail = tail(listtail);
+  }
+  return returnval;
 }
