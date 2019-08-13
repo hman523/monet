@@ -63,8 +63,7 @@ std::string Functional::map(const std::vector<std::string> &vals) {
   std::string listhead = head(lst);
   std::string listtail = tail(lst);
   while (listhead != "") {
-    returnlst +=
-        (Interpreter::Instance()->eval(vals[1] + " " + listhead) + " ");
+    returnlst += Interpreter::Instance()->eval(vals[1] + " " + listhead) + " ";
     listhead = head(listtail);
     listtail = tail(listtail);
   }
@@ -75,6 +74,28 @@ std::string Functional::apply(const std::vector<std::string> &vals) {
   if (vals.size() != 3) {
     throw Exception("Wrong number of parameters for " + vals[0]);
   }
+  if (!isList(vals[1])) {
+    throw Exception("First parameter in " + vals[0] + " is not a list");
+  }
+  if (!isList(vals[2])) {
+    throw Exception("Second parameter in " + vals[0] + " is not a list");
+  }
+  // Once type checking is better check that initial value is correct
+  std::string fns = strToList(vals[1]);
+  std::string lst = strToList(vals[2]);
+  std::string returnlst = "[";
+  std::string fnhead = head(fns);
+  std::string fntail = tail(fns);
+  std::string listhead = head(lst);
+  std::string listtail = tail(lst);
+  while (listhead != "") {
+    returnlst += Interpreter::Instance()->eval(fnhead + " " + listhead) + " ";
+    fnhead = head(fntail);
+    fntail = tail(fntail);
+    listhead = head(listtail);
+    listtail = tail(listtail);
+  }
+  return returnlst.substr(0, returnlst.length() - 1) + "]";
 }
 
 std::string Functional::reduce(const std::vector<std::string> &vals) {
