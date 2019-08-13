@@ -1,0 +1,18 @@
+The Functional Library
+Since this library is essential to the language, it is easier to import than most other libraries.
+To import, enter "import "f""
+
+Function: f.map
+Parameters: A function and a list
+Return: a list that is the function applied to each element
+Side Effects: Whatever the side effects of the original function are
+
+Function: f.apply
+Parameters: A list of functions and a list
+Return: a list that is each function applied to each corresponding element
+Side Effects: Whatever the side effects of the original functions are
+
+Function: f.reduce
+Parameters: A function, a list, and an initial value
+Return: The following algorithm is applied: (fn (fn initial (head list)) (head (tail list))) etc
+Side Effects: Whatever the side effects of the original function are
