@@ -1,0 +1,7 @@
+//This file is to show an example for the "load" function
+//I used this to test if things got called and if functions were added
+
+println "Hello from test1.txt"
+define num fact num x
+return (if (eq 0 x) 1 (mul (fact (sub x 1)) x))
+end
