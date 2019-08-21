@@ -125,6 +125,7 @@ private:
   friend class Time;
   friend class Math;
   friend class Functional;
+  friend class List;
 
   // memory
   std::vector<std::string> code;

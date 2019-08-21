@@ -26,17 +26,17 @@
 ## Libraries
 - [x] file system
 - [x] time library
-- [ ] math library
+- [x] math library (Still a lot to add but a good start)
+- [ ] List library
 - [ ] string processing
 - [ ] logging library
 - [ ] data structure library
-- [ ] functional library (map, reduce, filter)
+- [x] functional library (map, reduce)
 - [ ] Regex library
 - [ ] Random Library
 - [ ] shell library
 - [ ] os library (get system info)
 - [ ] concurrency library (do together, map together)
-- [ ] Euler library (library for solving project Euler problems)
 - [ ] networking library 
 - [ ] a REST library
 - [ ] audio library

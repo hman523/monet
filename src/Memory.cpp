@@ -10,6 +10,7 @@
 #include "../include/Interpreter.h"
 #include "../lib/File/File.h"
 #include "../lib/Functional/Functional.h"
+#include "../lib/List/List.h"
 #include "../lib/Math/Math.h"
 #include "../lib/Time/Time.h"
 #include <cmath>
@@ -26,8 +27,6 @@ Memory::Memory()
            "eq",     "ne",      "gt",   "lt",         "ge",     "le",
            "define", "return",  "end",  "subroutine", "defmem", "load",
            "list",   "cons",    "head", "tail",       "null",   "import"}) {
-  libraries.insert({strbool("file", false), strbool("time", false),
-                    strbool("math", false), strbool("f", false)});
   loadLibraries();
   enterfn();
 }
@@ -399,6 +398,11 @@ void Memory::loadLibraries() {
   libraryinstances.insert(std::pair<std::string, Library *>("math", math));
   Library *functional = new Functional();
   libraryinstances.insert(std::pair<std::string, Library *>("f", functional));
+  Library *list = new List();
+  libraryinstances.insert(std::pair<std::string, Library *>("list", list));
+  libraries.insert({strbool("file", false), strbool("time", false),
+                    strbool("math", false), strbool("f", false),
+                    strbool("list", false)});
 }
 
 std::string Memory::libraryExec(const std::string &expression,
