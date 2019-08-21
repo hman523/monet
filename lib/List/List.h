@@ -20,11 +20,14 @@ public:
 
 private:
   std::set<std::string> functions;
-  std::vector<std::string> split(const std::string &text,
-                                 const std::string &delims);
   std::string evalstring(const std::string &val);
+  std::string evallist(const std::string &val);
 
   std::string nthTail(const std::vector<std::string> &vals);
+  std::string get(const std::vector<std::string> &vals);
+  std::string sort(const std::vector<std::string> &vals);
+  std::string filter(const std::vector<std::string> &vals);
+  std::string length(const std::vector<std::string> &vals);
 };
 
 #endif // MONET_LIST_H
