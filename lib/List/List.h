@@ -9,6 +9,7 @@
 #ifndef MONET_LIST_H
 #define MONET_LIST_H
 
+#include "../../include/Memory.h"
 #include "../Library.h"
 #include <vector>
 
@@ -20,13 +21,15 @@ public:
 
 private:
   std::set<std::string> functions;
+  num evalnum(const std::string &val);
   std::string evalstring(const std::string &val);
   std::string evallist(const std::string &val);
-
+  std::string head(const std::string &lst);
+  std::string tail(const std::string &lst);
+  bool isList(const std::string &lst);
+  bool isNum(const std::string &val) const;
   std::string nthTail(const std::vector<std::string> &vals);
   std::string get(const std::vector<std::string> &vals);
-  std::string sort(const std::vector<std::string> &vals);
-  std::string filter(const std::vector<std::string> &vals);
   std::string length(const std::vector<std::string> &vals);
 };
 

@@ -23,10 +23,6 @@ std::string List::eval(const std::string &expression) {
     return nthTail(words);
   } else if (words[0] == "list.get") {
     return get(words);
-  } else if (words[0] == "list.sort") {
-    return sort(words);
-  } else if (words[0] == "list.filter") {
-    return filter(words);
   } else if (words[0] == "list.length") {
     return length(words);
   }
@@ -53,22 +49,82 @@ std::string List::evallist(const std::string &val) {
   }
 }
 
+num List::evalnum(const std::string &val) {
+  return Interpreter::Instance()->strToNum(val);
+}
+
+std::string List::head(const std::string &lst) {
+  return Interpreter::Instance()->listSplit(lst).first;
+}
+
+std::string List::tail(const std::string &lst) {
+  return Interpreter::Instance()->listSplit(lst).second;
+}
+
+bool List::isList(const std::string &lst) {
+  return Interpreter::Instance()->memory.listexists(lst) ||
+         Interpreter::Instance()->isList(lst);
+}
+
+bool List::isNum(const std::string &val) const {
+  return Interpreter::Instance()->isNumber(val);
+}
+
 std::string List::nthTail(const std::vector<std::string> &vals) {
-  throw Exception("Fatal implementation error in List in List.cpp");
+  if (vals.size() != 3) {
+    throw Exception("Wrong number of parameters for list.nthtail");
+  }
+  if (!isNum(vals[1])) {
+    throw Exception("Wrong type in first parameter of list.nthtail");
+  }
+  if (!isList(vals[2])) {
+    throw Exception("Wrong type in second parameter of list.nthtail");
+  }
+  throw Exception("nth Tail is not implemented yet");
+  /**std::string lst = evallist(vals[2]);
+  uint32_t n;
+  std::string listhead = head(lst);
+  std::string listtail = tail(lst);
+  uint32_t index = 0;
+  while (index < n) {
+    listhead = head(listtail);
+    listtail = tail(listtail);
+  }
+  return listtail;**/
 }
 
 std::string List::get(const std::vector<std::string> &vals) {
-  throw Exception("Fatal implementation error in List in List.cpp");
-}
-
-std::string List::sort(const std::vector<std::string> &vals) {
-  throw Exception("Fatal implementation error in List in List.cpp");
-}
-
-std::string List::filter(const std::vector<std::string> &vals) {
-  throw Exception("Fatal implementation error in List in List.cpp");
+  if (vals.size() != 3) {
+    throw Exception("Wrong number of parameters for list.get");
+  }
+  if (!isList(vals[1])) {
+    throw Exception("Wrong type in first parameter of list.get");
+  }
+  if (!isNum(vals[2])) {
+    throw Exception("Wrong type in second parameter of list.get");
+  }
+  std::string lst = evallist(vals[1]);
+  uint32_t n = 0;
+  std::string listhead = head(lst);
+  std::string listtail = tail(lst);
+  num index = evalnum(vals[2]);
+  while (index > n) {
+    listhead = head(listtail);
+    listtail = tail(listtail);
+    ++n;
+  }
+  return listhead;
 }
 
 std::string List::length(const std::vector<std::string> &vals) {
+  if (vals.size() != 3) {
+    throw Exception("Wrong number of parameters for list.length");
+  }
+  if (!isList(vals[1])) {
+    throw Exception("Wrong type in first parameter of list.length");
+  }
+  if (!isNum(vals[2])) {
+    throw Exception("Wrong type in second parameter of list.length");
+  }
   throw Exception("Fatal implementation error in List in List.cpp");
 }
