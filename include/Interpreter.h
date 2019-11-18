@@ -126,6 +126,9 @@ private:
   friend class Math;
   friend class Functional;
   friend class List;
+  friend class HTTP;
+  friend class TCP;
+  friend class UDP;
 
   // memory
   std::vector<std::string> code;

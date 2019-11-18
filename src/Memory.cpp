@@ -10,9 +10,12 @@
 #include "../include/Interpreter.h"
 #include "../lib/File/File.h"
 #include "../lib/Functional/Functional.h"
+#include "../lib/HTTP/HTTP.h"
 #include "../lib/List/List.h"
 #include "../lib/Math/Math.h"
+#include "../lib/TCP/TCP.h"
 #include "../lib/Time/Time.h"
+#include "../lib/UDP/UDP.h"
 #include <cmath>
 #include <iostream>
 #include <sstream>
@@ -400,9 +403,17 @@ void Memory::loadLibraries() {
   libraryinstances.insert(std::pair<std::string, Library *>("f", functional));
   Library *list = new List();
   libraryinstances.insert(std::pair<std::string, Library *>("list", list));
+  Library *http = new HTTP();
+  libraryinstances.insert(std::pair<std::string, Library *>("http", http));
+  Library *tcp = new TCP();
+  libraryinstances.insert(std::pair<std::string, Library *>("tcp", tcp));
+  Library *udp = new UDP();
+  libraryinstances.insert(std::pair<std::string, Library *>("udp", udp));
+
   libraries.insert({strbool("file", false), strbool("time", false),
                     strbool("math", false), strbool("f", false),
-                    strbool("list", false)});
+                    strbool("list", false), strbool("http", false),
+                    strbool("tcp", false), strbool("udp", false)});
 }
 
 std::string Memory::libraryExec(const std::string &expression,
