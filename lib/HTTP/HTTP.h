@@ -23,6 +23,10 @@ public:
 private:
   std::set<std::string> functions;
   std::string get(const std::vector<std::string> &vals);
+  std::string head(const std::vector<std::string> &vals);
+  std::string put(const std::vector<std::string> &vals);
+  std::string post(const std::vector<std::string> &vals);
+  std::string del(const std::vector<std::string> &vals);
 };
 
 #endif // MONET_HTTP_H

@@ -22,6 +22,8 @@ public:
 
 private:
   std::set<std::string> functions;
+  std::string send(const std::vector<std::string> &expression);
+  std::string rec(const std::vector<std::string> &expression);
 };
 
 #endif // MONET_TCP_H
