@@ -1,6 +1,10 @@
-//
-// Created by hunter on 11/18/19.
-//
+/**
+ * Stephen Hunter Barbella
+ * GitHub: hman523
+ * Email: shbarbella@gmail.com
+ * Licence: MIT
+ * File: UDP.cpp
+ */
 
 #include "UDP.h"
 #include "../../include/Interpreter.h"

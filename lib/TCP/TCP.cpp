@@ -1,6 +1,10 @@
-//
-// Created by hunter on 11/18/19.
-//
+/**
+ * Stephen Hunter Barbella
+ * GitHub: hman523
+ * Email: shbarbella@gmail.com
+ * Licence: MIT
+ * File: TCP.cpp
+ */
 
 #include "TCP.h"
 #include "../../include/Interpreter.h"

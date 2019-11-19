@@ -1,6 +1,10 @@
-//
-// Created by hunter on 11/18/19.
-//
+/**
+ * Stephen Hunter Barbella
+ * GitHub: hman523
+ * Email: shbarbella@gmail.com
+ * Licence: MIT
+ * File: UDP.h
+ */
 
 #ifndef MONET_UDP_H
 #define MONET_UDP_H
