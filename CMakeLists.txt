@@ -7,8 +7,6 @@ set(CMAKE_CXX_FLAGS "-Wall -Wextra -Werror=format-security -Werror=implicit-func
 
 find_package(Boost REQUIRED system)
 
-#include_directories(${Boost_INCLUDE_DIR})
-
 add_executable(Monet src/main.cpp src/Interpreter.cpp include/Interpreter.h
         src/Memory.cpp include/Memory.h src/Exception.cpp include/Exception.h lib/Library.h
         lib/File/File.cpp lib/File/File.h lib/Time/Time.cpp lib/Time/Time.h lib/Math/Math.cpp

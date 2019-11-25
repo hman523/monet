@@ -8,6 +8,7 @@
 
 #include "UDP.h"
 #include "../../include/Interpreter.h"
+#include <boost/asio.hpp>
 
 UDP::UDP() : functions({"udp.send", "udp.receive"}) {}
 
