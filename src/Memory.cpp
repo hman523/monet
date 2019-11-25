@@ -7,7 +7,6 @@
  */
 
 #include "../include/Memory.h"
-#include "../include/Interpreter.h"
 #include "../lib/File/File.h"
 #include "../lib/Functional/Functional.h"
 #include "../lib/HTTP/HTTP.h"
@@ -16,9 +15,7 @@
 #include "../lib/TCP/TCP.h"
 #include "../lib/Time/Time.h"
 #include "../lib/UDP/UDP.h"
-#include <cmath>
 #include <iostream>
-#include <sstream>
 
 typedef std::pair<std::string, bool> strbool;
 
