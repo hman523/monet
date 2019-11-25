@@ -13,7 +13,7 @@
 
 namespace bmp = boost::multiprecision;
 
-Math::Math() { functions.insert({"math.exp", "math.sqr", "math.sqrt"}); }
+Math::Math() : functions({"math.exp", "math.sqr", "math.sqrt"}) {}
 
 std::set<std::string> Math::getFunctions() { return functions; }
 

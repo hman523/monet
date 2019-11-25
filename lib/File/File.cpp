@@ -13,11 +13,10 @@
 #include <fstream>
 #include <vector>
 
-File::File() {
-  functions.insert({"file.read", "file.write", "file.exists", "file.getline",
-                    "file.words", "file.split", "file.last", "file.append",
-                    "file.count"});
-}
+File::File()
+    : functions({"file.read", "file.write", "file.exists", "file.getline",
+                 "file.words", "file.split", "file.last", "file.append",
+                 "file.count"}) {}
 
 std::set<std::string> File::getFunctions() { return functions; }
 

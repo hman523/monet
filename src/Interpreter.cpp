@@ -43,7 +43,7 @@ Interpreter::Interpreter() {}
  * Constructor
  * @param filename - the file you want to interpret
  */
-Interpreter::Interpreter(std::string filename) {
+Interpreter::Interpreter(std::string filename) : memory(), code() {
   code = loadCodeFromFile(filename);
 }
 

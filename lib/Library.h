@@ -15,6 +15,7 @@ class Library {
 public:
   virtual std::set<std::string> getFunctions() = 0;
   virtual std::string eval(const std::string &expression) = 0;
+  virtual ~Library() = default;
 };
 
 #endif // MONET_LIBRARY_H

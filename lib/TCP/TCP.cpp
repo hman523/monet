@@ -9,7 +9,7 @@
 #include "TCP.h"
 #include "../../include/Interpreter.h"
 
-TCP::TCP() { functions.insert({"tcp.send", "tcp.receive"}); }
+TCP::TCP() : functions({"tcp.send", "tcp.receive"}) {}
 
 std::set<std::string> TCP::getFunctions() { return functions; }
 

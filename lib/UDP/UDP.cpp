@@ -9,7 +9,7 @@
 #include "UDP.h"
 #include "../../include/Interpreter.h"
 
-UDP::UDP() { functions.insert({"udp.send", "udp.receive"}); }
+UDP::UDP() : functions({"udp.send", "udp.receive"}) {}
 
 std::set<std::string> UDP::getFunctions() { return functions; }
 

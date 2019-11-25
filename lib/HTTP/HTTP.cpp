@@ -9,10 +9,9 @@
 #include "HTTP.h"
 #include "../../include/Interpreter.h"
 
-HTTP::HTTP() {
-  functions.insert(
-      {"http.get", "http.post", "http.put", "http.head", "http.delete"});
-}
+HTTP::HTTP()
+    : functions(
+          {"http.get", "http.post", "http.put", "http.head", "http.delete"}) {}
 
 std::set<std::string> HTTP::getFunctions() { return functions; }
 
