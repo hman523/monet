@@ -7,7 +7,6 @@
  */
 
 #include "HTTP.h"
-#include "../../include/Exception.h"
 #include "../../include/Interpreter.h"
 
 HTTP::HTTP() {
