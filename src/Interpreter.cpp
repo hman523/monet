@@ -37,13 +37,13 @@ Interpreter *Interpreter::Instance(std::string filename) {
  * Default constructor
  * Used when using the REPL
  */
-Interpreter::Interpreter() {}
+Interpreter::Interpreter() : code(), memory() {}
 
 /**
  * Constructor
  * @param filename - the file you want to interpret
  */
-Interpreter::Interpreter(std::string filename) : memory(), code() {
+Interpreter::Interpreter(std::string filename) : code(), memory() {
   code = loadCodeFromFile(filename);
 }
 

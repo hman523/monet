@@ -10,10 +10,9 @@
 #include "../../include/Exception.h"
 #include "../../include/Interpreter.h"
 
-List::List() {
-  functions.insert(
-      {"list.nthtail", "list.get", "list.sort", "list.filter", "list.length"});
-}
+List::List()
+    : functions({"list.nthtail", "list.get", "list.sort", "list.filter",
+                 "list.length"}) {}
 
 std::set<std::string> List::getFunctions() { return functions; }
 

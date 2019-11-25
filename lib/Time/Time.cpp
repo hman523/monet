@@ -11,11 +11,10 @@
 #include "../../include/Interpreter.h"
 #include <ctime>
 
-Time::Time() {
-  functions.insert({"time.time", "time.date", "time.local", "time.localdate",
-                    "time.list", "time.string", "time.localstring",
-                    "time.locallist"});
-}
+Time::Time()
+    : functions({"time.time", "time.date", "time.local", "time.localdate",
+                 "time.list", "time.string", "time.localstring",
+                 "time.locallist"}) {}
 
 std::set<std::string> Time::getFunctions() { return functions; }
 

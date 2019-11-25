@@ -20,13 +20,18 @@
 typedef std::pair<std::string, bool> strbool;
 
 Memory::Memory()
-    : reservedwords(
+    : booleans(), nums(), strings(), lists(), functions(), subroutines(),
+      mems(), memvalues(),
+      reservedwords(
           {"print",  "println", "quit", "boolean",    "num",    "string",
            "read",   "add",     "sub",  "mul",        "div",    "and",
            "or",     "nand",    "nor",  "xor",        "xnor",   "if",
            "eq",     "ne",      "gt",   "lt",         "ge",     "le",
            "define", "return",  "end",  "subroutine", "defmem", "load",
-           "list",   "cons",    "head", "tail",       "null",   "import"}) {
+           "list",   "cons",    "head", "tail",       "null",   "import"}),
+      functionnamespace(), subroutinenamespace(), memnamespace(),
+      libraryfunctionnamespace(), libraries(), libraryinstances(),
+      variabletypes(), functionbindings() {
   loadLibraries();
   enterfn();
 }
