@@ -8,6 +8,7 @@
 
 #include "TCP.h"
 #include "../../include/Interpreter.h"
+#include <boost/asio.hpp>
 
 TCP::TCP() : functions({"tcp.send", "tcp.receive"}) {}
 
