@@ -6,6 +6,8 @@ set(CMAKE_CXX_FLAGS "-Wall -Wextra -Werror=format-security -Werror=implicit-func
 -Wpedantic -Weffc++ -fexceptions -O2")
 
 find_package(Boost REQUIRED system)
+set(cpprestsdk_DIR /usr/lib/${CMAKE_LIBRARY_ARCHITECTURE}/cmake/)
+find_package(cpprestsdk REQUIRED)
 
 add_executable(Monet src/main.cpp src/Interpreter.cpp include/Interpreter.h
         src/Memory.cpp include/Memory.h src/Exception.cpp include/Exception.h lib/Library.h
@@ -14,4 +16,4 @@ add_executable(Monet src/main.cpp src/Interpreter.cpp include/Interpreter.h
         lib/List/List.h lib/HTTP/HTTP.cpp lib/HTTP/HTTP.h lib/TCP/TCP.cpp lib/TCP/TCP.h
         lib/UDP/UDP.cpp lib/UDP/UDP.h)
 
-target_link_libraries(Monet ${Boost_SYSTEM_LIBRARY})
+target_link_libraries(Monet ${Boost_SYSTEM_LIBRARY} cpprestsdk::cpprest)
