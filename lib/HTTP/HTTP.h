@@ -30,12 +30,8 @@ private:
   std::string evalstring(const std::string &val);
 
   std::string rest(const std::vector<std::string> &vals,
-                   const std::string &method);
-  std::string get(const std::vector<std::string> &vals);
-  std::string head(const std::vector<std::string> &vals);
-  std::string put(const std::vector<std::string> &vals);
-  std::string post(const std::vector<std::string> &vals);
-  std::string del(const std::vector<std::string> &vals);
+                   const std::string &method,
+                   const std::basic_string<char> methodc);
 };
 
 #endif // MONET_HTTP_H
