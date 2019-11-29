@@ -38,7 +38,7 @@
 - [ ] os library (get system info)
 - [ ] concurrency library (do together, map together)
 - [ ] networking library 
-- [ ] a REST library
+- [x] a REST library
 - [ ] audio library
 - [ ] graphics library
 - [ ] Cuda library
