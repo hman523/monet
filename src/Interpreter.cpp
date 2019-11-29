@@ -888,7 +888,10 @@ std::string Interpreter::ifstatement(const std::vector<std::string> &vals) {
 
 void Interpreter::define(const std::vector<std::string> &vals) {
   std::vector<std::string> definition = split(vals[0]);
-  if (definition.size() < 3 || definition.size() % 2 == 0) {
+  if (definition.size() < 3) {
+    throw Exception("Cannot define function due to too few parameters");
+  }
+  if (definition.size() % 2 == 0) {
     throw Exception("Cannot define function \"" + definition[2] +
                     "\" due to wrong number of parameters");
   }
@@ -1139,7 +1142,8 @@ int Interpreter::comparison(const std::vector<std::string> &vals) {
       return -1;
     }
   }
-  if (isString(vals1) && isString(vals2)) {
+  if ((isString(vals1) || memory.strexists(vals1)) &&
+      (isString(vals2) || memory.strexists(vals2))) {
     std::string a, b;
     a = strtostr(vals1);
     b = strtostr(vals2);
