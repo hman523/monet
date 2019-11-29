@@ -32,6 +32,7 @@ private:
   std::string rest(const std::vector<std::string> &vals,
                    const std::string &method,
                    const std::basic_string<char> methodc);
+  std::string head(const std::vector<std::string> &vals);
 };
 
 #endif // MONET_HTTP_H

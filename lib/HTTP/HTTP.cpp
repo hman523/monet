@@ -29,7 +29,7 @@ std::string HTTP::eval(const std::string &expression) {
   } else if (words[0] == "http.put") {
     return rest(words, "http.put", methods::PUT);
   } else if (words[0] == "http.head") {
-    return rest(words, "http.head", methods::HEAD);
+    return head(words);
   } else if (words[0] == "http.delete") {
     return rest(words, "http.delete", methods::DEL);
   }
@@ -56,8 +56,32 @@ std::string HTTP::rest(const std::vector<std::string> &vals,
   http_client client(U(url));
   http_response response = client.request(methodc).get();
   if (response.status_code() == status_codes::OK) {
-    return response.extract_string().get();
+    std::string reply = response.extract_string().get();
+    return reply;
   } else {
     throw Exception("OK not returned from " + method + " request");
+  }
+}
+
+std::string HTTP::head(const std::vector<std::string> &vals) {
+  if (vals.size() != 2) {
+    throw Exception("Wrong number of parameters in http.head");
+  }
+  std::string url = evalstring(vals[1]);
+  http_client client(U(url));
+  http_response response = client.request(methods::HEAD).get();
+  if (response.status_code() == status_codes::OK) {
+    std::string lst = "[\"";
+    for (auto j = response.headers().begin(); j != response.headers().end();
+         ++j) {
+      auto f = j.operator*().first;
+      auto s = j.operator*().second;
+      lst += f + "\", \"" + s + "\", \"";
+    }
+    lst = lst.substr(0, lst.length() - 3);
+    lst += "]";
+    return lst;
+  } else {
+    throw Exception("OK not returned from http.head request");
   }
 }
