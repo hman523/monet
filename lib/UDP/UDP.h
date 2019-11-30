@@ -26,6 +26,8 @@ public:
 
 private:
   std::set<std::string> functions;
+  int evalToInt(const std::string &val);
+  bool isNum(const std::string &val);
   std::string send(const std::vector<std::string> &expression);
   std::string rec(const std::vector<std::string> &expression);
 };

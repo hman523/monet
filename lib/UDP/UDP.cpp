@@ -9,6 +9,7 @@
 #include "UDP.h"
 #include "../../include/Interpreter.h"
 #include <boost/asio.hpp>
+#include <numeric>
 
 UDP::UDP() : functions({"udp.send", "udp.receive"}) {}
 
@@ -17,13 +18,118 @@ std::set<std::string> UDP::getFunctions() { return functions; }
 std::string UDP::eval(const std::string &expression) {
   std::vector<std::string> words = Interpreter::Instance()->split(expression);
   if (words[0] == "udp.send") {
-    send(words);
+    return send(words);
   } else if (words[0] == "udp.receive") {
-    rec(words);
+    return rec(words);
   }
   throw Exception("Fatal implementation error in UDP library in UDP.cpp");
 }
 
-std::string UDP::send(const std::vector<std::string> &expression) {}
+int UDP::evalToInt(const std::string &val) {
+  return Interpreter::Instance()->strToInt(val);
+}
 
-std::string UDP::rec(const std::vector<std::string> &expression) {}
+bool UDP::isNum(const std::string &val) {
+  return Interpreter::Instance()->isNumber(val);
+}
+
+std::string UDP::send(const std::vector<std::string> &expression) {
+  if (expression.size() < 4) {
+    throw Exception("Wrong number of parameters for udp.send");
+  }
+
+  if (!isNum(expression[2])) {
+    throw Exception("Wrong type in second parameter of udp.send");
+  }
+
+  boost::asio::io_context io_service;
+  boost::asio::ip::udp::socket socket(io_service);
+  boost::system::error_code ec;
+
+  boost::asio::ip::address ip_address =
+      boost::asio::ip::address::from_string(expression[1], ec);
+
+  if (ec) {
+    throw Exception(
+        "Invalid IP address received in first parameter of udp.send");
+  }
+
+  int port = evalToInt(expression[2]);
+  if (port < 0) {
+    throw Exception(
+        "Invalid port number received in second parameter of udp.send");
+  }
+  boost::asio::ip::udp::endpoint ep(ip_address, port);
+  try {
+    socket.connect(ep);
+  } catch (boost::system::system_error &e) {
+    throw Exception("udp.send failed to connect socket to endpoint " +
+                    expression[1] + ":" + std::to_string(port));
+  }
+  std::string message = expression[3];
+  message = std::accumulate(expression.begin() + 4, expression.end(), message,
+                            [](const std::string &m1, const std::string &m2) {
+                              return m1 + " " + m2;
+                            }) +
+            "\n";
+  boost::system::error_code error;
+
+  socket.send(boost::asio::buffer(message), 0, error);
+
+  if (error) {
+    throw Exception("udp.send failed to write to socket");
+  }
+
+  return "";
+}
+
+std::string UDP::rec(const std::vector<std::string> &expression) {
+  if (expression.size() != 2) {
+    throw Exception("Wrong number of parameters for udp.receive");
+  }
+
+  if (!isNum(expression[1])) {
+    throw Exception("Wrong type in first parameter of udp.receive");
+  }
+
+  boost::asio::io_context io_service;
+  int port = evalToInt(expression[1]);
+  if (port < 0) {
+    throw Exception(
+        "Invalid port number received in first parameter of udp.send");
+  }
+
+  std::string buf;
+  try {
+    boost::asio::ip::udp::socket socket(
+        io_service,
+        boost::asio::ip::udp::endpoint(boost::asio::ip::udp::v4(), port));
+
+    boost::asio::ip::udp::endpoint sender_endpoint;
+
+    boost::system::error_code ec;
+    socket.receive_from(boost::asio::buffer(buf), sender_endpoint,
+                        decltype(socket)::message_peek, ec);
+
+    if (ec) {
+      throw Exception("udp.receive failed to read from the socket");
+    }
+
+    decltype(socket)::bytes_readable readable(true);
+    socket.io_control(readable);
+    auto length = readable.get();
+    buf.resize(length);
+
+    socket.receive_from(boost::asio::buffer(buf.data(), buf.size()),
+                        sender_endpoint, 0, ec);
+
+    if (ec) {
+      throw Exception("udp.receive failed to read from the socket");
+    }
+
+  } catch (boost::system::system_error &e) {
+    throw Exception("udp.receive failed to open socket on port " +
+                    std::to_string(port));
+  }
+  return buf.substr(0, buf.find('\n') + 1);
+}
