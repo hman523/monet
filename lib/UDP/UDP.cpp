@@ -1,7 +1,7 @@
 /**
- * Stephen Hunter Barbella
- * GitHub: hman523
- * Email: shbarbella@gmail.com
+ * Stephen Hunter Barbella, Baibhav Vatsa
+ * GitHub: hman523, baibhavatsa
+ * Email: shbarbella@gmail.com, baibhavvatsa@gmail.com
  * Licence: MIT
  * File: UDP.cpp
  */
