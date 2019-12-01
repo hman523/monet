@@ -1,7 +1,7 @@
 /**
- * Stephen Hunter Barbella
- * GitHub: hman523
- * Email: shbarbella@gmail.com
+ * Stephen Hunter Barbella, Baibhav Vatsa
+ * GitHub: hman523, baibhavatsa
+ * Email: shbarbella@gmail.com, baibhavvatsa@gmail.com
  * Licence: MIT
  * File: TCP.h
  */
@@ -26,6 +26,8 @@ public:
 
 private:
   std::set<std::string> functions;
+  int evalint(const std::string &val);
+  std::string evalstring(const std::string &val);
   std::string send(const std::vector<std::string> &expression);
   std::string rec(const std::vector<std::string> &expression);
 };
