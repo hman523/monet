@@ -49,7 +49,7 @@ std::string UDP::send(const std::vector<std::string> &expression) {
   boost::system::error_code ec;
 
   boost::asio::ip::address ip_address =
-      boost::asio::ip::address::from_string(expression[1], ec);
+      boost::asio::ip::address::from_string(evalstring(expression[1]), ec);
 
   if (ec) {
     throw Exception(
@@ -59,27 +59,27 @@ std::string UDP::send(const std::vector<std::string> &expression) {
   int port = evalint(expression[2]);
   if (port < 0) {
     throw Exception(
-        "Invalid port number received in second papression[1rameter of udp.send");
+        "Invalid port number received in second parameter of udp.send");
   }
 
   boost::asio::ip::udp::endpoint ep(ip_address, port);
-  
+
   try {
     socket.connect(ep);
   } catch (boost::system::system_error &e) {
     throw Exception("udp.send failed to connect socket to endpoint " +
                     expression[1] + ":" + std::to_string(port));
   }
-  
+
   std::string message = expression[3];
   if (expression.size() == 4) {
-    message = evalstring(message);
+    message = evalstring(message) + "\n";
   } else {
-  message = std::accumulate(expression.begin() + 4, expression.end(), message,
-                            [](const std::string &m1, const std::string &m2) {
-                              return m1 + " " + m2;
-                            }) +
-            "\n";
+    message = std::accumulate(expression.begin() + 4, expression.end(), message,
+                              [](const std::string &m1, const std::string &m2) {
+                                return m1 + " " + m2;
+                              }) +
+              "\n";
   }
   boost::system::error_code error;
 
