@@ -8,7 +8,7 @@ println ~
 println "store or retrieve ?"
 print "> "
 read command
-(if (eq command "store") (handle_store) (if (eq command "retrieve") (handle_retrieve) (if (eq command "quit") (println "quitting") (println "incorrect"))))
+if (eq command "store") (handle_store) (if (eq command "retrieve") (handle_retrieve) (if (eq command "quit") (println "quitting") (println "incorrect")))
 return 0
 end
 
